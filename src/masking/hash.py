@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from typing import Callable
+from collections.abc import Callable
 
 
 def hash_string(
@@ -10,17 +10,20 @@ def hash_string(
     text_encoding: str = "utf-8",
 ) -> str:
     """Hashes a string using a secret key with SHA256 as the default hashing algorithm.
+
     Args:
+    ----
         data (str): input string to be hashed
         secret (str): secret key to hash the input string
         method (Callable, optional): Defaults to hashlib.sha256.
         text_encoding (str, optional): Defaults to "utf-8".
 
     Returns:
+    -------
         str: hashed string
-    """
 
-    assert isinstance(
+    """
+    assert isinstance(  # noqa: S101
         data, str
     ), f"Provided input is a {type(data)}. Make sure the type is str."
 
@@ -30,6 +33,4 @@ def hash_string(
     signature: str = hmac.new(secret_key, msg=input_data, digestmod=method).hexdigest()
 
     # The test case uses upper case letters
-    signature = signature.upper()
-
-    return signature
+    return signature.upper()
