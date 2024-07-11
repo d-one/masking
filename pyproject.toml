@@ -15,7 +15,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pre-commit = "^3.7.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
