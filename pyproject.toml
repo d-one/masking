@@ -15,6 +15,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pandas = "^2.2.2"
+argparse = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
@@ -37,7 +39,6 @@ ignore = [
     "D203",    # one-blank-line-before-class
     "D213",    # multi-line-summary-second-line
     "E501",    # line-too-long
-    "S608",    # hardcoded-sql-expression
     "BLE001",  # catch-blind-exceptions
     "COM812",  # missing-trailing-commas
 ]

@@ -4,7 +4,7 @@ from collections.abc import Callable
 
 
 def hash_string(
-    data: str,
+    data: str | None,
     secret: str,
     method: Callable = hashlib.sha256,
     text_encoding: str = "utf-8",
@@ -23,6 +23,9 @@ def hash_string(
         str: hashed string
 
     """
+    if data is None:
+        return None
+
     assert isinstance(  # noqa: S101
         data, str
     ), f"Provided input is a {type(data)}. Make sure the type is str."
@@ -32,5 +35,4 @@ def hash_string(
 
     signature: str = hmac.new(secret_key, msg=input_data, digestmod=method).hexdigest()
 
-    # The test case uses upper case letters
-    return signature.upper()
+    return signature
