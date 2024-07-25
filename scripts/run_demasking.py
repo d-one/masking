@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from demasking.pipeline import DeMaskTablePipeline
+from masking.demask.pipeline import DeMaskTablePipeline
 from pandas import read_csv
 
 # Parse command-line arguments

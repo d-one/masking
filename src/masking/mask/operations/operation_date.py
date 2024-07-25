@@ -1,30 +1,23 @@
 import pandas as pd
-
-from masking.fake.plz import FakePLZProvider
+from masking.mask.fake.date import FakeDateProvider
 
 from .operation import Operation
 
 
-class FakePLZ(Operation):
-    """Mask a column with fake PLZ data."""
+class FakeDate(Operation):
+    """Hashes a column using SHA256 algorithm."""
 
-    def __init__(
-        self,
-        col_name: str,
-        preserve: str | tuple[str] | None = None,
-        locale: str = "de_CH",
-    ) -> None:
+    def __init__(self, col_name: str, preserve: str | tuple[str] = "year") -> None:
         """Initialize the HashSHA256 class.
 
         Args:
         ----
             col_name (str): column name to be hashed
-            preserve (str or tuple[str]): part of the PLZ to be preserved. See masking.fake.plz.FakePLZProvider for more information.
-            locale (str, optional): Country initials such ash 'de_CH'.
+            preserve (str or tuple[str]): part of the date to be preserved. See masking.fake.date.FakeDateProvider for more information.
 
         """
         self.col_name = col_name
-        self.faker = FakePLZProvider(preserve=preserve, locale=locale)
+        self.faker = FakeDateProvider(preserve=preserve)
 
     def _mask_line(self, line: str) -> str:
         """Mask a single line.

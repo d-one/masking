@@ -2,8 +2,7 @@ import argparse
 import time
 from pathlib import Path
 
-from masking.fake.name import FakeNameProvider
-from masking.pipeline import MaskDataFramePipeline
+from masking.mask.pipeline import MaskDataFramePipeline
 from pandas import read_csv
 
 # Parse command-line arguments
@@ -45,29 +44,29 @@ def measure_execution_time(config: dict) -> float:
 
 
 config = {
-    "Beschrieb": {
-        "masking": "presidio",
-        "config": {
-            "col_name": "Beschrieb",
-            # "masking_function": lambda x: hash_string(
-            #     x, "new_secret", method=hashlib.sha256
-            # ),
-            "masking_function": lambda x: FakeNameProvider().__call__(),  # noqa: ARG005, PLC2801
-        },
-    },
-    "Name": {"masking": "hash", "config": {"col_name": "Name", "secret": "my_secret"}},
-    "Vorname": {
-        "masking": "hash",
-        "config": {"col_name": "Vorname", "secret": "my_secret"},
-    },
-    "Geburtsdatum": {
-        "masking": "fake_date",
-        "config": {"col_name": "Geburtsdatum", "preserve": ("year", "month")},
-    },
-    "PLZ": {
-        "masking": "fake_plz",
-        "config": {"col_name": "PLZ", "preserve": ("district", "area")},
-    },
+    # "Beschrieb": {
+    #     "masking": "presidio",
+    #     "config": {
+    #         "col_name": "Beschrieb",
+    #         # "masking_function": lambda x: hash_string(
+    #         #     x, "new_secret", method=hashlib.sha256
+    #         # ),
+    #         "masking_function": lambda x: FakeNameProvider().__call__(),
+    #     },
+    # },
+    "Name": {"masking": "hash", "config": {"col_name": "Name", "secret": "my_secret"}}
+    # "Vorname": {
+    #     "masking": "hash",
+    #     "config": {"col_name": "Vorname", "secret": "my_secret"},
+    # },
+    # "Geburtsdatum": {
+    #     "masking": "fake_date",
+    #     "config": {"col_name": "Geburtsdatum", "preserve": ("year", "month")},
+    # },
+    # "PLZ": {
+    #     "masking": "fake_plz",
+    #     "config": {"col_name": "PLZ", "preserve": ("district", "area")},
+    # },
 }
 
 times = [measure_execution_time(config) for _ in range(1)]

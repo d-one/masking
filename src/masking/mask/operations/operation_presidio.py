@@ -4,9 +4,9 @@ from typing import ClassVar
 
 import pandas as pd
 import spacy
+from masking.presidio_recognizers import Recognizers, allow_list
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
-from presidio_recognizers import Recognizers, allow_list
 
 from .operation import Operation
 

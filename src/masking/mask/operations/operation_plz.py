@@ -1,28 +1,29 @@
-import hashlib
-
 import pandas as pd
-
-from masking.hash import hash_string
+from masking.mask.fake.plz import FakePLZProvider
 
 from .operation import Operation
 
 
-class HashSHA256(Operation):
-    """Hashes a column using SHA256 algorithm."""
+class FakePLZ(Operation):
+    """Mask a column with fake PLZ data."""
 
-    secret: str  # secret key to hash the input string
-
-    def __init__(self, col_name: str, secret: str) -> None:
+    def __init__(
+        self,
+        col_name: str,
+        preserve: str | tuple[str] | None = None,
+        locale: str = "de_CH",
+    ) -> None:
         """Initialize the HashSHA256 class.
 
         Args:
         ----
             col_name (str): column name to be hashed
-            secret (str): secret key to hash the input string
+            preserve (str or tuple[str]): part of the PLZ to be preserved. See masking.fake.plz.FakePLZProvider for more information.
+            locale (str, optional): Country initials such ash 'de_CH'.
 
         """
         self.col_name = col_name
-        self.secret = secret
+        self.faker = FakePLZProvider(preserve=preserve, locale=locale)
 
     def _mask_line(self, line: str) -> str:
         """Mask a single line.
@@ -37,9 +38,14 @@ class HashSHA256(Operation):
 
         """
         if line not in self.concordance_table:
-            self.concordance_table[line] = hash_string(
-                line, self.secret, method=hashlib.sha256
-            )
+            faked = self.faker(line)
+            while faked in self.concordance_table.values():
+                print(  # noqa: T201
+                    f"Collision detected: {faked} already exists in the concordance table. Retrying..."
+                )
+                faked = self.faker(line)
+
+            self.concordance_table.update({line: faked})
 
         return self.concordance_table.get(line, line)
 
