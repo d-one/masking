@@ -1,3 +1,6 @@
+import time
+from concurrent.futures import ThreadPoolExecutor
+
 import spacy
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
@@ -23,17 +26,11 @@ analyzer = AnalyzerEngine(
     nlp_engine=loaded_nlp_engine, supported_languages=["de", "en"]
 )
 
-# registry = RecognizerRegistry()
-# # registry.load_predefined_recognizers("de")
-
-# for recognizer in Recognizers.values():
-#     for rec in recognizer:
-#         registry.add_recognizer(rec)
-
-# analyzer.registry = registry
-
 # Analyze text
-t = "Künzler Yvette könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie."
+t = [
+    "Künzler Yvette könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",
+    "Hediger Olivia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",
+]
 
 print("Text : ", t)
 print("-------------------")
@@ -41,24 +38,29 @@ print("-------------------")
 print("German : ")
 print()
 
-r = analyzer.analyze(
-    text=t, language="de", return_decision_process=True, allow_list=["z. B."]
-)
 
-for res in r:
-    print("Entity : ", res)
-    print(t[res.start : res.end])
-    print("t : <", res.entity_type, ">", sep="")
-    print(res.analysis_explanation)
+def analyze_text(text: str):
+    print("Text")
+    s = analyzer.analyze(
+        text=text, language="de", return_decision_process=True, allow_list=["z. B."]
+    )
+
+    time.sleep(1)
+
+    print("Done")
+
+    return s
 
 
-print("-------------------")
+t *= 10
 
-print("English : ")
-print()
+with ThreadPoolExecutor() as executor:
+    results = executor.map(analyze_text, t)
 
-r = analyzer.analyze(text=t, language="en")
 
-for res in r:
-    print("Entity : ", res)
-    print(t[res.start : res.end])
+for r in results:
+    for res in r:
+        print("Entity : ", res)
+        print(t[res.start : res.end])
+        print("t : <", res.entity_type, ">", sep="")
+        print(res.analysis_explanation)
