@@ -4,6 +4,11 @@
 
 The Masking Package is a Python library designed to provide various masking operations on data columns. It supports hashing, fake data generation, and other masking techniques to ensure data privacy and security.
 
+## Table of Content
+
+- Development:
+    - [Installation](docs/installation.md)
+
 ## Installation
 
 To install the Masking Package, use the following command:

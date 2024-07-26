@@ -25,6 +25,7 @@ pyspark = "^3.5.1"
 pyarrow = "^17.0.0"
 faker = "^26.0.0"
 numpy = "1.26.4"
+spacy = "^3.7.5"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"

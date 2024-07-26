@@ -19,7 +19,7 @@ class MaskColumnPipeline:
     4. Populate the masked column with the transformed values
     """
 
-    config: dict[dict[str, Any]]  # masking operation and configuration
+    config: dict[str, Any]  # masking operation and configuration
     pipeline: list[Operation]  # list of operations to apply
     column_name: str  # column name to be masked
     concordance_table: pd.DataFrame | None = None  # unique values in the column
