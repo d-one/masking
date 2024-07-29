@@ -1,3 +1,4 @@
+import warnings
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from typing import ClassVar
@@ -9,6 +10,15 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
 from .operation import Operation
+
+# Ignore the specific FutureWarnings from torch.load
+warnings.filterwarnings(
+    "ignore", message=".*weights_only=False.*", category=FutureWarning
+)
+# Ignore the specific FutureWarnings from torch.cuda.amp.autocast
+warnings.filterwarnings(
+    "ignore", message=".*torch.cuda.amp.autocast.*", category=FutureWarning
+)
 
 
 class LoadedSpacyNlpEngine(SpacyNlpEngine):
