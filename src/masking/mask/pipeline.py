@@ -39,7 +39,6 @@ class MaskColumnPipeline:
             concordance_table (pd.DataFrame or None): unique values in the column
 
         """
-
         self.config = config
         self.column_name = column
         self.concordance_table = concordance_table
@@ -54,7 +53,7 @@ class MaskColumnPipeline:
 
     def _build_pipeline(self) -> list[Operation]:
         """Build the pipeline to mask the column."""
-        masking = self.config["masking"] 
+        masking = self.config["masking"]
         config_ = self.config.get("config", {})
 
         if "col_name" not in config_:

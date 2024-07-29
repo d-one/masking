@@ -5,12 +5,13 @@ from typing import ClassVar
 
 import pandas as pd
 import spacy
-from masking.presidio_recognizers import Recognizers, allow_list
 from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
-from .operation import Operation
 from masking.delimiters import DELIMITERS
+from masking.presidio_recognizers import Recognizers, allow_list
+
+from .operation import Operation
 
 # Ignore the specific FutureWarnings from torch.load
 warnings.filterwarnings(
@@ -86,11 +87,12 @@ class HashPresidio(Operation):
             col_name (str): column name to be hashed
             model (str): spaCy model to detect entities
             masking_function (Collable[[str],str], optional): function to hash the input string.
+            delimiter (str, optional): delimiter to mask the entities.
 
         """
         self.col_name = col_name
         self.masking_function = masking_function
-        self.delimiter = DELIMITERS.get(delimiter,{'start':'<<','end':'>>'})
+        self.delimiter = DELIMITERS.get(delimiter, {"start": "<<", "end": ">>"})
 
         if model is None:
             model = {"de": "de_core_news_lg", "en": "en_core_web_trf"}
@@ -190,7 +192,9 @@ class HashPresidio(Operation):
             masked_entity = line_concordance_table.get(
                 entity, self.concordance_table.get(entity, entity)
             )
-            delimited_masked_entity = self.delimiter['start'] + masked_entity + self.delimiter['end']
+            delimited_masked_entity = (
+                self.delimiter["start"] + masked_entity + self.delimiter["end"]
+            )
             line = line.replace(entity, delimited_masked_entity)
 
         return line, line_concordance_table

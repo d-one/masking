@@ -17,5 +17,8 @@ install-poetry:
 	@curl -sSL https://install.python-poetry.org | python3 -
 	@export PATH=$HOME/.local/bin:$PATH
 
-install: check-pip check-poetry
+install-precommit:
+	@poetry run pre-commit install
+
+install: check-pip check-poetry install-precommit
 	@poetry install --with dev

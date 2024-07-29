@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 
 import pandas as pd
 
+from masking.delimiters import DELIMITERS
+
 
 class Operation(ABC):
     """Abstract class for masking operations in a pipeline."""
@@ -83,12 +85,12 @@ class DeMaskingEntities(Operation):
 
     col_name: str  # column name to be masked
 
-    def __init__(self, col_name: str) -> None:
+    def __init__(self, col_name: str, delimiter: str = "<<>>") -> None:
         """Initialize the DeMasking object."""
         self.col_name = col_name
+        self.delimiter = DELIMITERS.get(delimiter, {"start": "<<", "end": ">>"})
 
-    @staticmethod
-    def _demask_row(line: str, concordance_table: dict[str, str]) -> pd.Series:
+    def _demask_row(self, line: str, concordance_table: dict[str, str]) -> pd.Series:
         """Demask a row in a dataframe.
 
         Args:
@@ -101,13 +103,19 @@ class DeMaskingEntities(Operation):
             pd.Series: demasked row
 
         """
-        # Find all the entities in the line between the delimiters "<< >>" using regex
-        entities = re.findall(r"<<(.*?)>>", line)
+        # Find all the entities in the line between the delimiters using regex
+        regex = re.compile(
+            re.escape(self.delimiter["start"])
+            + "(.*?)"
+            + re.escape(self.delimiter["end"])
+        )
+        entities = re.findall(regex, line)
 
         # Replace the entities found in the line with the original values
         for entity in entities:
+            delimited_entity = self.delimiter["start"] + entity + self.delimiter["end"]
             line = line.replace(
-                f"<<{entity}>>", concordance_table.get(entity, f"<<{entity}>>")
+                delimited_entity, concordance_table.get(entity, delimited_entity)
             )
 
         return line

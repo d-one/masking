@@ -1,6 +1,7 @@
 import hashlib
 
 import pandas as pd
+
 from masking.mask.hash import hash_string
 
 from .operation import Operation

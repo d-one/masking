@@ -1,7 +1,7 @@
 import argparse
 import time
-from pathlib import Path
 from importlib import import_module
+from pathlib import Path
 
 from masking.mask.pipeline import MaskDataFramePipeline
 from pandas import read_csv
@@ -48,14 +48,14 @@ config = {
     "Beschrieb": {
         "masking": "presidio",
         "config": {
-            "masking_function": lambda x: getattr(import_module( 'masking.mask.fake.name' ), 'FakeNameProvider')().__call__(),
+            "masking_function": lambda x: import_module("masking.mask.fake.name")
+            .FakeNameProvider()
+            .__call__(),
+            "delimiter": "[[]]",
         },
     },
     "Name": {"masking": "hash", "config": {"secret": "my_secret"}},
-    "Vorname": {
-        "masking": "hash",
-        "config": {"secret": "my_secret"},
-    },
+    "Vorname": {"masking": "hash", "config": {"secret": "my_secret"}},
     # "Geburtsdatum": {
     #     "masking": "fake_date",
     #     "config": {"preserve": ("year", "month")},

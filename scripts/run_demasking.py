@@ -52,11 +52,11 @@ concordance_tables = {
 
 # Demasking logicc
 config = {
-    # "Name": {"masking": "hash", "config": {"col_name": "Name"}},
-    # "Vorname": {"masking": "hash"},
-    "Geburtsdatum": {"masking": "fake_date"},
-    "PLZ": {"masking": "fake_plz"},
-    # "Beschrieb": {"masking": "entities"},
+    "Name": {"masking": "hash", "config": {"col_name": "Name"}},
+    "Vorname": {"masking": "hash"},
+    # "Geburtsdatum": {"masking": "fake_date"},
+    # "PLZ": {"masking": "fake_plz"},
+    "Beschrieb": {"masking": "entities", "config": {"delimiter": "[[]]"}},
 }
 
 pipeline = DeMaskTablePipeline(config=config, concordance_tables=concordance_tables)
