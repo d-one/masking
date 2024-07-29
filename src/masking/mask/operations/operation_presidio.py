@@ -10,6 +10,7 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
 from .operation import Operation
+from masking.delimiters import DELIMITERS
 
 # Ignore the specific FutureWarnings from torch.load
 warnings.filterwarnings(
@@ -76,6 +77,7 @@ class HashPresidio(Operation):
         col_name: str,
         masking_function: Callable[[str], str],
         model: dict[str, str] | None = None,
+        delimiter: str = "<<>>",
     ) -> None:
         """Initialize the HashTextSHA256 class.
 
@@ -88,6 +90,7 @@ class HashPresidio(Operation):
         """
         self.col_name = col_name
         self.masking_function = masking_function
+        self.delimiter = DELIMITERS.get(delimiter,{'start':'<<','end':'>>'})
 
         if model is None:
             model = {"de": "de_core_news_lg", "en": "en_core_web_trf"}
@@ -187,7 +190,7 @@ class HashPresidio(Operation):
             masked_entity = line_concordance_table.get(
                 entity, self.concordance_table.get(entity, entity)
             )
-            delimited_masked_entity = "<<" + masked_entity + ">>"
+            delimited_masked_entity = self.delimiter['start'] + masked_entity + self.delimiter['end']
             line = line.replace(entity, delimited_masked_entity)
 
         return line, line_concordance_table

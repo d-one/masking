@@ -39,11 +39,12 @@ class MaskColumnPipeline:
             concordance_table (pd.DataFrame or None): unique values in the column
 
         """
-        self.config = config
-        self.pipeline = self._build_pipeline()
-        self.column_name = column
 
+        self.config = config
+        self.column_name = column
         self.concordance_table = concordance_table
+
+        self.pipeline = self._build_pipeline()
 
     @classmethod
     def from_dict(cls, configuration: dict[str, dict[dict[str, Any]]]) -> None:
@@ -53,9 +54,14 @@ class MaskColumnPipeline:
 
     def _build_pipeline(self) -> list[Operation]:
         """Build the pipeline to mask the column."""
-        masking, config = self.config["masking"], self.config["config"]
+        masking = self.config["masking"] 
+        config_ = self.config.get("config", {})
+
+        if "col_name" not in config_:
+            config_["col_name"] = self.column_name
+
         operation_class = MASKING_OPERATIONS.get(masking, Operation)
-        return [operation_class(**config)]
+        return [operation_class(**config_)]
 
     def _prepare_concordance_table(self) -> None:
         """Prepare the concordance table for the pipeline.

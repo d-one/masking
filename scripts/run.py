@@ -1,6 +1,7 @@
 import argparse
 import time
 from pathlib import Path
+from importlib import import_module
 
 from masking.mask.pipeline import MaskDataFramePipeline
 from pandas import read_csv
@@ -44,28 +45,24 @@ def measure_execution_time(config: dict) -> float:
 
 
 config = {
-    # "Beschrieb": {
-    #     "masking": "presidio",
-    #     "config": {
-    #         "col_name": "Beschrieb",
-    #         # "masking_function": lambda x: hash_string(
-    #         #     x, "new_secret", method=hashlib.sha256
-    #         # ),
-    #         "masking_function": lambda x: getattr(import_module( 'masking.mask.fake.name' ), 'FakeNameProvider')().__call__(),
-    #     },
-    # },
-    "Name": {"masking": "hash", "config": {"col_name": "Name", "secret": "my_secret"}},
+    "Beschrieb": {
+        "masking": "presidio",
+        "config": {
+            "masking_function": lambda x: getattr(import_module( 'masking.mask.fake.name' ), 'FakeNameProvider')().__call__(),
+        },
+    },
+    "Name": {"masking": "hash", "config": {"secret": "my_secret"}},
     "Vorname": {
         "masking": "hash",
-        "config": {"col_name": "Vorname", "secret": "my_secret"},
+        "config": {"secret": "my_secret"},
     },
     # "Geburtsdatum": {
     #     "masking": "fake_date",
-    #     "config": {"col_name": "Geburtsdatum", "preserve": ("year", "month")},
+    #     "config": {"preserve": ("year", "month")},
     # },
     # "PLZ": {
     #     "masking": "fake_plz",
-    #     "config": {"col_name": "PLZ", "preserve": ("district", "area")},
+    #     "config": {"preserve": ("district", "area")},
     # },
 }
 
