@@ -51,14 +51,14 @@ config = {
     #         # "masking_function": lambda x: hash_string(
     #         #     x, "new_secret", method=hashlib.sha256
     #         # ),
-    #         "masking_function": lambda x: FakeNameProvider().__call__(),
+    #         "masking_function": lambda x: getattr(import_module( 'masking.mask.fake.name' ), 'FakeNameProvider')().__call__(),
     #     },
     # },
-    "Name": {"masking": "hash", "config": {"col_name": "Name", "secret": "my_secret"}}
-    # "Vorname": {
-    #     "masking": "hash",
-    #     "config": {"col_name": "Vorname", "secret": "my_secret"},
-    # },
+    "Name": {"masking": "hash", "config": {"col_name": "Name", "secret": "my_secret"}},
+    "Vorname": {
+        "masking": "hash",
+        "config": {"col_name": "Vorname", "secret": "my_secret"},
+    },
     # "Geburtsdatum": {
     #     "masking": "fake_date",
     #     "config": {"col_name": "Geburtsdatum", "preserve": ("year", "month")},
