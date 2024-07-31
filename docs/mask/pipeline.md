@@ -134,7 +134,3 @@ masked_df = pipeline(df)
 # Print the masked DataFrame
 print(masked_df)
 ```
-
-## Conclusion
-
-The `MaskColumnPipeline` and `MaskDataFramePipeline` classes provide a powerful and flexible way to mask sensitive data in Pandas DataFrames. By defining custom operations and assembling them into pipelines, users can tailor the masking process to their specific needs, ensuring that sensitive information is appropriately protected.
