@@ -20,9 +20,9 @@ def load_hash_presidio() -> Operation:
 
 
 def load_hash_sha256() -> Operation:
-    from .operation_hash import HashSHA256
+    from .operation_hash import HashOperation
 
-    return HashSHA256
+    return HashOperation
 
 
 MASKING_OPERATIONS: dict[str, Operation] = {

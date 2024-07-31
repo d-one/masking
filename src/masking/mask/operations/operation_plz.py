@@ -14,7 +14,7 @@ class FakePLZ(Operation):
         preserve: str | tuple[str] | None = None,
         locale: str = "de_CH",
     ) -> None:
-        """Initialize the HashSHA256 class.
+        """Initialize the HashOperation class.
 
         Args:
         ----

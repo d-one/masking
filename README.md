@@ -8,6 +8,9 @@ The Masking Package is a Python library designed to provide various masking oper
 
 - Development:
     - [Installation](docs/installation.md)
+    - [Available Modules](docs/available_modules.md)
+        - [mask](docs/mask/mask.md)
+        - [demask](docs/demask/demask.md)
 
 ## Installation
 

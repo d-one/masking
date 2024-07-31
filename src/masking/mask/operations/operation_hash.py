@@ -1,4 +1,5 @@
 import hashlib
+from collections.abc import Callable
 
 import pandas as pd
 
@@ -7,22 +8,26 @@ from masking.mask.hash import hash_string
 from .operation import Operation
 
 
-class HashSHA256(Operation):
+class HashOperation(Operation):
     """Hashes a column using SHA256 algorithm."""
 
     secret: str  # secret key to hash the input string
 
-    def __init__(self, col_name: str, secret: str) -> None:
-        """Initialize the HashSHA256 class.
+    def __init__(
+        self, col_name: str, secret: str, hash_function: Callable = hashlib.sha256
+    ) -> None:
+        """Initialize the HashOperation class.
 
         Args:
         ----
             col_name (str): column name to be hashed
             secret (str): secret key to hash the input string
+            hash_function (hashlib._Hash): hash function to use
 
         """
         self.col_name = col_name
         self.secret = secret
+        self.hash_function = hash_function
 
     def _mask_line(self, line: str) -> str:
         """Mask a single line.
@@ -38,7 +43,7 @@ class HashSHA256(Operation):
         """
         if line not in self.concordance_table:
             self.concordance_table[line] = hash_string(
-                line, self.secret, method=hashlib.sha256
+                line, self.secret, method=self.hash_function
             )
 
         return self.concordance_table.get(line, line)

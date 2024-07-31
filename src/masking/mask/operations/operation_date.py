@@ -9,7 +9,7 @@ class FakeDate(Operation):
     """Hashes a column using SHA256 algorithm."""
 
     def __init__(self, col_name: str, preserve: str | tuple[str] = "year") -> None:
-        """Initialize the HashSHA256 class.
+        """Initialize the HashOperation class.
 
         Args:
         ----
