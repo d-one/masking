@@ -1,6 +1,6 @@
-from masking.mask.fake.date import FakeDateProvider
-from masking.mask.fake.name import FakeNameProvider
-from masking.mask.fake.plz import FakePLZProvider
+from masking.mask.operations.fake.date import FakeDateProvider
+from masking.mask.operations.fake.name import FakeNameProvider
+from masking.mask.operations.fake.plz import FakePLZProvider
 
 
 def fake_date():

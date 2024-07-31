@@ -48,7 +48,9 @@ config = {
     "Beschrieb": {
         "masking": "presidio",
         "config": {
-            "masking_function": lambda x: import_module("masking.mask.fake.name")
+            "masking_function": lambda x: import_module(
+                "masking.mask.operations.fake.name"
+            )
             .FakeNameProvider()
             .__call__(),
             "delimiter": "[[]]",
