@@ -6,6 +6,8 @@ This page is dedicated to the documentation of the mask module.
 - Operations
     - [hash](operation_hash.md)
     - [presidio](presidio.md)
+    - [fake-date](fake-date.md)
+    - [fake-plz](fake-plz.md)
 
 
 ## Introduction
