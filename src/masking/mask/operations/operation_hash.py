@@ -3,8 +3,7 @@ from collections.abc import Callable
 
 import pandas as pd
 
-from masking.mask.hash import hash_string
-
+from .hash import hash_string
 from .operation import Operation
 
 

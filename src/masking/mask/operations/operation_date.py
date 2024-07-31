@@ -1,7 +1,6 @@
 import pandas as pd
 
-from masking.mask.fake.date import FakeDateProvider
-
+from .fake.date import FakeDateProvider
 from .operation import Operation
 
 

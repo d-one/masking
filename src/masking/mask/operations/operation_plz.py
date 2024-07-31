@@ -1,7 +1,6 @@
 import pandas as pd
 
-from masking.mask.fake.plz import FakePLZProvider
-
+from .fake.plz import FakePLZProvider
 from .operation import Operation
 
 
