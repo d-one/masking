@@ -54,6 +54,7 @@ config = {
             .FakeNameProvider()
             .__call__(),
             "delimiter": "[[]]",
+            "allow_list": ["z. B.", "zB", "z.B."],
         },
     },
     "Name": {"masking": "hash", "config": {"secret": "my_secret"}},

@@ -9,7 +9,6 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
 from masking.delimiters import DELIMITERS
-from masking.presidio_recognizers import Recognizers, allow_list
 
 from .operation import Operation
 
@@ -63,15 +62,7 @@ class HashPresidio(Operation):
     analyzer: AnalyzerEngine  # presidio analyzer engine
 
     # Entities to be detected as PII
-    _ENTITIES: ClassVar[set[str]] = {"EMAIL_ADDRESS", "PERSON", "PHONE_NUMBER"}
-
-    _ENTITIES_TO_BE_FILTERED: ClassVar[list[str]] = {
-        recon.supported_entities[0]
-        for lang in Recognizers
-        for recon in Recognizers[lang]
-    }
-
-    _PII_ENTITIES: ClassVar[list[str]] = list(_ENTITIES.union(_ENTITIES_TO_BE_FILTERED))
+    _PII_ENTITIES: ClassVar[set[str]] = {"EMAIL_ADDRESS", "PERSON", "PHONE_NUMBER"}
 
     def __init__(
         self,
@@ -79,6 +70,7 @@ class HashPresidio(Operation):
         masking_function: Callable[[str], str],
         model: dict[str, str] | None = None,
         delimiter: str = "<<>>",
+        allow_list: list[str] | None = None,
     ) -> None:
         """Initialize the HashTextSHA256 class.
 
@@ -88,11 +80,14 @@ class HashPresidio(Operation):
             model (str): spaCy model to detect entities
             masking_function (Collable[[str],str], optional): function to hash the input string.
             delimiter (str, optional): delimiter to mask the entities.
+            allow_list (list[str], optional): list of entities to be ignored.
 
         """
         self.col_name = col_name
         self.masking_function = masking_function
         self.delimiter = DELIMITERS.get(delimiter, {"start": "<<", "end": ">>"})
+
+        self.allow_list = allow_list if allow_list is not None else []
 
         if model is None:
             model = {"de": "de_core_news_lg", "en": "en_core_web_trf"}
@@ -127,7 +122,7 @@ class HashPresidio(Operation):
             text=line,
             language=language,
             entities=self._PII_ENTITIES,
-            allow_list=list(allow_list),
+            allow_list=self.allow_list,
         )
 
         return {line[detected.start : detected.end].strip() for detected in results}

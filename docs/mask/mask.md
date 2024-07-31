@@ -5,6 +5,7 @@ This page is dedicated to the documentation of the mask module.
 - [Pipeline](pipeline.md)
 - Operations
     - [hash](operation_hash.md)
+    - [presidio](presidio.md)
 
 
 ## Introduction
