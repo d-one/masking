@@ -2,7 +2,7 @@
 
 This page is dedicated to the documentation of the mask module.
 
-
+- [Pipeline](pipeline.md)
 
 
 ## Introduction
