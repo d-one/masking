@@ -64,7 +64,7 @@ class HashPresidio(Operation):
     # Entities to be detected as PII
     _PII_ENTITIES: ClassVar[set[str]] = {"EMAIL_ADDRESS", "PERSON", "PHONE_NUMBER"}
 
-    def __init__(
+    def __init__( # noqa: PLR0913
         self,
         col_name: str,
         masking_function: Callable[[str], str],
