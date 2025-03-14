@@ -16,7 +16,7 @@ The Masking Package is a Python library designed to provide various masking oper
 To install the Masking Package, use the following command:
 
 ```bash
-pip install masking@git+"https://ksb-ops@dev.azure.com/ksb-ops/MaskingModule/_git/MaskingModule"
+pip install masking@git+"https://github.com/d-one/masking"
 ```
 
 ## Usage
