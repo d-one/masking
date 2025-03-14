@@ -1,20 +1,19 @@
 import argparse
+import shutil
 import time
-from importlib import import_module
 from pathlib import Path
 
+from masking.mask.operations.operation_hash import HashOperation
+from masking.mask.operations.operation_match import StringMatchOperation
+from masking.mask.operations.operation_presidio import HashPresidio
+from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
-from pandas import read_csv
+from masking.utils.hash import hash_string
+from pandas import DataFrame, read_csv
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Mask data in a CSV file.")
-parser.add_argument(
-    "-d",
-    "--data",
-    type=str,
-    help="Path to the CSV file.",
-    default=Path(__file__).parent / "../.." / "MaskingData.csv",
-)
+parser.add_argument("-d", "--data", type=str, help="Path to the CSV file.")
 
 args = parser.parse_args()
 
@@ -27,46 +26,65 @@ if not path.exists():
 
 
 def measure_execution_time(config: dict) -> float:
-    pipeline = MaskDataFramePipeline(config)
+    pipeline = MaskDataFramePipeline(config, workers=min(4, len(config)))
     data = read_csv(path)
+    print(data)
 
     start_time = time.time()
     data = pipeline(data)
 
-    data.to_csv(path.parent / "MaskedData.csv", index=False)
+    path_to_save = path.resolve().parent / "build"
+    if path_to_save.exists():
+        shutil.rmtree(path_to_save)
+    path_to_save.mkdir(parents=True, exist_ok=True)
+
+    data.to_csv(path_to_save / "MaskedData.csv", index=False)
 
     # Print Masked Data und Concordance Tables
     for col_name, concordance_table in pipeline.concordance_tables.items():
-        concordance_table.to_csv(
-            path.parent / f"{col_name}_concordance_table.csv", index=False
+        df_concordance_table = DataFrame(
+            {
+                "clear_values": list(concordance_table.keys()),
+                "masked_values": list(concordance_table.values()),
+            },
+            index=None,
+        )
+
+        df_concordance_table.to_csv(
+            path_to_save / f"{col_name}_concordance_table.csv", index=False
         )
 
     return time.time() - start_time
 
 
 config = {
-    "Beschrieb": {
-        "masking": "presidio",
-        "config": {
-            "masking_function": lambda x: import_module(
-                "masking.mask.operations.fake.name"
-            )
-            .FakeNameProvider()
-            .__call__(),
-            "delimiter": "[[]]",
-            "allow_list": ["z. B.", "zB", "z.B."],
-        },
+    "Name": {"masking_operation": HashOperation(col_name="Name", secret="my_secret")},
+    "Vorname": {
+        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+        "concordance_table": DataFrame({
+            "clear_values": ["Darius"],
+            "masked_values": ["DA"],
+        }),
     },
-    "Name": {"masking": "hash", "config": {"secret": "my_secret"}},
-    "Vorname": {"masking": "hash", "config": {"secret": "my_secret"}},
-    # "Geburtsdatum": {
-    #     "masking": "fake_date",
-    #     "config": {"preserve": ("year", "month")},
-    # },
-    # "PLZ": {
-    #     "masking": "fake_plz",
-    #     "config": {"preserve": ("district", "area")},
-    # },
+    "Beschrieb": {
+        "masking_operation": HashPresidio(
+            col_name="Beschrieb", masking_function=lambda x: hash_string(x, "my_secret")
+        )
+    },
+    "Geburtsdatum": {
+        "masking_operation": YYYYHashOperation(
+            col_name="Geburtsdatum", secret="my_secret"
+        )
+    },
+    "Extra": {
+        "masking_operation": StringMatchOperation(
+            col_name="Extra",
+            pii_cols=["Name", "Vorname", "Geburtsdatum"],
+            allow_list=["Darius"],
+            deny_keys=["Doctor"],
+            masking_function=lambda x: "<MASKED>",
+        )
+    },
 }
 
 times = [measure_execution_time(config) for _ in range(1)]

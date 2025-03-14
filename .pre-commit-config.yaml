@@ -26,3 +26,11 @@ repos:
         args: [--lock]
       - id: poetry-lock
         args: [--no-update]
+  - repo: local
+    hooks:
+      - id: poetry-build
+        name: Poetry Build
+        entry: poetry build
+        language: system
+        types: [python]
+        pass_filenames: false

@@ -1,3 +1,36 @@
+###################### Ruff ######################
+[tool.ruff]
+preview = true
+target-version = "py311"
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+dummy-variable-rgx = "^_$"
+ignore = [
+    "CPY001",  # flake8-copyright
+    "D1",      # undocumented-*
+    "D203",    # one-blank-line-before-class
+    "D213",    # multi-line-summary-second-line
+    "E501",    # line-too-long
+    "BLE001",  # catch-blind-exceptions
+    "COM812",  # missing-trailing-commas
+    "PLR0917", # too-many-positional-arguments
+]
+select = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/try_presidio.py" = ["T201", "ANN2", "ERA001"]
+"scripts/try_faker.py" = ["T201", "ANN2", "ERA001"]
+"scripts/run.py" = ["T201", "S106","INP001", "ERA001", "PLW0108", "ARG005"]
+"scripts/run_spark.py" = ["T201", "INP001", "S106", "ERA001", "FBT003", "PLW0108", "ARG005"]
+"scripts/run_demasking.py" = ["T201", "ERA001", "S101"]
+"src/masking/mask/operations/__init__.py" = ["PLC0415"]
+"src/masking/mask_spark/operations/__init__.py" = ["PLC0415"]
+
+############################# POETRY ##########################
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -17,45 +50,15 @@ readme = "README.md"
 python = "^3.11"
 pandas = "^2.2.2"
 argparse = "^1.4.0"
-de_core_news_lg = {url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_lg-3.7.0/de_core_news_lg-3.7.0-py3-none-any.whl"}
-en_core_web_trf = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.7.3/en_core_web_trf-3.7.3-py3-none-any.whl"}
 presidio-analyzer = "^2.2.354"
-presidio-anonymizer = "^2.2.354"
 pyspark = "^3.5.1"
 pyarrow = "^17.0.0"
 faker = "^26.0.0"
 numpy = "1.26.4"
 spacy = "^3.7.5"
+dateparser = "^1.2.0"
+presidio-anonymizer = "^2.2.356"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"
 pre-commit = "^3.7.1"
-
-###################### Ruff ######################
-
-[tool.ruff]
-preview = true
-target-version = "py311"
-
-[tool.ruff.format]
-skip-magic-trailing-comma = true
-
-[tool.ruff.lint]
-dummy-variable-rgx = "^_$"
-ignore = [
-    "CPY001",  # flake8-copyright
-    "D1",      # undocumented-*
-    "D203",    # one-blank-line-before-class
-    "D213",    # multi-line-summary-second-line
-    "E501",    # line-too-long
-    "BLE001",  # catch-blind-exceptions
-    "COM812",  # missing-trailing-commas
-]
-select = ["ALL"]
-
-[tool.ruff.lint.per-file-ignores]
-"scripts/try_presidio.py" = ["T201", "ANN2", "ERA001"]
-"scripts/try_faker.py" = ["T201", "ANN2", "ERA001"]
-"scripts/run.py" = ["T201", "ERA001", "ARG005", "PLC2801"]
-"scripts/run_demasking.py" = ["T201", "ERA001", "S101"]
-"src/masking/mask/operations/__init__.py" = ["PLC0415"]

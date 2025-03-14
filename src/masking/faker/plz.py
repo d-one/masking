@@ -55,7 +55,7 @@ class FakePLZProvider(FakeProvider):
                 preserve = (preserve,)
 
             # Check if the preserve values are admissible
-            msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE])}."""
+            msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE.values()])}."""
             assert all(s in self._ADMISSIBLE.values() for s in preserve), msg  # noqa: S101
 
             self._PRESERVED = set(preserve)
