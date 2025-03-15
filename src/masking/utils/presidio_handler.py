@@ -16,7 +16,13 @@ class PresidioHandler:
     deny_list: list[str] | None = (None,)
 
     # Entities to be detected as PII
-    _PII_ENTITIES: ClassVar[set[str]] = {"EMAIL_ADDRESS", "PERSON", "PHONE_NUMBER"}
+    _PII_ENTITIES: ClassVar[set[str]] = {
+        "EMAIL_ADDRESS",
+        "PERSON",
+        "PHONE_NUMBER",
+        "DATE_TIME",
+        "LOCATION",
+    }
 
     def __init__(  # noqa: PLR0913
         self,

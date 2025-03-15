@@ -2,114 +2,38 @@ import hashlib
 import json
 from collections import defaultdict
 from collections.abc import Callable, Generator
-from typing import ClassVar
 
-from presidio_anonymizer import AnonymizerEngine, OperatorConfig
+from presidio_anonymizer import OperatorConfig
 
 from masking.base_operations.operation import Operation
-from masking.utils.entity_detection import AnalyzerEngine, PresidioMultilingualAnalyzer
 from masking.utils.multi_nested_dict import MultiNestedDictHandler
+from masking.utils.presidio_handler import PresidioHandler
 
 
-class HashDictOperationBase(Operation, MultiNestedDictHandler):
+class HashDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
     """Hashes a column using SHA256 algorithm."""
 
-    # Entities to be detected as PII
-    _PII_ENTITIES: ClassVar[set[str]] = {
-        "EMAIL_ADDRESS",
-        "PERSON",
-        "PHONE_NUMBER",
-        "DATE_TIME",
-        "LOCATION",
-    }
-
-    def __init__(  # noqa: PLR0913
-        self,
-        col_name: str,
-        masking_function: Callable = hashlib.sha256,
-        allow_list: list[str] | None = None,
-        analyzer: AnalyzerEngine | None = None,
-        operators: dict[str, OperatorConfig] | None = None,
-        **kwargs: dict,
+    def __init__(
+        self, col_name: str, masking_function: Callable = hashlib.sha256, **kwargs: dict
     ) -> None:
         """Initialize the HashOperation class.
 
         Args:
         ----
             col_name (str): column name to be hashed
-            secret (str): secret key to hash the line string
             masking_function (Callable): function to hash the line string
-            allow_list (list[str]): list of strings to be allowed in the masking process.
-            analyzer (AnalyzerEngine): analyzer engine to use
-            operators (dict[str, OperatorConfig]): operators to be used in the masking process
             **kwargs (dict): keyword arguments
 
         """
-        super().__init__(**kwargs)
+        super().__init__(col_name=col_name, **kwargs)
 
-        self.col_name = col_name
         self.masking_function = masking_function
 
-        self.allow_list = allow_list if allow_list is not None else []
-
-        self.analyzer = analyzer or PresidioMultilingualAnalyzer().analyzer
-
-        self.concordance_table = {}
-
-        self.operators = operators or {
-            entity: OperatorConfig("custom", {"lambda": self.masking_function})
-            for entity in self._PII_ENTITIES
-        }
-
-        self.anonymizer = AnonymizerEngine()
-
-    def update_analyzer(self, analyzer: AnalyzerEngine) -> None:
-        """Update the analyzer engine.
-
-        Args:
-        ----
-            analyzer (AnalyzerEngine): analyzer engine to use
-
-        """
-        self.analyzer = analyzer
-
-    def update_anonymizer(self, anonymizer: AnonymizerEngine) -> None:
-        """Update the anonymizer engine.
-
-        Args:
-        ----
-            anonymizer (AnonymizerEngine): anonymizer engine
-
-        """
-        self.anonymizer = anonymizer
-
-    def _get_language_entities(
-        self, line: str, language: str, nlp_artifacts: list | None = None
-    ) -> set[str]:
-        """Get entities in a text.
-
-        Args:
-        ----
-            line (str): input text
-            language (str): language of the text
-            nlp_artifacts (list): nlp artifacts
-
-        Returns:
-        -------
-            dict[str, set[str]]: dictionary with entities detected in the text
-
-        """
-        params = {
-            "text": line,
-            "language": language,
-            "entities": self._PII_ENTITIES,
-            "allow_list": self.allow_list,
-        }
-
-        if nlp_artifacts:
-            params["nlp_artifacts"] = nlp_artifacts
-
-        return self.analyzer.analyze(**params)
+        if kwargs.get("operators", None) is None:
+            self.operators = {
+                entity: OperatorConfig("custom", {"lambda": self.masking_function})
+                for entity in self._PII_ENTITIES
+            }
 
     def _get_leafs(self, line: dict | str) -> tuple[Generator[str, None, None]]:
         """Get the leafs of a nested dictionary.
