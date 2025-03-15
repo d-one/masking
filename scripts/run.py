@@ -3,12 +3,11 @@ import shutil
 import time
 from pathlib import Path
 
+from masking.base_operations.operation_presidio import PresidioMultilingualAnalyzer
 from masking.mask.operations.operation_hash import HashOperation
-from masking.mask.operations.operation_match import StringMatchOperation
 from masking.mask.operations.operation_presidio import HashPresidio
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
-from masking.utils.hash import hash_string
 from pandas import DataFrame, read_csv
 
 # Parse command-line arguments
@@ -57,6 +56,11 @@ def measure_execution_time(config: dict) -> float:
     return time.time() - start_time
 
 
+analyzer = PresidioMultilingualAnalyzer(
+    models={"de": "de_core_news_lg", "en": "en_core_web_trf"}
+).analyzer
+
+
 config = {
     "Name": {"masking_operation": HashOperation(col_name="Name", secret="my_secret")},
     "Vorname": {
@@ -68,7 +72,9 @@ config = {
     },
     "Beschrieb": {
         "masking_operation": HashPresidio(
-            col_name="Beschrieb", masking_function=lambda x: hash_string(x, "my_secret")
+            col_name="Beschrieb",
+            masking_function=lambda x: "<MASKED>",
+            analyzer=analyzer,
         )
     },
     "Geburtsdatum": {
@@ -76,15 +82,15 @@ config = {
             col_name="Geburtsdatum", secret="my_secret"
         )
     },
-    "Extra": {
-        "masking_operation": StringMatchOperation(
-            col_name="Extra",
-            pii_cols=["Name", "Vorname", "Geburtsdatum"],
-            allow_list=["Darius"],
-            deny_keys=["Doctor"],
-            masking_function=lambda x: "<MASKED>",
-        )
-    },
+    # "Extra": {
+    #     "masking_operation": StringMatchOperation(
+    #         col_name="Extra",
+    #         pii_cols=["Name", "Vorname", "Geburtsdatum"],
+    #         allow_list=["Darius"],
+    #         deny_keys=["Doctor"],
+    #         masking_function=lambda x: "<MASKED>",
+    #     )
+    # },
 }
 
 times = [measure_execution_time(config) for _ in range(1)]
