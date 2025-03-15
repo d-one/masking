@@ -45,15 +45,19 @@ class PresidioHandler:
         """
         super().__init__(**kwargs)
 
+        self.allow_list = allow_list or []
+        self.allow_list = [a_clean for a in self.allow_list if (a_clean := a.strip())]
+
+        entities = kwargs.get("pii_entities", None)
+        if entities:
+            self._PII_ENTITIES = entities
+
         self.analyzer = analyzer or PresidioMultilingualAnalyzer().analyzer
         self.anonymizer = anonymizer or AnonymizerEngine()
         self.operators = operators or {
             entity: OperatorConfig("replace", {"new_value": "<MASKED>"})
             for entity in self._PII_ENTITIES
         }
-
-        self.allow_list = allow_list or []
-        self.allow_list = [a_clean for a in self.allow_list if (a_clean := a.strip())]
 
     def update_analyzer(self, analyzer: AnalyzerEngine) -> None:
         """Update the analyzer engine.
