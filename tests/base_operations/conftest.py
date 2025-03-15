@@ -1,8 +1,8 @@
-from typing import Any
-
 import pandas as pd
 import pytest
-from pyspark.sql import SparkSession
+from pyspark.sql import DataFrame, SparkSession
+
+CT_TYPE = dict | pd.DataFrame | None | list[dict] | DataFrame
 
 
 @pytest.fixture(
@@ -21,5 +21,5 @@ from pyspark.sql import SparkSession
         ),
     ],
 )
-def input_concordance_table(request) -> Any:
+def input_concordance_table(request: pytest.FixtureRequest) -> CT_TYPE:
     return request.param

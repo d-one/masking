@@ -63,7 +63,7 @@ class Operation(ABC):
                 )
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
-                raise ValueError(msg) from e
+                raise TypeError(msg) from e
             return
 
         if isinstance(self.concordance_table, DataFrame):
@@ -85,7 +85,7 @@ class Operation(ABC):
                 )
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
-                raise ValueError(msg) from e
+                raise TypeError(msg) from e
             return
 
         if isinstance(self.concordance_table, dict):
@@ -99,10 +99,10 @@ class Operation(ABC):
                 return
 
             msg = f"Invalid concordance table, expected a dictionary of type dict[str,str], got {type(self.concordance_table)}"
-            raise ValueError(msg)
+            raise TypeError(msg)
 
         msg = f"Invalid concordance table, expected a dictionary, got {type(self.concordance_table)}"
-        raise ValueError(msg)
+        raise TypeError(msg)
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.

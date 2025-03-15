@@ -1,25 +1,27 @@
-from typing import Any
-
 import pandas as pd
 import pytest
 from masking.base_operations.operation import Operation
 from pyspark.sql import DataFrame, SparkSession
 
+from .conftest import CT_TYPE
+
 
 class ConcreteOperation(Operation):
-    def _mask_line(self, line: str) -> str:
+    @staticmethod
+    def _mask_line() -> str:
         return "masked_line"
 
-    def _mask_data(self, data: str) -> str:
+    @staticmethod
+    def _mask_data() -> str:
         return "masked_data"
 
 
-def concrete_operation(name, table: dict | None = None) -> ConcreteOperation:
+def concrete_operation(name: str, table: dict | None = None) -> ConcreteOperation:
     return ConcreteOperation(name, table)
 
 
 def test_operation_is_abstract() -> None:
-    """Test if Operation is an abstract class, with abstract methods _mask_line and _mask_data"""
+    """Test if Operation is an abstract class, with abstract methods _mask_line and _mask_data."""
     # Check if Operation is an abstract class
     with pytest.raises(TypeError):
         Operation("col_name")
@@ -34,7 +36,7 @@ def test_operation_is_abstract() -> None:
 
 @pytest.mark.parametrize("name", ["col_name", "col_name2", "col_name3", None, []])
 def test_col_name_is_input(name: str) -> None:
-    """Test if the col_name attribute is the input for the operation
+    """Test if the col_name attribute is the input for the operation.
 
     Args:
     ----
@@ -52,12 +54,12 @@ def test_col_name_is_input(name: str) -> None:
     assert op.col_name == name
 
 
-def test_concordance_table_is_input(input_concordance_table: Any) -> None:
-    """Test if the concordance_table attribute is the input for the operation
+def test_concordance_table_is_input(input_concordance_table: CT_TYPE) -> None:
+    """Test if the concordance_table attribute is the input for the operation.
 
     Args:
     ----
-        table (dict): concordance table
+        input_concordance_table (CT_TYPE): concordance table
 
     """
     allowed_types = {dict, pd.DataFrame, DataFrame}
@@ -65,7 +67,7 @@ def test_concordance_table_is_input(input_concordance_table: Any) -> None:
         input_concordance_table is None,
         *[isinstance(input_concordance_table, t) for t in allowed_types],
     ]):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             concrete_operation("col_name", input_concordance_table)
         return
 
@@ -79,14 +81,13 @@ def test_concordance_table_is_input(input_concordance_table: Any) -> None:
 
     if isinstance(input_concordance_table, pd.DataFrame):
         input_concordance_table = input_concordance_table.to_dict()
-        input_concordance_table = {
-            k: v
-            for k, v in zip(
+        input_concordance_table = dict(
+            zip(
                 input_concordance_table["clear_values"].values(),
                 input_concordance_table["masked_values"].values(),
                 strict=False,
             )
-        }
+        )
 
     if input_concordance_table is None:
         assert op.concordance_table == {}
@@ -117,20 +118,20 @@ def test_concordance_table_is_input(input_concordance_table: Any) -> None:
 def test_concordance_table_have_columns_clear_and_masked_values(
     table: DataFrame,
 ) -> None:
-    """Test if the concordance_table attribute has columns clear_values and masked_values
+    """Test if the concordance_table attribute has columns clear_values and masked_values.
 
     Args:
     ----
         table (DataFrame): concordance table
 
     """
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         concrete_operation("col_name", table)
 
 
 @pytest.mark.parametrize("name", ["col_name", "col_name2", "col_name3", None, []])
 def test_serving_columns_is_list(name: str) -> None:
-    """Test if the serving_columns method returns a list with the column name
+    """Test if the serving_columns method returns a list with the column name.
 
     Args:
     ----
@@ -147,12 +148,12 @@ def test_serving_columns_is_list(name: str) -> None:
     assert op.serving_columns == [name]
 
 
-def test_update_concordance_table(input_concordance_table: Any) -> None:
-    """Test if the concordance_table attribute is the input for the operation
+def test_update_concordance_table(input_concordance_table: CT_TYPE) -> None:
+    """Test if the concordance_table attribute is the input for the operation.
 
     Args:
     ----
-        table (dict): concordance table
+        input_concordance_table (dict): concordance table
 
     """
     if not isinstance(input_concordance_table, dict):
