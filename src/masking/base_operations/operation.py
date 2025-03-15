@@ -15,6 +15,28 @@ class Operation(ABC):
 
     MAX_RETRY = 50
 
+    def __init__(
+        self,
+        col_name: str,
+        concordance_table: dict | AnyDataFrame | None = None,
+        **kwargs: dict,
+    ) -> None:
+        """Initialize the Operation class.
+
+        Args:
+        ----
+            col_name (str): column name to be masked
+            concordance_table (dict | AnyDataFrame | None): concordance table
+            **kwargs: additional arguments for the masking operation
+
+        """
+        super().__init__(**kwargs)
+
+        self.col_name = col_name
+        self.concordance_table = concordance_table
+
+        self._cast_concordance_table()
+
     @property
     def serving_columns(self) -> list[str]:
         """Return the columns needed for serving the operation."""
@@ -61,6 +83,22 @@ class Operation(ABC):
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise ValueError(msg) from e
             return
+
+        if isinstance(self.concordance_table, dict):
+            if len(self.concordance_table) == 0:
+                return
+
+            if all(
+                isinstance(value, str) and isinstance(k, str)
+                for k, value in self.concordance_table.items()
+            ):
+                return
+
+            msg = f"Invalid concordance table, expected a dictionary of type dict[str,str], got {type(self.concordance_table)}"
+            raise ValueError(msg)
+
+        msg = f"Invalid concordance table, expected a dictionary, got {type(self.concordance_table)}"
+        raise ValueError(msg)
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.

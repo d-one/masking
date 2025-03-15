@@ -6,11 +6,8 @@ from typing import ClassVar
 
 from presidio_anonymizer import AnonymizerEngine, OperatorConfig
 
-from masking.base_operations.entity_detection import (
-    AnalyzerEngine,
-    PresidioMultilingualAnalyzer,
-)
 from masking.base_operations.operation import Operation
+from masking.utils.entity_detection import AnalyzerEngine, PresidioMultilingualAnalyzer
 from masking.utils.multi_nested_dict import MultiNestedDictHandler
 
 

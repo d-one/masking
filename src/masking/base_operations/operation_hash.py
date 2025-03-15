@@ -11,7 +11,11 @@ class HashOperationBase(Operation):
     secret: str  # secret key to hash the input string
 
     def __init__(
-        self, col_name: str, secret: str, hash_function: Callable = hashlib.sha256
+        self,
+        col_name: str,
+        secret: str,
+        hash_function: Callable = hashlib.sha256,
+        **kwargs: dict,
     ) -> None:
         """Initialize the HashOperation class.
 
@@ -20,9 +24,13 @@ class HashOperationBase(Operation):
             col_name (str): column name to be hashed
             secret (str): secret key to hash the input string
             hash_function (hashlib._Hash): hash function to use
+            **kwargs (dict): keyword arguments
 
         """
-        self.col_name = col_name
+        super().__init__(
+            col_name=col_name, concordance_table=kwargs.get("concordance_table", None)
+        )
+
         self.secret = secret
         self.hash_function = hash_function
 

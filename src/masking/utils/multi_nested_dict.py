@@ -18,6 +18,7 @@ class MultiNestedDictHandler:
         list_index: dict | None = None,
         deny_tag: dict | None = None,
         case_sensitive: bool | None = None,  # noqa: FBT001
+        **kwargs: dict,
     ) -> None:
         """Initialize the MultiNestedDict.
 
@@ -29,8 +30,10 @@ class MultiNestedDictHandler:
             list_index (dict): The list index
             deny_tag (dict): The deny tag
             case_sensitive (bool): The case sensitivity to use
+            **kwargs (dict): keyword arguments
 
         """
+        super().__init__(**kwargs)
         self.path_separator = sep if sep is not None else self.path_separator
         self.list_index = list_index if list_index is not None else self.list_index
         self.deny_tag = deny_tag if deny_tag is not None else self.deny_tag
