@@ -6,11 +6,10 @@ from pathlib import Path
 import pandas as pd
 from masking.mask_spark.operations.operation_dict import HashDictOperation
 from masking.mask_spark.operations.operation_hash import HashOperation
-from masking.mask_spark.operations.operation_match import StringMatchOperation
 from masking.mask_spark.operations.operation_presidio import HashPresidio
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline
-from masking.utils.hash import hash_string
+from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
 from pyspark.sql import SparkSession
 
 # Parse command-line arguments
@@ -101,18 +100,28 @@ def measure_execution_time(config: dict) -> float:
     return time.time() - start_time
 
 
+analyzer = PresidioMultilingualAnalyzer(
+    models={"de": "de_core_news_lg", "en": "en_core_web_trf"}
+).analyzer
+
+
 config = {
-    "Name": {"masking_operation": HashOperation(col_name="Name", secret="my_secret")},
+    "Name": {
+        "masking_operation": HashOperation(
+            col_name="Name", secret="my_secret", concordance_table={"Spiess": "SP"}
+        )
+    },
     "Vorname": {
         "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-        "concordance_table": pd.DataFrame({
-            "clear_values": ["Darius"],
-            "masked_values": ["DA"],
-        }),
+        "concordance_table": {"Darius": "DA"},
     },
     "Beschrieb": {
         "masking_operation": HashPresidio(
-            col_name="Beschrieb", masking_function=lambda x: hash_string(x, "my_secret")
+            col_name="Beschrieb",
+            masking_function=lambda x: "<MASKED>",
+            analyzer=analyzer,
+            allow_list=["Darius"],
+            pii_entities=["PERSON"],
         )
     },
     "Geburtsdatum": {
@@ -120,15 +129,15 @@ config = {
             col_name="Geburtsdatum", secret="my_secret"
         )
     },
-    "Extra": {
-        "masking_operation": StringMatchOperation(
-            col_name="Extra",
-            pii_cols=["Name", "Vorname", "Geburtsdatum"],
-            allow_list=["Darius"],
-            deny_keys=["Doctor"],
-            masking_function=lambda x: "<MASKED>",
-        )
-    },
+    # "Extra": {
+    #     "masking_operation": StringMatchOperation(
+    #         col_name="Extra",
+    #         pii_cols=["Name", "Vorname", "Geburtsdatum"],
+    #         allow_list=["Darius"],
+    #         deny_keys=["Doctor"],
+    #         masking_function=lambda x: "<MASKED>",
+    #     )
+    # },
 }
 
 times = [measure_execution_time(config) for _ in range(1)]
