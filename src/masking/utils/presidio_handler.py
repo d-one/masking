@@ -24,12 +24,13 @@ class PresidioHandler:
         "LOCATION",
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         analyzer: AnalyzerEngine = None,
         anonymizer: AnonymizerEngine = None,
         operators: dict[str, OperatorConfig] | None = None,
         allow_list: list[str] | None = None,
+        pii_entities: list[str] | None = None,
         **kwargs: dict,
     ) -> None:
         """Initialize the Presidio Handler.
@@ -40,6 +41,7 @@ class PresidioHandler:
             anonymizer (AnonymizerEngine): presidio anonymizer engine
             operators (dict[str, OperatorConfig]): operators for masking
             allow_list (list[str]): list of allowed entities
+            pii_entities (list[str]): list of entities to detect
             **kwargs: keyword arguments
 
         """
@@ -48,9 +50,8 @@ class PresidioHandler:
         self.allow_list = allow_list or []
         self.allow_list = [a_clean for a in self.allow_list if (a_clean := a.strip())]
 
-        entities = kwargs.get("pii_entities", None)
-        if entities:
-            self._PII_ENTITIES = entities
+        if pii_entities:
+            self._PII_ENTITIES = pii_entities
 
         self.analyzer = analyzer or PresidioMultilingualAnalyzer().analyzer
         self.anonymizer = anonymizer or AnonymizerEngine()
