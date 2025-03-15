@@ -54,8 +54,8 @@ class PresidioHandler:
             for entity in self._PII_ENTITIES
         }
 
-        self.allow_list = allow_list or []
-        self.deny_list = deny_list or []
+        self.allow_list = [a_clean for a in allow_list if (a_clean := a.strip())] or []
+        self.deny_list = [a_clean for a in deny_list if (a_clean := a.strip())] or []
 
     def update_analyzer(self, analyzer: AnalyzerEngine) -> None:
         """Update the analyzer engine.

@@ -4,22 +4,22 @@ from collections.abc import Callable
 from hashlib import sha256
 
 from presidio_analyzer import Pattern, PatternRecognizer
-from presidio_anonymizer import AnonymizerEngine, OperatorConfig
+from presidio_anonymizer import OperatorConfig
 
 from masking.base_operations.operation import Operation
 from masking.utils.multi_nested_dict import MultiNestedDictHandler
+from masking.utils.presidio_handler import PresidioHandler
 
 
-class StringMatchOperationBase(Operation, MultiNestedDictHandler):
+class StringMatchOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
     _PII_ENTITY = "PATIENT_DATA"
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         col_name: str,
         pii_cols: list[str] | None = None,
         masking_function: Callable = sha256,
         operators: dict[str, OperatorConfig] | None = None,
-        allow_list: list[str] | None = None,
         **kwargs: dict,
     ) -> None:
         """Initialize the StringMatchingOperation.
@@ -30,27 +30,17 @@ class StringMatchOperationBase(Operation, MultiNestedDictHandler):
             pii_cols (list): The PII columns
             masking_function (Callable): The masking function
             operators (dict): The operators
-            path_separator (str): The separator
-            allow_list (list): The allow list
-            allow_keys (list): The allow keys
-            deny_keys (list): The deny keys
             **kwargs (dict): The keyword arguments
 
         """
-        super().__init__(**kwargs)
+        super().__init__(col_name=col_name, **kwargs)
 
-        self.col_name = col_name
         self.operators = operators or {
             self._PII_ENTITY: OperatorConfig("replace", {"new_value": "<MASKED>"})
         }
 
         self.pii_cols = pii_cols or []
         self.masking_function = masking_function
-        self.anonymizer = AnonymizerEngine()
-
-        self.allow_list = []
-        if allow_list:
-            self.allow_list = [a_clean for a in allow_list if (a_clean := a.strip())]
 
     @property
     def serving_columns(self) -> list[str]:
