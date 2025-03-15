@@ -32,6 +32,10 @@ class Operation(ABC):
         """
         super().__init__(**kwargs)
 
+        if not isinstance(col_name, str):
+            msg = f"Invalid column name, expected a string, got {type(col_name)}"
+            raise TypeError(msg)
+
         self.col_name = col_name
         self.concordance_table = concordance_table
 
@@ -108,8 +112,16 @@ class Operation(ABC):
             concordance_table: dict with masked values
 
         """
+        msg = f"Invalid concordance table, expected a dictionary, got {type(concordance_table)}"
+
         if not isinstance(concordance_table, dict):
-            msg = f"Invalid concordance table, expected a dictionary, got {type(concordance_table)}"
+            raise TypeError(msg)
+
+        # Check that all values are strings, and all keys are strings
+        if not all(
+            isinstance(value, str) and isinstance(k, str)
+            for k, value in concordance_table.items()
+        ):
             raise TypeError(msg)
 
         self._cast_concordance_table()
