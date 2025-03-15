@@ -27,9 +27,7 @@ class HashOperationBase(Operation):
             **kwargs (dict): keyword arguments
 
         """
-        super().__init__(
-            col_name=col_name, concordance_table=kwargs.get("concordance_table", None)
-        )
+        super().__init__(col_name=col_name, **kwargs)
 
         self.secret = secret
         self.hash_function = hash_function

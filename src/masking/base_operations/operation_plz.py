@@ -10,6 +10,7 @@ class FakePLZBase(Operation):
         col_name: str,
         preserve: str | tuple[str] | None = None,
         locale: str = "de_CH",
+        **kwargs: dict,
     ) -> None:
         """Initialize the HashOperation class.
 
@@ -18,9 +19,10 @@ class FakePLZBase(Operation):
             col_name (str): column name to be hashed
             preserve (str or tuple[str]): part of the PLZ to be preserved. See masking.fake.plz.FakePLZProvider for more information.
             locale (str, optional): Country initials such ash 'de_CH'.
+            **kwargs (dict): keyword arguments
 
         """
-        self.col_name = col_name
+        super().__init__(col_name=col_name, **kwargs)
         self.faker = FakePLZProvider(preserve=preserve, locale=locale)
 
     def _mask_line(self, line: str) -> str:
