@@ -84,6 +84,7 @@ config = {
             col_name="Beschrieb",
             masking_function=lambda x: "<MASKED>",
             analyzer=analyzer,
+            allow_list=["Darius"],
         )
     },
     "Geburtsdatum": {

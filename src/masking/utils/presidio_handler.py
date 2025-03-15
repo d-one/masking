@@ -24,13 +24,12 @@ class PresidioHandler:
         "LOCATION",
     }
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         analyzer: AnalyzerEngine = None,
         anonymizer: AnonymizerEngine = None,
         operators: dict[str, OperatorConfig] | None = None,
         allow_list: list[str] | None = None,
-        deny_list: list[str] | None = None,
         **kwargs: dict,
     ) -> None:
         """Initialize the Presidio Handler.
@@ -41,7 +40,6 @@ class PresidioHandler:
             anonymizer (AnonymizerEngine): presidio anonymizer engine
             operators (dict[str, OperatorConfig]): operators for masking
             allow_list (list[str]): list of allowed entities
-            deny_list (list[str]): list of denied entities
             **kwargs: keyword arguments
 
         """
@@ -50,12 +48,12 @@ class PresidioHandler:
         self.analyzer = analyzer or PresidioMultilingualAnalyzer().analyzer
         self.anonymizer = anonymizer or AnonymizerEngine()
         self.operators = operators or {
-            entity: OperatorConfig("custom", {"lambda": lambda x: "<MASKED>"})  # noqa: ARG005
+            entity: OperatorConfig("replace", {"new_value": "<MASKED>"})
             for entity in self._PII_ENTITIES
         }
 
-        self.allow_list = [a_clean for a in allow_list if (a_clean := a.strip())] or []
-        self.deny_list = [a_clean for a in deny_list if (a_clean := a.strip())] or []
+        self.allow_list = allow_list or []
+        self.allow_list = [a_clean for a in self.allow_list if (a_clean := a.strip())]
 
     def update_analyzer(self, analyzer: AnalyzerEngine) -> None:
         """Update the analyzer engine.
