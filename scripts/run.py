@@ -85,6 +85,7 @@ config = {
             masking_function=lambda x: "<MASKED>",
             analyzer=analyzer,
             allow_list=["Darius"],
+            pii_entities=["PERSON"],
         )
     },
     "Geburtsdatum": {
