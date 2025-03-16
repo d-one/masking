@@ -46,63 +46,76 @@ class Operation(ABC):
         """Return the columns needed for serving the operation."""
         return [self.col_name]
 
-    def _cast_concordance_table(self) -> None:
-        """Cast the concordance table to a dictionary."""
-        if self.concordance_table is None:
-            self.concordance_table = {}
-            return
+    @staticmethod
+    def cast_concordance_table(
+        concordance_table: pd.DataFrame | DataFrame | dict | None,
+    ) -> dict:
+        """Cast the concordance table to a dictionary.
 
-        if isinstance(self.concordance_table, pd.DataFrame):
+        Args:
+        ----
+            concordance_table (Any): concordance table
+
+        Returns:
+        -------
+            dict: concordance table as a dictionary
+
+        """
+        if concordance_table is None:
+            return {}
+
+        if isinstance(concordance_table, pd.DataFrame):
             # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
             try:
-                clear_values = self.concordance_table["clear_values"]
-                masked_values = self.concordance_table["masked_values"]
-
-                self.concordance_table = dict(
-                    zip(clear_values, masked_values, strict=False)
+                return dict(
+                    zip(
+                        concordance_table["clear_values"],
+                        concordance_table["masked_values"],
+                        strict=False,
+                    )
                 )
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e
-            return
 
-        if isinstance(self.concordance_table, DataFrame):
+        if isinstance(concordance_table, DataFrame):
             # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
             try:
                 clear_values = (
-                    self.concordance_table.select("clear_values")
+                    concordance_table.select("clear_values")
                     .rdd.flatMap(lambda x: x)
                     .collect()
                 )
                 masked_values = (
-                    self.concordance_table.select("masked_values")
+                    concordance_table.select("masked_values")
                     .rdd.flatMap(lambda x: x)
                     .collect()
                 )
 
-                self.concordance_table = dict(
-                    zip(clear_values, masked_values, strict=False)
-                )
+                return dict(zip(clear_values, masked_values, strict=False))
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e
-            return
 
-        if isinstance(self.concordance_table, dict):
-            if len(self.concordance_table) == 0:
-                return
+        if isinstance(concordance_table, dict):
+            if any([
+                len(concordance_table) == 0,
+                all(
+                    isinstance(value, str) and isinstance(k, str)
+                    for k, value in concordance_table.items()
+                ),
+            ]):
+                return concordance_table
 
-            if all(
-                isinstance(value, str) and isinstance(k, str)
-                for k, value in self.concordance_table.items()
-            ):
-                return
-
-            msg = f"Invalid concordance table, expected a dictionary of type dict[str,str], got {type(self.concordance_table)}"
+            msg = f"Invalid concordance table, expected a dictionary of type dict[str,str], got {type(concordance_table)}"
             raise TypeError(msg)
 
-        msg = f"Invalid concordance table, expected a dictionary, got {type(self.concordance_table)}"
+        msg = f"Invalid concordance table, expected a dictionary, got {type(concordance_table)}"
         raise TypeError(msg)
+
+    def _cast_concordance_table(self) -> None:
+        """Cast the concordance table to a dictionary."""
+        self.concordance_table = self.cast_concordance_table(self.concordance_table)
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.

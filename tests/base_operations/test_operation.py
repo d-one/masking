@@ -3,13 +3,13 @@ import pytest
 from masking.base_operations.operation import Operation
 from pyspark.sql import DataFrame, SparkSession
 
-from .conftest import CT_TYPE
+from .conftest import CT_ALLOWED_TYPES, CT_TYPE
 
 
 class ConcreteOperation(Operation):
     @staticmethod
-    def _mask_line() -> str:
-        return "masked_line"
+    def _mask_line(line: str) -> str:
+        return "masked_" + line
 
     @staticmethod
     def _mask_data() -> str:
@@ -62,10 +62,9 @@ def test_concordance_table_is_input(input_concordance_table: CT_TYPE) -> None:
         input_concordance_table (CT_TYPE): concordance table
 
     """
-    allowed_types = {dict, pd.DataFrame, DataFrame}
     if not any([
         input_concordance_table is None,
-        *[isinstance(input_concordance_table, t) for t in allowed_types],
+        *[isinstance(input_concordance_table, t) for t in CT_ALLOWED_TYPES],
     ]):
         with pytest.raises(TypeError):
             concrete_operation("col_name", input_concordance_table)
@@ -178,3 +177,94 @@ def test_update_concordance_table(input_concordance_table: CT_TYPE) -> None:
     for k, v in input_concordance_table.items():
         assert k in op.concordance_table
         assert v in op.concordance_table.values()
+
+
+def test_get_operating_input(input_name_and_line: tuple) -> None:
+    """Test if the _get_operating_input method returns the correct input for the operation.
+
+    Args:
+    ----
+        input_name_and_line (tuple): tuple with the column name and input line
+
+    """
+    name, line = input_name_and_line
+    op = concrete_operation(name)
+
+    if line is None:
+        assert op._get_operating_input(line) is None
+        return
+
+    assert op._get_operating_input(line) == "line"
+
+
+def test_check_mask_line(input_name_and_line: tuple) -> None:
+    """Test if the _check_mask_line method returns the correct input for the operation.
+
+    If the line is None, the method should return None.
+    If the input is a pd.Series, the method should return the value of the column with the same name as the column name.
+
+    Args:
+    ----
+        input_name_and_line (tuple): tuple with the column name and input line
+
+    """
+    name, line = input_name_and_line
+    op = concrete_operation(name)
+
+    if line is None:
+        assert op._check_mask_line(line) is None
+        return
+
+    expected_line = line
+    if isinstance(line, pd.Series):
+        expected_line = line[name]
+
+    assert op._check_mask_line(line) == concrete_operation(name)._mask_line(
+        expected_line
+    )
+
+
+def test_check_mask_line_with_concordance_table(
+    input_name_and_line: tuple, input_concordance_table: CT_TYPE
+) -> None:
+    """Test if the _check_mask_line method returns the correct input for the operation.
+
+    If the value to be masked is in the concordance table, the method should return the masked value in the concordance table.
+
+    Args:
+    ----
+        input_name_and_line (tuple): tuple with the column name and input line
+        input_concordance_table (CT_TYPE): concordance table
+
+    """
+    name, line = input_name_and_line
+
+    # If the concordance table is not in the allowed_types, the method should raise a TypeError
+    if not any([
+        input_concordance_table is None,
+        *[isinstance(input_concordance_table, t) for t in CT_ALLOWED_TYPES],
+    ]):
+        with pytest.raises(TypeError):
+            concrete_operation(name, input_concordance_table)
+        return
+
+    op = concrete_operation(name, input_concordance_table)
+
+    if line is None:
+        assert op._check_mask_line(line) is None
+        return
+
+    expected_line = line
+    if isinstance(line, pd.Series):
+        expected_line = line[name]
+
+    # Cast the concordance table to a dictionary
+    input_concordance_table = op.cast_concordance_table(input_concordance_table)
+
+    if expected_line in input_concordance_table and input_concordance_table is not None:
+        assert op._check_mask_line(line) == input_concordance_table[expected_line]
+        return
+
+    assert op._check_mask_line(line) == concrete_operation(name)._mask_line(
+        expected_line
+    )
