@@ -28,7 +28,7 @@ select = ["ALL"]
 "scripts/run_demasking.py" = ["T201", "ERA001", "S101"]
 "src/masking/mask/operations/__init__.py" = ["PLC0415"]
 "src/masking/mask_spark/operations/__init__.py" = ["PLC0415"]
-"tests/*" = ["S101", "SLF0"]
+"tests/*" = ["S101", "SLF0", "PLC0415"]
 
 ############################# POETRY ##########################
 

@@ -8,7 +8,6 @@ CT_ALLOWED_TYPES = {dict, pd.DataFrame, DataFrame}
 
 
 @pytest.fixture(
-    scope="module",
     params=[
         {},
         {"a": "b", "line": "L", "e": "f"},
@@ -21,20 +20,19 @@ CT_ALLOWED_TYPES = {dict, pd.DataFrame, DataFrame}
         SparkSession.builder.getOrCreate().createDataFrame(
             [("a", "b"), ("c", "d"), ("line", "L")], ["clear_values", "masked_values"]
         ),
-    ],
+    ]
 )  # Valid & invalid concordance tables input
 def vi_input_concordance_table(request: pytest.FixtureRequest) -> CT_TYPE:
     return request.param
 
 
 @pytest.fixture(
-    scope="module",
     params=[
         ("col_name_None", None),
         ("col_name", "line"),
         ("col_name_", pd.Series(["line"], index=["col_name_"])),
         ("col_name2_", pd.Series(["line2", "line"], index=["col_name_", "col_name2_"])),
-    ],
+    ]
 )  # Valid input name and line
 def v_input_name_and_line(
     request: pytest.FixtureRequest,
@@ -43,14 +41,13 @@ def v_input_name_and_line(
 
 
 @pytest.fixture(
-    scope="module", params=["col_name", "col_name2", "col_name3", None, []]
+    params=["col_name", "col_name2", "col_name3", None, []]
 )  # Valid & invalid column names
 def vi_name(request: pytest.FixtureRequest) -> str:
     return request.param
 
 
 @pytest.fixture(
-    scope="module",
     params=[
         pd.DataFrame(
             [("a", "b"), ("c", "d"), ("e", "f")],
@@ -66,7 +63,7 @@ def vi_name(request: pytest.FixtureRequest) -> str:
         SparkSession.builder.getOrCreate().createDataFrame(
             [("a", "b"), ("c", "d"), ("e", "f")], ["clear_values", "masked_values_"]
         ),
-    ],
+    ]
 )  # Invalid concordance tables input
 def invalid_table(request: pytest.FixtureRequest) -> DataFrame:
     return request.param

@@ -29,6 +29,10 @@ class HashOperationBase(Operation):
         """
         super().__init__(col_name=col_name, **kwargs)
 
+        if not isinstance(secret, str):
+            msg = f"Invalid secret key, expected a string, got {type(secret)}"
+            raise TypeError(msg)
+
         self.secret = secret
         self.hash_function = hash_function
 

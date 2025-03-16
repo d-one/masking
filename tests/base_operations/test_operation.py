@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 import pandas as pd
 import pytest
 from masking.base_operations.operation import Operation
@@ -16,7 +18,9 @@ class ConcreteOperation(Operation):
         return "masked_data"
 
 
-def concrete_operation(name: str, table: dict | None = None) -> ConcreteOperation:
+def create_concrete_operation(
+    name: str, table: dict | None = None
+) -> ConcreteOperation:
     return ConcreteOperation(name, table)
 
 
@@ -34,31 +38,39 @@ def test_operation_is_abstract() -> None:
         Operation._mask_data("data")
 
 
-def test_col_name_is_input(vi_name: str) -> None:
+def test_col_name_is_input(
+    vi_name: str, create_concrete_operation: Callable = create_concrete_operation
+) -> None:
     """Test if the col_name attribute is the input for the operation.
 
     Args:
     ----
         vi_name (str): name of the column
+        create_concrete_operation (Callable): function to create the concrete operation
+        **kwargs (dict): additional arguments for the masking operation
 
     """
     # Check that col_name must be a string
     if not isinstance(vi_name, str):
         with pytest.raises(TypeError):
-            concrete_operation(vi_name)
+            create_concrete_operation(vi_name)
         return
 
-    op = concrete_operation(vi_name)
+    op = create_concrete_operation(vi_name)
     assert isinstance(op.col_name, str)
     assert op.col_name == vi_name
 
 
-def test_concordance_table_is_input(vi_input_concordance_table: CT_TYPE) -> None:
+def test_concordance_table_is_input(
+    vi_input_concordance_table: CT_TYPE,
+    create_concrete_operation: Callable = create_concrete_operation,
+) -> None:
     """Test if the concordance_table attribute is the input for the operation.
 
     Args:
     ----
         vi_input_concordance_table (CT_TYPE): concordance table
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     if not any([
@@ -66,10 +78,10 @@ def test_concordance_table_is_input(vi_input_concordance_table: CT_TYPE) -> None
         *[isinstance(vi_input_concordance_table, t) for t in CT_ALLOWED_TYPES],
     ]):
         with pytest.raises(TypeError):
-            concrete_operation("col_name", vi_input_concordance_table)
+            create_concrete_operation("col_name", vi_input_concordance_table)
         return
 
-    op = concrete_operation("col_name", vi_input_concordance_table)
+    op = create_concrete_operation("col_name", vi_input_concordance_table)
 
     # Check that the concordance table must be a dictionary
     assert isinstance(op.concordance_table, dict)
@@ -96,58 +108,68 @@ def test_concordance_table_is_input(vi_input_concordance_table: CT_TYPE) -> None
 
 def test_concordance_table_have_columns_clear_and_masked_values(
     invalid_table: DataFrame,
+    create_concrete_operation: Callable = create_concrete_operation,
 ) -> None:
     """Test if the concordance_table attribute has columns clear_values and masked_values.
 
     Args:
     ----
         invalid_table (DataFrame): concordance table
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     with pytest.raises(TypeError):
-        concrete_operation("col_name", invalid_table)
+        create_concrete_operation("col_name", invalid_table)
 
 
-def test_serving_columns_is_list(vi_name: str | list | None) -> None:
+def test_serving_columns_is_list(
+    vi_name: str | list | None,
+    create_concrete_operation: Callable = create_concrete_operation,
+) -> None:
     """Test if the serving_columns method returns a list with the column name.
 
     Args:
     ----
         vi_name (str): name of the column
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     if not isinstance(vi_name, str):
         with pytest.raises(TypeError):
-            concrete_operation(vi_name)
+            create_concrete_operation(vi_name)
         return
 
-    op = concrete_operation(vi_name)
+    op = create_concrete_operation(vi_name)
     assert isinstance(op.serving_columns, list)
     assert op.serving_columns == [vi_name]
 
 
-def test_update_concordance_table(vi_input_concordance_table: CT_TYPE) -> None:
+def test_update_concordance_table(
+    vi_input_concordance_table: CT_TYPE,
+    create_concrete_operation: Callable = create_concrete_operation,
+) -> None:
     """Test if the concordance_table attribute is the input for the operation.
 
     Args:
     ----
         vi_input_concordance_table (dict): concordance table
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     if not isinstance(vi_input_concordance_table, dict):
         with pytest.raises(TypeError):
-            concrete_operation("col_name").update_concordance_table(
+            create_concrete_operation("col_name").update_concordance_table(
                 vi_input_concordance_table
             )
         return
 
-    op = concrete_operation("col_name")
+    op = create_concrete_operation("col_name")
     op.update_concordance_table(vi_input_concordance_table)
 
     assert op.concordance_table == vi_input_concordance_table
 
     # Make sure that is there exists elements in the concordance table, the method will update the concordance table
-    op = concrete_operation("col_name", {"1": "2"})
+    op = create_concrete_operation("col_name", {"1": "2"})
     op.update_concordance_table(vi_input_concordance_table)
 
     assert "1" in op.concordance_table
@@ -158,16 +180,20 @@ def test_update_concordance_table(vi_input_concordance_table: CT_TYPE) -> None:
         assert v in op.concordance_table.values()
 
 
-def test_get_operating_input(v_input_name_and_line: tuple) -> None:
+def test_get_operating_input(
+    v_input_name_and_line: tuple,
+    create_concrete_operation: Callable = create_concrete_operation,
+) -> None:
     """Test if the _get_operating_input method returns the correct input for the operation.
 
     Args:
     ----
         v_input_name_and_line (tuple): tuple with the column name and input line
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     name, line = v_input_name_and_line
-    op = concrete_operation(name)
+    op = create_concrete_operation(name)
 
     if line is None:
         assert op._get_operating_input(line) is None
@@ -176,7 +202,10 @@ def test_get_operating_input(v_input_name_and_line: tuple) -> None:
     assert op._get_operating_input(line) == "line"
 
 
-def test_check_mask_line(v_input_name_and_line: tuple) -> None:
+def test_check_mask_line(
+    v_input_name_and_line: tuple,
+    create_concrete_operation: Callable = create_concrete_operation,
+) -> None:
     """Test if the _check_mask_line method returns the correct input for the operation.
 
     If the line is None, the method should return None.
@@ -185,10 +214,11 @@ def test_check_mask_line(v_input_name_and_line: tuple) -> None:
     Args:
     ----
         v_input_name_and_line (tuple): tuple with the column name and input line
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     name, line = v_input_name_and_line
-    op = concrete_operation(name)
+    op = create_concrete_operation(name)
 
     if line is None:
         assert op._check_mask_line(line) is None
@@ -198,13 +228,15 @@ def test_check_mask_line(v_input_name_and_line: tuple) -> None:
     if isinstance(line, pd.Series):
         expected_line = line[name]
 
-    assert op._check_mask_line(line) == concrete_operation(name)._mask_line(
+    assert op._check_mask_line(line) == create_concrete_operation(name)._mask_line(
         expected_line
     )
 
 
 def test_check_mask_line_with_concordance_table(
-    v_input_name_and_line: tuple, vi_input_concordance_table: CT_TYPE
+    v_input_name_and_line: tuple,
+    vi_input_concordance_table: CT_TYPE,
+    create_concrete_operation: Callable = create_concrete_operation,
 ) -> None:
     """Test if the _check_mask_line method returns the correct input for the operation.
 
@@ -214,6 +246,7 @@ def test_check_mask_line_with_concordance_table(
     ----
         v_input_name_and_line (tuple): tuple with the column name and input line
         vi_input_concordance_table (CT_TYPE): concordance table
+        create_concrete_operation (Callable): function to create the concrete operation
 
     """
     name, line = v_input_name_and_line
@@ -224,10 +257,10 @@ def test_check_mask_line_with_concordance_table(
         *[isinstance(vi_input_concordance_table, t) for t in CT_ALLOWED_TYPES],
     ]):
         with pytest.raises(TypeError):
-            concrete_operation(name, vi_input_concordance_table)
+            create_concrete_operation(name, vi_input_concordance_table)
         return
 
-    op = concrete_operation(name, vi_input_concordance_table)
+    op = create_concrete_operation(name, vi_input_concordance_table)
 
     if line is None:
         assert op._check_mask_line(line) is None
@@ -247,6 +280,6 @@ def test_check_mask_line_with_concordance_table(
         assert op._check_mask_line(line) == vi_input_concordance_table[expected_line]
         return
 
-    assert op._check_mask_line(line) == concrete_operation(name)._mask_line(
+    assert op._check_mask_line(line) == create_concrete_operation(name)._mask_line(
         expected_line
     )
