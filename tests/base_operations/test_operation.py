@@ -14,7 +14,12 @@ class ConcreteOperation(Operation):
         return "masked_data"
 
 
-from .test_operation_inheritance import *  # noqa: E402, F403
+@pytest.fixture(scope="module")
+def operation_class() -> type:
+    return ConcreteOperation
+
+
+from .testsuit_operation_inheritance import *  # noqa: E402, F403
 
 
 def test_operation_is_abstract() -> None:

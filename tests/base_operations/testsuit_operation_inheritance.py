@@ -1,5 +1,3 @@
-import inspect
-import logging
 from collections.abc import Callable
 
 import pandas as pd
@@ -9,36 +7,16 @@ from pyspark.sql import DataFrame
 
 from .conftest import CT_ALLOWED_TYPES, CT_TYPE
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)  # Set logging level
 
-handler = logging.StreamHandler()  # Log to console
-handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-logger.addHandler(handler)
-
-
-# Function to recursively get all concrete subclasses
-def get_concrete_subclasses(cls: type) -> list[type]:
-    """Recursively retrieve all concrete subclasses of a given class."""
-    subclasses = set(cls.__subclasses__())  # Get direct subclasses
-    for subclass in list(subclasses):  # Iterate over them
-        subclasses.update(get_concrete_subclasses(subclass))  # Add their subclasses
-
-    return [
-        sub for sub in subclasses if not inspect.isabstract(sub)
-    ]  # Keep only concrete ones
-
-
-@pytest.fixture(
-    params=get_concrete_subclasses(Operation)
-)  # Get all concrete subclasses
-def create_concrete_operation(request: pytest.FixtureRequest) -> Callable:
+@pytest.fixture()
+def create_concrete_operation(operation_class: type) -> Callable:
     """Create a concrete operation with the given parameters."""
+    print(f"Creating concrete operation: {operation_class}")  # noqa: T201
 
     def _create_concrete_operation(
         col_name: str, table: CT_TYPE | None = None, **kwargs: dict
     ) -> Operation:
-        return request.param(col_name=col_name, concordance_table=table, **kwargs)
+        return operation_class(col_name=col_name, concordance_table=table, **kwargs)
 
     return _create_concrete_operation
 

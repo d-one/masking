@@ -1,0 +1,17 @@
+# Function to recursively get all concrete subclasses
+# def get_concrete_subclasses(cls: type) -> list[type]:
+#     """Recursively retrieve all concrete subclasses of a given class."""
+#     subclasses = set(cls.__subclasses__())  # Get direct subclasses
+#     for subclass in list(subclasses):  # Iterate over them
+#         subclasses.update(get_concrete_subclasses(subclass))  # Add their subclasses
+
+#     return [
+#         sub for sub in subclasses if not inspect.isabstract(sub)
+#     ]  # Keep only concrete ones
+
+# @pytest.fixture(
+#     params=get_concrete_subclasses(Operation)
+# )  # Get all concrete subclasses
+# def operation_class(request: pytest.FixtureRequest) -> type:
+#     """Create a concrete operation with the given parameters."""
+#     return request.param
