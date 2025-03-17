@@ -13,7 +13,7 @@ class HashOperationBase(Operation):
     def __init__(
         self,
         col_name: str,
-        secret: str,
+        secret: str | None = None,
         hash_function: Callable = hashlib.sha256,
         **kwargs: dict,
     ) -> None:
@@ -29,7 +29,7 @@ class HashOperationBase(Operation):
         """
         super().__init__(col_name=col_name, **kwargs)
 
-        if not isinstance(secret, str):
+        if not any([isinstance(secret, str), secret is None]):
             msg = f"Invalid secret key, expected a string, got {type(secret)}"
             raise TypeError(msg)
 
@@ -54,5 +54,8 @@ class HashOperationBase(Operation):
             except Exception as e:
                 msg = f"Input line must be a string. Tried to convert to string but en error occured: {e}"
                 raise ValueError(msg) from e
+
+        if self.secret is None:
+            return self.hash_function(line.encode()).hexdigest()
 
         return hash_string(line, self.secret, method=self.hash_function)

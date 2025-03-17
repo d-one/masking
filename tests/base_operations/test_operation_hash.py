@@ -2,31 +2,42 @@ from abc import ABCMeta
 from collections.abc import Callable
 from typing import Any
 
+import pandas as pd
 import pytest
 from masking.base_operations.operation_hash import HashOperationBase, hashlib
+from masking.utils.hash import hash_string
 
 
-class ConcreteHashOperation(HashOperationBase):
-    def __init__(
-        self,
-        col_name: str,
-        secret: str = "my_secret",  # noqa: S107
-        hash_function: Callable[..., Any] = hashlib.sha256,
-        **kwargs: dict,
-    ) -> None:
-        super().__init__(col_name, secret, hash_function, **kwargs)
+@pytest.fixture(
+    scope="module",
+    params=[
+        ("secret1", hashlib.sha256),
+        ("secret2", hashlib.sha512),
+        ("secret3", hashlib.md5),
+        (None, hashlib.sha256),
+    ],
+)
+def operation_class(request: pytest.FixtureRequest) -> type:
+    class ConcreteHashOperation(HashOperationBase):
+        def __init__(
+            self,
+            col_name: str,
+            secret: str = request.param[0],
+            hash_function: Callable[..., Any] = request.param[1],
+            **kwargs: dict,
+        ) -> None:
+            super().__init__(
+                col_name=col_name, secret=secret, hash_function=hash_function, **kwargs
+            )
 
-    @staticmethod
-    def _mask_data() -> str:
-        return "masked_data"
+        @staticmethod
+        def _mask_data() -> str:
+            return "masked_data"
 
-
-@pytest.fixture(scope="module")
-def operation_class() -> type:
     return ConcreteHashOperation
 
 
-from .testsuit_operation_inheritance import *  # noqa: E402, F403
+from .operation_inheritance import *  # noqa: E402, F403
 
 
 def test_operation_is_abstract() -> None:
@@ -44,3 +55,35 @@ def test_operation_is_abstract() -> None:
     assert isinstance(
         HashOperationBase, ABCMeta
     ), "HashOperationBase should be an abstract base class"
+
+
+def test_hash_operation_without_secret(
+    operation_class: type, v_input_name_and_line: tuple[str, str | pd.Series]
+) -> None:
+    """Test if HashOperationBase implements hashlib functions without a secret key."""
+    col_name, line = v_input_name_and_line
+    operation = operation_class(col_name=col_name)
+
+    assert (
+        operation.hash_function.__module__ == "_hashlib"
+    ), "Hash function should be from hashlib"
+
+    if line is None:
+        return
+
+    str_line = line
+    if isinstance(line, pd.Series):
+        str_line = line[col_name]
+
+    if operation.secret is None:
+        # Check if the masked line is the same as the hash of the line
+        assert (
+            operation._mask_line(str_line)
+            == operation.hash_function(str_line.encode()).hexdigest()
+        ), "Masked line should be the hash of the line"
+        return
+
+    # Check if the masked line is the same as the hash of the line with the secret key
+    assert operation._mask_line(str_line) == hash_string(
+        str_line, operation.secret, method=operation.hash_function
+    ), "Masked line should be the hash of the line with the secret key"

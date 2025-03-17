@@ -4,22 +4,21 @@ import pytest
 from masking.base_operations.operation import Operation
 
 
-class ConcreteOperation(Operation):
-    @staticmethod
-    def _mask_line(line: str) -> str:
-        return "masked_" + line
-
-    @staticmethod
-    def _mask_data() -> str:
-        return "masked_data"
-
-
 @pytest.fixture(scope="module")
 def operation_class() -> type:
+    class ConcreteOperation(Operation):
+        @staticmethod
+        def _mask_line(line: str) -> str:
+            return "masked_" + line
+
+        @staticmethod
+        def _mask_data() -> str:
+            return "masked_data"
+
     return ConcreteOperation
 
 
-from .testsuit_operation_inheritance import *  # noqa: E402, F403
+from .operation_inheritance import *  # noqa: E402, F403
 
 
 def test_operation_is_abstract() -> None:
