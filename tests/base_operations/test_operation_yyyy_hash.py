@@ -1,17 +1,21 @@
+import hashlib
 from abc import ABCMeta
 from collections.abc import Callable
 from typing import Any
 
 import pandas as pd
 import pytest
-from masking.base_operations.operation_hash import HashOperationBase, hashlib
-from masking.utils.hash import hash_string
+from dateparser import parse
+from masking.base_operations.operation_yyyy_hash import (
+    YYYYHashOperationBase,
+    hash_string,
+)
 
-from .conftest import get_v_input_name_and_line_str
+from .conftest import get_v_input_name_and_line_date
 
 
 @pytest.fixture(
-    scope="module", params=get_v_input_name_and_line_str()
+    scope="module", params=get_v_input_name_and_line_date()
 )  # Valid input name and line
 def v_input_name_and_line(
     request: pytest.FixtureRequest,
@@ -29,7 +33,7 @@ def v_input_name_and_line(
     ],
 )
 def operation_class(request: pytest.FixtureRequest) -> type:
-    class ConcreteHashOperation(HashOperationBase):
+    class ConcreteYYYYHashOperation(YYYYHashOperationBase):
         def __init__(
             self,
             col_name: str,
@@ -45,33 +49,33 @@ def operation_class(request: pytest.FixtureRequest) -> type:
         def _mask_data() -> str:
             return "masked_data"
 
-    return ConcreteHashOperation
+    return ConcreteYYYYHashOperation
 
 
 from .operation_inheritance import *  # noqa: E402, F403
 
 
-def test_operation_is_abstract() -> None:
-    """Test if Operation is an abstract class, with abstract methods _mask_line and _mask_data."""
-    # Check if HashOperationBase cannot be instantiated directly
+def test_operation_yyyy_hash_is_abstract() -> None:
+    """Test if OperationYYYYHash is an abstract class, with abstract methods _mask_line and _mask_data."""
+    # Check if OperationYYYYHash is an abstract class
     with pytest.raises(TypeError):
-        HashOperationBase("col_name", "secret")
+        YYYYHashOperationBase("col_name")
 
-    # Check for abstract methods if needed
+    # Check if OperationYYYYHash has abstract methods
     assert hasattr(
-        HashOperationBase, "_mask_line"
-    ), "HashOperationBase should define _mask_line"
+        YYYYHashOperationBase, "_mask_line"
+    ), "YYYYHashOperationBase should define _mask_line"
     assert hasattr(
-        HashOperationBase, "_mask_data"
-    ), "HashOperationBase should define _mask_data"
+        YYYYHashOperationBase, "_mask_data"
+    ), "YYYYHashOperationBase should define _mask_data"
 
     # Ensure _mask_data is abstract
     assert isinstance(
-        HashOperationBase, ABCMeta
-    ), "HashOperationBase should be an abstract base class"
+        YYYYHashOperationBase, ABCMeta
+    ), "YYYYHashOperationBase should be an abstract base class"
 
 
-def test_hash_operation_hash(
+def test_yyyy_hash_operation_hash(
     operation_class: type, v_input_name_and_line: tuple[str, str | pd.Series]
 ) -> None:
     """Test if HashOperationBase implements hashlib functions.
@@ -102,15 +106,17 @@ def test_hash_operation_hash(
     if isinstance(line, pd.Series):
         str_line = line[col_name]
 
+    year = str(parse(str_line).year)
+
     if operation.secret is None:
         # Check if the masked line is the same as the hash of the line
         assert (
             operation._mask_line(str_line)
-            == operation.hash_function(str_line.encode()).hexdigest()
+            == year + "_" + operation.hash_function(str_line.encode()).hexdigest()
         ), "Masked line should be the hash of the line"
         return
 
     # Check if the masked line is the same as the hash of the line with the secret key
-    assert operation._mask_line(str_line) == hash_string(
+    assert operation._mask_line(str_line) == year + "_" + hash_string(
         str_line, operation.secret, method=operation.hash_function
     ), "Masked line should be the hash of the line with the secret key"

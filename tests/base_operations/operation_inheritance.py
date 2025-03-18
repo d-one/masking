@@ -175,7 +175,11 @@ def test_get_operating_input(
         assert op._get_operating_input(line) is None
         return
 
-    assert op._get_operating_input(line) == "line"
+    expected_line = line
+    if isinstance(line, pd.Series) and len(op.serving_columns) == 1:
+        expected_line = line[name]
+
+    assert op._get_operating_input(line) == expected_line
 
 
 def test_check_mask_line_without_concordance_table(
@@ -203,9 +207,7 @@ def test_check_mask_line_without_concordance_table(
     if isinstance(line, pd.Series):
         expected_line = line[name]
 
-    assert op._check_mask_line(line) == create_concrete_operation(name)._mask_line(
-        expected_line
-    )
+    assert op._check_mask_line(line) == op._mask_line(expected_line)
 
 
 def test_check_mask_line_with_concordance_table(

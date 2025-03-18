@@ -27,20 +27,6 @@ def vi_input_concordance_table(request: pytest.FixtureRequest) -> CT_TYPE:
 
 
 @pytest.fixture(
-    params=[
-        ("col_name_None", None),
-        ("col_name", "line"),
-        ("col_name_", pd.Series(["line"], index=["col_name_"])),
-        ("col_name2_", pd.Series(["line2", "line"], index=["col_name_", "col_name2_"])),
-    ]
-)  # Valid input name and line
-def v_input_name_and_line(
-    request: pytest.FixtureRequest,
-) -> tuple[str, str | pd.Series]:
-    return request.param
-
-
-@pytest.fixture(
     params=["col_name", "col_name2", "col_name3", None, []]
 )  # Valid & invalid column names
 def vi_name(request: pytest.FixtureRequest) -> str:
@@ -68,9 +54,18 @@ def vi_name(request: pytest.FixtureRequest) -> str:
 def invalid_table(request: pytest.FixtureRequest) -> DataFrame:
     return request.param
 
-@pytest.fixture(
-    scope="module",
-    params=[
+
+def get_v_input_name_and_line_str() -> tuple[str, str]:
+    return [
+        ("col_name_None", None),
+        ("col_name", "line"),
+        ("col_name_", pd.Series(["line"], index=["col_name_"])),
+        ("col_name2_", pd.Series(["line2", "line"], index=["col_name_", "col_name2_"])),
+    ]
+
+
+def get_v_input_name_and_line_date() -> tuple[str, str]:
+    return [
         ("col_name", "2021-01-01"),
         ("col_name_", "2021-01-02"),
         ("col_name2_", "2021-01-03T00:00:00"),
@@ -83,28 +78,32 @@ def invalid_table(request: pytest.FixtureRequest) -> DataFrame:
             "col_name8_",
             pd.Series(["2021-01-09T00:00:00.000000+00:00"], index=["col_name8_"]),
         ),
-        ("col_name9_", pd.Series(["2021-01-10", "2021-01-11"], index=["col_name9_", "col_name9_"])),
+        (
+            "col_name9_",
+            pd.Series(["2021-01-10", "2021-01-11"], index=["col_name9", "col_name9_"]),
+        ),
         (
             "col_name10_",
             pd.Series(
-                ["2021-01-12T00:00:00", "2021-01-13T00:00:00"], index=["col_name10_", "col_name10_"]
+                ["2021-01-12T00:00:00", "2021-01-13T00:00:00"],
+                index=["col_name10", "col_name10_"],
             ),
         ),
         (
             "col_name11_",
             pd.Series(
                 ["2021-01-14T00:00:00.000000", "2021-01-15T00:00:00.000000"],
-                index=["col_name11_", "col_name11_"],
+                index=["col_name11", "col_name11_"],
             ),
         ),
         (
             "col_name12_",
             pd.Series(
-                ["2021-01-16T00:00:00.000000+00:00", "2021-01-17T00:00:00.000000+00:00"],
-                index=["col_name12_", "col_name12_"],
+                [
+                    "2021-01-16T00:00:00.000000+00:00",
+                    "2021-01-17T00:00:00.000000+00:00",
+                ],
+                index=["col_name12_", "col_name12"],
             ),
         ),
     ]
-)
-def v_input_name_and_date(request: pytest.FixtureRequest) -> tuple[str, str]:
-    return request.param

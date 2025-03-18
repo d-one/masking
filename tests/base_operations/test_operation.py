@@ -1,7 +1,19 @@
 from abc import ABCMeta
 
+import pandas as pd
 import pytest
 from masking.base_operations.operation import Operation
+
+from .conftest import get_v_input_name_and_line_str
+
+
+@pytest.fixture(
+    scope="module", params=get_v_input_name_and_line_str()
+)  # Valid input name and line
+def v_input_name_and_line(
+    request: pytest.FixtureRequest,
+) -> tuple[str, str | pd.Series]:
+    return request.param
 
 
 @pytest.fixture(scope="module")

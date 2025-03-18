@@ -37,5 +37,13 @@ class YYYYHashOperationBase(HashOperationBase):
         if any(isinstance(line, t) for t in (datetime, date)):
             year = line.year
 
-        signature = hash_string(str(line), self.secret, method=self.hash_function)
+        def hash_function(x: str) -> str:
+            return hash_string(x, self.secret, method=self.hash_function)
+
+        if self.secret is None:
+
+            def hash_function(x: str) -> str:
+                return self.hash_function(x.encode()).hexdigest()
+
+        signature = hash_function(str(line))
         return "_".join([str(year), signature])
