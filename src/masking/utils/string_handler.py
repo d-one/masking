@@ -11,10 +11,17 @@ def strip_key(text: str, key: str) -> str:
         str: stripped text
 
     """
+    if not all([isinstance(text, str), isinstance(key, str)]):
+        msg = f"Both text and key should be strings, got {type(text)} and {type(key)}."
+        raise TypeError(msg)
+
+    if not key:
+        return text
+
     if text.startswith(key):
-        text = text[len(key) :]
+        return strip_key(text[len(key) :], key)
 
     if text.endswith(key):
-        text = text[: -len(key)]
+        return strip_key(text[: -len(key)], key)
 
     return text
