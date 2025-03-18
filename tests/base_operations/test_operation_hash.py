@@ -48,6 +48,9 @@ def test_operation_is_abstract() -> None:
 
     # Check for abstract methods if needed
     assert hasattr(
+        HashOperationBase, "_mask_line"
+    ), "HashOperationBase should define _mask_line"
+    assert hasattr(
         HashOperationBase, "_mask_data"
     ), "HashOperationBase should define _mask_data"
 
@@ -57,10 +60,22 @@ def test_operation_is_abstract() -> None:
     ), "HashOperationBase should be an abstract base class"
 
 
-def test_hash_operation_without_secret(
+def test_hash_operation_hash(
     operation_class: type, v_input_name_and_line: tuple[str, str | pd.Series]
 ) -> None:
-    """Test if HashOperationBase implements hashlib functions without a secret key."""
+    """Test if HashOperationBase implements hashlib functions.
+    
+    The expected behavior is:
+
+    - The hash function should be from hashlib.
+    - If no secret is provided, then the mask_line method should return the result of the hash_function applied to the line.
+    - If a secret is provided, then the mask_line method should return the result of the hash_string function applied to the line with the secret key.
+       
+   Args:
+    ----
+        operation_class (type): HashOperationBase class
+        v_input_name_and_line (tuple): tuple with the column name and input line
+   """
     col_name, line = v_input_name_and_line
     operation = operation_class(col_name=col_name)
 

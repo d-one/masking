@@ -67,3 +67,44 @@ def vi_name(request: pytest.FixtureRequest) -> str:
 )  # Invalid concordance tables input
 def invalid_table(request: pytest.FixtureRequest) -> DataFrame:
     return request.param
+
+@pytest.fixture(
+    scope="module",
+    params=[
+        ("col_name", "2021-01-01"),
+        ("col_name_", "2021-01-02"),
+        ("col_name2_", "2021-01-03T00:00:00"),
+        ("col_name3_", "2021-01-04T00:00:00.000000"),
+        ("col_name4_", "2021-01-05T00:00:00.000000+00:00"),
+        ("col_name5_", pd.Series(["2021-01-06"], index=["col_name5_"])),
+        ("col_name6_", pd.Series(["2021-01-07T00:00:00"], index=["col_name6_"])),
+        ("col_name7_", pd.Series(["2021-01-08T00:00:00.000000"], index=["col_name7_"])),
+        (
+            "col_name8_",
+            pd.Series(["2021-01-09T00:00:00.000000+00:00"], index=["col_name8_"]),
+        ),
+        ("col_name9_", pd.Series(["2021-01-10", "2021-01-11"], index=["col_name9_", "col_name9_"])),
+        (
+            "col_name10_",
+            pd.Series(
+                ["2021-01-12T00:00:00", "2021-01-13T00:00:00"], index=["col_name10_", "col_name10_"]
+            ),
+        ),
+        (
+            "col_name11_",
+            pd.Series(
+                ["2021-01-14T00:00:00.000000", "2021-01-15T00:00:00.000000"],
+                index=["col_name11_", "col_name11_"],
+            ),
+        ),
+        (
+            "col_name12_",
+            pd.Series(
+                ["2021-01-16T00:00:00.000000+00:00", "2021-01-17T00:00:00.000000+00:00"],
+                index=["col_name12_", "col_name12_"],
+            ),
+        ),
+    ]
+)
+def v_input_name_and_date(request: pytest.FixtureRequest) -> tuple[str, str]:
+    return request.param
