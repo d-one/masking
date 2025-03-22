@@ -56,12 +56,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         configuration: dict[str, dict[str, tuple[dict[str, Any]]]],
         workers: int = 1,
     ) -> None:
-        self.config = configuration
-
-        self.col_pipelines: list[ConcordanceTable] = [
-            ConcordanceTable(**config) for config in configuration.values()
-        ]
-        self.workers = workers
+        super().__init__(configuration, workers, ConcordanceTable)
 
     @staticmethod
     def _filter_data(pipeline: ConcordanceTable, data: DataFrame) -> DataFrame:

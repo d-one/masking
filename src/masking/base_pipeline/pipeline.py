@@ -18,6 +18,17 @@ class MaskDataFramePipelineBase(ABC):
 
     concordance_tables: ClassVar[dict[str, dict]] = {}  # unique values in the columns
 
+    def __init__(
+        self,
+        configuration: dict[str, dict[str, tuple[dict[str, Any]]]],
+        workers: int = 1,
+        dtype: ConcordanceTableBase = ConcordanceTableBase,
+    ) -> None:
+        self.config = configuration
+
+        self.col_pipelines = [dtype(**config) for config in configuration.values()]
+        self.workers = workers
+
     def clear_concordance_tables(self) -> None:
         """Clear the concordance tables."""
         for pipeline in self.col_pipelines:
