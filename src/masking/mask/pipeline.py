@@ -1,4 +1,3 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 import pandas as pd
@@ -74,20 +73,39 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         self.workers = workers
 
     @staticmethod
-    def _run_pipeline(
-        pipeline: ConcordanceTable, col_data: pd.Series | pd.DataFrame
-    ) -> tuple:
-        return pipeline(col_data)
+    def _filter_data(pipeline: ConcordanceTable, data: pd.DataFrame) -> pd.DataFrame:
+        """Filter out the data where the masked values are the same as the clear values.
 
-    def __call__(self, data: pd.DataFrame) -> pd.DataFrame:
-        """Mask the dataframe."""
-        # Create concordance tables
-        if self.workers == 1:
-            for pipeline in self.col_pipelines:
-                self.concordance_tables[pipeline.column_name] = self._run_pipeline(
-                    pipeline, data[pipeline.serving_columns]
-                )
+        Args:
+        ----
+            pipeline (ConcordanceTable): pipeline object
+            data (pd.DataFrame): input dataframe
 
+        Returns:
+        -------
+            pd.DataFrame: dataframe with masked column
+
+        """
+        return (
+            data[pipeline.serving_columns]
+            .dropna(how="all")
+            .drop_duplicates(keep="first")
+        )
+
+    def _substitute_masked_values(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Substitute the masked values in the original dataframe using the concordance table.
+
+        Args:
+        ----
+            data (pd.DataFrame): input dataframe
+
+        Returns:
+        -------
+        pd.DataFrame: dataframe with masked column
+
+        """
+        for pipeline in self.col_pipelines:
+            if self.concordance_tables[pipeline.column_name]:
                 data[pipeline.column_name] = data[pipeline.column_name].map(
                     lambda x, col_name=pipeline.column_name: self.concordance_tables[
                         col_name
@@ -95,25 +113,21 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                     if not pd.isna(x)
                     else x
                 )
-        else:
-            with ThreadPoolExecutor(max_workers=self.workers) as executor:
-                futures = {
-                    executor.submit(
-                        self._run_pipeline, pipeline, data[pipeline.serving_columns]
-                    ): pipeline.column_name
-                    for pipeline in self.col_pipelines
-                }
-
-                for future in as_completed(futures):
-                    col_name = futures[future]
-                    self.concordance_tables[col_name] = future.result()
-
-                    data[col_name] = data[col_name].map(
-                        lambda x, col_name=col_name: self.concordance_tables[
-                            col_name
-                        ].get(x, x)
-                        if not pd.isna(x)
-                        else x
-                    )
 
         return data
+
+    @staticmethod
+    def _impose_ordering(data: pd.DataFrame, columns_order: dict) -> pd.DataFrame:
+        """Impose the ordering of the columns.
+
+        Args:
+        ----
+            data (pd.DataFrame): input dataframe
+            columns_order (dict): dictionary with the columns order
+
+        Returns:
+        -------
+        pd.DataFrame: dataframe with the columns ordered
+
+        """
+        return data[sorted(data.columns, key=lambda x: columns_order[x])]

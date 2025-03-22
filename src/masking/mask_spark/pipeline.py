@@ -1,4 +1,3 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 from pyspark.sql import DataFrame
@@ -111,30 +110,18 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
 
         return data
 
-    def __call__(self, data: DataFrame) -> DataFrame:
-        """Mask the dataframe."""
-        columns_order = {col_name: i for i, col_name in enumerate(data.columns)}
+    @staticmethod
+    def _impose_ordering(data: DataFrame, columns_order: dict) -> DataFrame:
+        """Impose the ordering of the columns.
 
-        # Create concordance tables
-        if self.workers == 1:
-            for pipeline in self.col_pipelines:
-                self.concordance_tables[pipeline.column_name] = pipeline(
-                    self._filter_data(pipeline, data)
-                )
-        else:
-            with ThreadPoolExecutor(max_workers=self.workers) as executor:
-                futures = {
-                    executor.submit(
-                        pipeline, self._filter_data(pipeline, data)
-                    ): pipeline.column_name
-                    for pipeline in self.col_pipelines
-                }
+        Args:
+        ----
+            data (DataFrame): input dataframe
+            columns_order (dict): dictionary with the order of the columns
 
-                for future in as_completed(futures):
-                    col_name = futures[future]
-                    self.concordance_tables[col_name] = future.result()
+        Returns:
+        -------
+        DataFrame: dataframe with the columns ordered
 
-        data = self._substitute_masked_values(data)
-
-        # Reorder the columns based on the original order
+        """
         return data.select(*sorted(data.columns, key=lambda x: columns_order[x]))
