@@ -4,7 +4,6 @@ import time
 from pathlib import Path
 
 from masking.mask.operations.operation_hash import HashOperation
-from masking.mask.operations.operation_presidio import HashPresidio
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
@@ -79,15 +78,15 @@ config = {
             "masked_values": ["DA"],
         }),
     },
-    "Beschrieb": {
-        "masking_operation": HashPresidio(
-            col_name="Beschrieb",
-            masking_function=lambda x: "<MASKED>",
-            analyzer=analyzer,
-            allow_list=["Darius"],
-            pii_entities=["PERSON"],
-        )
-    },
+    # "Beschrieb": {
+    #     "masking_operation": HashPresidio(
+    #         col_name="Beschrieb",
+    #         masking_function=lambda x: "<MASKED>",
+    #         analyzer=analyzer,
+    #         allow_list=["Darius"],
+    #         pii_entities=["PERSON"],
+    #     )
+    # },
     "Geburtsdatum": {
         "masking_operation": YYYYHashOperation(
             col_name="Geburtsdatum", secret="my_secret"
