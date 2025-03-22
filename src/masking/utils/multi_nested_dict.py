@@ -1,22 +1,23 @@
 from collections.abc import Callable, Generator
-from typing import ClassVar
 
 from masking.utils.string_handler import strip_key
 
 
 class MultiNestedDictHandler:
-    path_separator: ClassVar[str] = ".[$]."
-    list_index: ClassVar[dict[str, str]] = {"start": "[", "end": "]"}
-    deny_tag: ClassVar[str] = {"start": "deny<", "end": ">"}
-    case_sensitive: ClassVar[bool] = False
+    path_separator: str
+    list_index: dict[str, str]
+    deny_tag: dict[str, str]
+    case_sensitive: bool
+    allow_keys: list[str | Callable[[str], bool]]
+    allow_keys_callable: list[Callable[[str], bool]]
 
     def __init__(  # noqa: PLR0913
         self,
-        allow_keys: list[str | Callable[[str], bool]] | None = None,
-        deny_keys: list[str | Callable[[str], bool]] | None = None,
-        sep: str | None = None,
-        list_index: dict | None = None,
-        deny_tag: dict | None = None,
+        allow_keys: list[str] | None = None,
+        deny_keys: list[str] | None = None,
+        path_separator: str | None = None,
+        list_index: dict[str, str] | None = None,
+        deny_tag: dict[str, str] | None = None,
         case_sensitive: bool | None = None,  # noqa: FBT001
         **kwargs: dict,
     ) -> None:
@@ -26,20 +27,19 @@ class MultiNestedDictHandler:
         ----
             allow_keys (list): The allow keys to use
             deny_keys (list): The deny keys to use
-            sep (str): The path separator
-            list_index (dict): The list index
-            deny_tag (dict): The deny tag
+            path_separator (str): The path separator to use
+            list_index (dict): The list index to use
+            deny_tag (dict): The deny tag to use
             case_sensitive (bool): The case sensitivity to use
             **kwargs (dict): keyword arguments
 
         """
         super().__init__(**kwargs)
-        self.path_separator = sep if sep is not None else self.path_separator
-        self.list_index = list_index if list_index is not None else self.list_index
-        self.deny_tag = deny_tag if deny_tag is not None else self.deny_tag
-        self.case_sensitive = (
-            case_sensitive if case_sensitive is not None else self.case_sensitive
-        )
+
+        self.path_separator = path_separator or ".[$]."
+        self.list_index = list_index or {"start": "[", "end": "]"}
+        self.deny_tag = deny_tag or {"start": "deny<", "end": ">"}
+        self.case_sensitive = case_sensitive if case_sensitive is not None else False
 
         self.allow_keys = []
         self.allow_keys_callable = []
@@ -83,7 +83,7 @@ class MultiNestedDictHandler:
             deny (str): The deny path
 
         """
-        return deny[len(self.deny_tag["start"]) : -len(self.deny_tag["end"])]
+        return strip_key(strip_key(deny, self.deny_tag["end"]), self.deny_tag["start"])
 
     # ------ SKIP ------
 
@@ -230,20 +230,6 @@ class MultiNestedDictHandler:
 
     # ------ PATH ------
 
-    def _index_to_path(self, index: int) -> str:
-        """Convert the index to the path.
-
-        Args:
-        ----
-            index (int): The index to convert
-
-        Returns:
-        -------
-            str: The path of the index
-
-        """
-        return f"{self.list_index['start']}{index}{self.list_index['end']}"
-
     def _is_list_index(self, key: str) -> bool:
         """Check if the key is a list index.
 
@@ -277,7 +263,9 @@ class MultiNestedDictHandler:
             str: The index of the key
 
         """
-        return key[len(self.list_index["start"]) : -len(self.list_index["end"])]
+        return strip_key(
+            strip_key(key, self.list_index["end"]), self.list_index["start"]
+        )
 
     def _list_index_to_path(self, key: str) -> str:
         """Convert the list index to the path.
@@ -511,3 +499,21 @@ class MultiNestedDictHandler:
         """
         for d in data:
             yield from self._find_leaf_path_and_value(data=d, parent=parent)
+
+    def _find_leaf_path_batch(
+        self, data: list[str | dict | list], parent: str = ""
+    ) -> Generator[str, None, None]:
+        """Find the leaf path in the nested dictionary.
+
+        Args:
+        ----
+            data (str|dict|list): The data to find the leaf path in
+            parent (str): The parent path
+
+        Returns:
+        -------
+            Generator: The leaf path
+
+        """
+        for d in data:
+            yield from self._find_leaf_path(data=d, parent=parent)
