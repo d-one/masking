@@ -6,6 +6,7 @@ from pyspark.sql.types import StringType
 
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
 from masking.base_pipeline.pipeline import MaskDataFramePipelineBase
+from masking.utils.string_handler import generate_unique_name
 
 
 class ConcordanceTable(ConcordanceTableBase):
@@ -105,9 +106,9 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 else pipeline[0].column_name
             )
             if concordance_tables[c_name]:
-                new_col_name = f"{c_name}_masked"
-                while new_col_name in data.columns:
-                    new_col_name += "_masked_"
+                new_col_name = generate_unique_name(
+                    seed=f"{c_name}_masked", existing_names=data.columns
+                )
 
                 data = (
                     data.withColumn(
