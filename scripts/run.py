@@ -4,7 +4,6 @@ import time
 from pathlib import Path
 
 from masking.mask.operations.operation_hash import HashOperation
-from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
 from pandas import DataFrame, read_csv
@@ -61,23 +60,35 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "Name": {
-        "masking_operation": HashOperation(
-            col_name="Name",
-            secret="my_secret",
-            concordance_table=DataFrame({
-                "clear_values": ["Spiess"],
-                "masked_values": ["SP"],
-            }),
-        )
-    },
-    "Vorname": {
-        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-        "concordance_table": DataFrame({
-            "clear_values": ["Darius"],
-            "masked_values": ["DA"],
-        }),
-    },
+    "Name": [
+        {
+            "masking_operation": HashOperation(
+                col_name="Name",
+                secret="my_secret",
+                concordance_table=DataFrame({
+                    "clear_values": ["Spiess"],
+                    "masked_values": ["SP"],
+                }),
+            )
+        },
+        {
+            "masking_operation": HashOperation(
+                col_name="Name",
+                secret="my_secret",
+                concordance_table=DataFrame({
+                    "clear_values": ["SP"],
+                    "masked_values": ["123"],
+                }),
+            )
+        },
+    ]
+    # "Vorname": {
+    #     "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+    #     "concordance_table": DataFrame({
+    #         "clear_values": ["Darius"],
+    #         "masked_values": ["DA"],
+    #     }),
+    # },
     # "Beschrieb": {
     #     "masking_operation": HashPresidio(
     #         col_name="Beschrieb",
@@ -87,11 +98,11 @@ config = {
     #         pii_entities=["PERSON"],
     #     )
     # },
-    "Geburtsdatum": {
-        "masking_operation": YYYYHashOperation(
-            col_name="Geburtsdatum", secret="my_secret"
-        )
-    },
+    # "Geburtsdatum": {
+    #     "masking_operation": YYYYHashOperation(
+    #         col_name="Geburtsdatum", secret="my_secret"
+    #     )
+    # },
     # "Extra": {
     #     "masking_operation": StringMatchOperation(
     #         col_name="Extra",

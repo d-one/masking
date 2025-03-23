@@ -4,10 +4,7 @@ import time
 from pathlib import Path
 
 import pandas as pd
-from masking.mask_spark.operations.operation_dict import HashDictOperation
 from masking.mask_spark.operations.operation_hash import HashOperation
-from masking.mask_spark.operations.operation_presidio import HashPresidio
-from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
 from pyspark.sql import SparkSession
@@ -55,23 +52,23 @@ def measure_execution_time(config: dict) -> float:
     # Print the number of workers
     print("Number of workers: ", spark.sparkContext.defaultParallelism)
 
-    if any(
-        isinstance(
-            config[col_name]["masking_operation"], HashDictOperation | HashPresidio
-        )
-        for col_name in config
-    ):
-        # Update the analyzer in the config
-        for col_name in config:
-            if isinstance(
-                config[col_name]["masking_operation"], HashDictOperation | HashPresidio
-            ):
-                analyzer = config[col_name]["masking_operation"].analyzer
-                broadcased_analyzer = spark.sparkContext.broadcast(analyzer)
+    # if any(
+    #     isinstance(
+    #         config[col_name]["masking_operation"], HashDictOperation | HashPresidio
+    #     )
+    #     for col_name in config
+    # ):
+    #     # Update the analyzer in the config
+    #     for col_name in config:
+    #         if isinstance(
+    #             config[col_name]["masking_operation"], HashDictOperation | HashPresidio
+    #         ):
+    #             analyzer = config[col_name]["masking_operation"].analyzer
+    #             broadcased_analyzer = spark.sparkContext.broadcast(analyzer)
 
-                config[col_name]["masking_operation"].update_analyzer(
-                    broadcased_analyzer.value
-                )
+    #             config[col_name]["masking_operation"].update_analyzer(
+    #                 broadcased_analyzer.value
+    #             )
 
     start_time = time.time()
 
@@ -106,29 +103,31 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "Name": {
-        "masking_operation": HashOperation(
-            col_name="Name", secret="my_secret", concordance_table={"Spiess": "SP"}
-        )
-    },
+    "Name": [
+        {
+            "masking_operation": HashOperation(
+                col_name="Name", secret="my_secret", concordance_table={"Spiess": "SP"}
+            )
+        }
+    ],
     "Vorname": {
         "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
         "concordance_table": {"Darius": "DA"},
     },
-    "Beschrieb": {
-        "masking_operation": HashPresidio(
-            col_name="Beschrieb",
-            masking_function=lambda x: "<MASKED>",
-            analyzer=analyzer,
-            allow_list=["Darius"],
-            pii_entities=["PERSON"],
-        )
-    },
-    "Geburtsdatum": {
-        "masking_operation": YYYYHashOperation(
-            col_name="Geburtsdatum", secret="my_secret"
-        )
-    },
+    # "Beschrieb": {
+    #     "masking_operation": HashPresidio(
+    #         col_name="Beschrieb",
+    #         masking_function=lambda x: "<MASKED>",
+    #         analyzer=analyzer,
+    #         allow_list=["Darius"],
+    #         pii_entities=["PERSON"],
+    #     )
+    # },
+    # "Geburtsdatum": {
+    #     "masking_operation": YYYYHashOperation(
+    #         col_name="Geburtsdatum", secret="my_secret"
+    #     )
+    # },
     # "Extra": {
     #     "masking_operation": StringMatchOperation(
     #         col_name="Extra",

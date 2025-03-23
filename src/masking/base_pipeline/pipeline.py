@@ -26,7 +26,19 @@ class MaskDataFramePipelineBase(ABC):
     ) -> None:
         self.config = configuration
 
-        self.col_pipelines = [dtype(**config) for config in configuration.values()]
+        self.col_pipelines = []
+        for col_name, config in configuration.items():
+            if isinstance(config, dict):
+                self.col_pipelines.append(dtype(**config))
+                continue
+
+            if isinstance(config, list):
+                self.col_pipelines.append([dtype(**c) for c in config])
+                continue
+
+            msg = f"Invalid configuration for column {col_name}: {config}"
+            raise ValueError(msg)
+
         self.workers = workers
 
     def clear_concordance_tables(self) -> None:
@@ -39,25 +51,106 @@ class MaskDataFramePipelineBase(ABC):
         """Get the order of the columns in the dataframe."""
         return {col_name: i for i, col_name in enumerate(data.columns)}
 
+    @staticmethod
     @abstractmethod
-    def _substitute_masked_values(self, data: AnyDataFrame) -> AnyDataFrame:
+    def _substitute_masked_values(
+        data: AnyDataFrame,
+        col_pipelines: list[ConcordanceTableBase],
+        concordance_tables: dict[str, dict[str, str]],
+    ) -> AnyDataFrame:
         """Substitute the masked values in the original dataframe using the concordance table."""
 
     @staticmethod
     @abstractmethod
     def _filter_data(
-        pipeline: ConcordanceTableBase, data: AnyDataFrame
+        data: AnyDataFrame, col_name: str, necessary_columns: list[str]
     ) -> AnyDataFrame:
         """Filter only the relevant columns for the masking."""
+
+    def filter_data(
+        self,
+        pipeline: ConcordanceTableBase | list[ConcordanceTableBase],
+        data: AnyDataFrame,
+    ) -> AnyDataFrame:
+        """Filter the data for the pipeline.
+
+        Args:
+        ----
+            pipeline (ConcordanceTableBase): pipeline object
+            data (AnyDataFrame): input dataframe
+
+        Returns:
+        -------
+            AnyDataFrame: filtered dataframe
+
+        """
+        if not isinstance(pipeline, list):
+            return self._filter_data(
+                data,
+                col_name=pipeline.column_name,
+                necessary_columns=pipeline.serving_columns,
+            )
+
+        necessary_columns = {col for p in pipeline for col in p.serving_columns}
+        return self._filter_data(data, pipeline[0].column_name, list(necessary_columns))
 
     @staticmethod
     @abstractmethod
     def _impose_ordering(data: AnyDataFrame, columns_order: dict) -> AnyDataFrame:
         """Impose the ordering of the columns."""
 
-    @staticmethod
-    def _run_pipeline(pipeline: ConcordanceTableBase, col_data: AnyDataFrame) -> tuple:
-        return pipeline(col_data)
+    def _run_pipeline(
+        self,
+        pipeline: ConcordanceTableBase | list[ConcordanceTableBase],
+        col_data: AnyDataFrame,
+    ) -> tuple:
+        """Run the pipeline for a column.
+
+        Args:
+        ----
+            pipeline (ConcordanceTableBase): pipeline object
+            col_data (AnyDataFrame): input dataframe
+
+        Returns:
+        -------
+            tuple: concordance table
+
+        """
+        if not isinstance(pipeline, list):
+            return pipeline(col_data)
+
+        output_concordance_table = {}
+        for pipe in pipeline:
+            # Generate the new concordance table
+            new_table = pipe(col_data)
+
+            # Substitute the masked values in the original dataframe
+            col_data = self._substitute_masked_values(
+                col_data, [pipe], {pipe.column_name: new_table}
+            )
+
+            # Merge the new concordance table with the previous one
+            new_concordance_values = {
+                k: v
+                for k, v in new_table.items()
+                if k not in output_concordance_table.values()
+            }
+            old_concordance_values = {
+                k: v for k, v in new_table.items() if k not in new_concordance_values
+            }
+
+            if old_concordance_values:
+                output_concordance_table = {
+                    k: old_concordance_values.get(v, v)
+                    for k, v in output_concordance_table.items()
+                }
+
+            output_concordance_table = {
+                **output_concordance_table,
+                **new_concordance_values,
+            }
+
+        return output_concordance_table
 
     def _run_pipelines_serial(self, data: AnyDataFrame) -> None:
         """Run the pipelines for each column serially.
@@ -68,8 +161,13 @@ class MaskDataFramePipelineBase(ABC):
 
         """
         for pipeline in self.col_pipelines:
-            self.concordance_tables[pipeline.column_name] = self._run_pipeline(
-                pipeline, self._filter_data(pipeline, data)
+            c_name = (
+                pipeline.column_name
+                if not isinstance(pipeline, list)
+                else pipeline[0].column_name
+            )
+            self.concordance_tables[c_name] = self._run_pipeline(
+                pipeline, self.filter_data(pipeline, data)
             )
 
     def _run_pipelines_parallel(self, data: AnyDataFrame) -> None:
@@ -83,8 +181,12 @@ class MaskDataFramePipelineBase(ABC):
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             futures = {
                 executor.submit(
-                    self._run_pipeline, pipeline, self._filter_data(pipeline, data)
-                ): pipeline.column_name
+                    self._run_pipeline, pipeline, self.filter_data(pipeline, data)
+                ): (
+                    pipeline.column_name
+                    if not isinstance(pipeline, list)
+                    else pipeline[0].column_name
+                )
                 for pipeline in self.col_pipelines
             }
 
@@ -115,7 +217,9 @@ class MaskDataFramePipelineBase(ABC):
         self._run_pipelines(data)
 
         # Substitute the masked values in the original dataframe
-        data = self._substitute_masked_values(data)
+        data = self._substitute_masked_values(
+            data, self.col_pipelines, self.concordance_tables
+        )
 
         # Impose the ordering of the columns
         return self._impose_ordering(data, columns_order)

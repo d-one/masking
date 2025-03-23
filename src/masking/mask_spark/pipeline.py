@@ -59,29 +59,53 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         super().__init__(configuration, workers, ConcordanceTable)
 
     @staticmethod
-    def _filter_data(pipeline: ConcordanceTable, data: DataFrame) -> DataFrame:
-        """Filter out the data where the masked values are the same as the clear values."""
-        return (
-            data.select(pipeline.serving_columns)
-            .filter(col(pipeline.column_name).isNotNull())
-            .distinct()
-        )
+    def _filter_data(
+        data: DataFrame, col_name: str, necessary_columns: list[str]
+    ) -> DataFrame:
+        """Filter out the data where the masked values are the same as the clear values.
 
-    def _substitute_masked_values(self, data: DataFrame) -> DataFrame:
+        Args:
+        ----
+            data (DataFrame): input dataframe
+            col_name (str): column name
+            necessary_columns (list[str]): list of necessary columns
+
+        Returns:
+        -------
+            DataFrame: dataframe with masked column
+
+        """
+        required = list({*necessary_columns, col_name})
+
+        return data.select(required).filter(col(col_name).isNotNull()).distinct()
+
+    @staticmethod
+    def _substitute_masked_values(
+        data: DataFrame,
+        col_pipelines: list[ConcordanceTable],
+        concordance_tables: dict[str, dict[str, str]],
+    ) -> DataFrame:
         """Substitute the masked values in the original dataframe using the concordance table.
 
         Args:
         ----
             data (DataFrame): input dataframe or series
+            col_pipelines (list[ConcordanceTable]): list of concordance tables
+            concordance_tables (dict[str, dict[str, str]): dictionary with the concordance tables
 
         Returns:
         -------
                 DataFrame: dataframe or series with masked column.
 
         """
-        for pipeline in self.col_pipelines:
-            if self.concordance_tables[pipeline.column_name]:
-                new_col_name = f"{pipeline.column_name}_masked"
+        for pipeline in col_pipelines:
+            c_name = (
+                pipeline.column_name
+                if not isinstance(pipeline, list)
+                else pipeline[0].column_name
+            )
+            if concordance_tables[c_name]:
+                new_col_name = f"{c_name}_masked"
                 while new_col_name in data.columns:
                     new_col_name += "_masked_"
 
@@ -89,18 +113,17 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                     data.withColumn(
                         new_col_name,
                         when(
-                            col(pipeline.column_name).isNotNull(),
+                            col(c_name).isNotNull(),
                             udf(
-                                lambda x,
-                                tab=self.concordance_tables[
-                                    pipeline.column_name
-                                ]: tab.get(x, str(x)),
+                                lambda x, tab=concordance_tables[c_name]: tab.get(
+                                    x, str(x)
+                                ),
                                 StringType(),
-                            )(col(pipeline.column_name)),
+                            )(col(c_name)),
                         ).otherwise(None),
                     )
-                    .drop(pipeline.column_name)
-                    .withColumnRenamed(new_col_name, pipeline.column_name)
+                    .drop(c_name)
+                    .withColumnRenamed(new_col_name, c_name)
                 )
 
         return data

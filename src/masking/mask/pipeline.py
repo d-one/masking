@@ -68,43 +68,55 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         super().__init__(configuration, workers, dtype=ConcordanceTable)
 
     @staticmethod
-    def _filter_data(pipeline: ConcordanceTable, data: pd.DataFrame) -> pd.DataFrame:
+    def _filter_data(
+        data: pd.DataFrame, col_name: str, necessary_columns: list[str]
+    ) -> pd.DataFrame:
         """Filter out the data where the masked values are the same as the clear values.
 
         Args:
         ----
-            pipeline (ConcordanceTable): pipeline object
             data (pd.DataFrame): input dataframe
+            col_name (str): column name
+            necessary_columns (list[str]): list of necessary columns
 
         Returns:
         -------
             pd.DataFrame: dataframe with masked column
 
         """
-        return (
-            data[pipeline.serving_columns]
-            .dropna(how="all")
-            .drop_duplicates(keep="first")
-        )
+        required = list({*necessary_columns, col_name})
 
-    def _substitute_masked_values(self, data: pd.DataFrame) -> pd.DataFrame:
+        # Filter out all the row which have null valus on the col_name
+        return data[required].dropna(subset=[col_name]).drop_duplicates(keep="first")
+
+    @staticmethod
+    def _substitute_masked_values(
+        data: pd.DataFrame,
+        col_pipelines: list[ConcordanceTable],
+        concordance_tables: dict[str, dict[str, str]],
+    ) -> pd.DataFrame:
         """Substitute the masked values in the original dataframe using the concordance table.
 
         Args:
         ----
             data (pd.DataFrame): input dataframe
+            col_pipelines (list[ConcordanceTable]): list of concordance tables
+            concordance_tables (dict[str, dict[str, str]): dictionary with the concordance tables
 
         Returns:
         -------
         pd.DataFrame: dataframe with masked column
 
         """
-        for pipeline in self.col_pipelines:
-            if self.concordance_tables[pipeline.column_name]:
-                data[pipeline.column_name] = data[pipeline.column_name].map(
-                    lambda x, col_name=pipeline.column_name: self.concordance_tables[
-                        col_name
-                    ].get(x, x)
+        for pipeline in col_pipelines:
+            c_name = (
+                pipeline.column_name
+                if not isinstance(pipeline, list)
+                else pipeline[0].column_name
+            )
+            if concordance_tables[c_name]:
+                data[c_name] = data[c_name].map(
+                    lambda x, col_name=c_name: concordance_tables[col_name].get(x, x)
                     if not pd.isna(x)
                     else x
                 )
