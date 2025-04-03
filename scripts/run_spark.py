@@ -54,14 +54,14 @@ def measure_execution_time(config: dict) -> float:
 
     # if any(
     #     isinstance(
-    #         config[col_name]["masking_operation"], HashDictOperation | HashPresidio
+    #         config[col_name]["masking_operation"], MaskDictOperation | HashPresidio
     #     )
     #     for col_name in config
     # ):
     #     # Update the analyzer in the config
     #     for col_name in config:
     #         if isinstance(
-    #             config[col_name]["masking_operation"], HashDictOperation | HashPresidio
+    #             config[col_name]["masking_operation"], MaskDictOperation | HashPresidio
     #         ):
     #             analyzer = config[col_name]["masking_operation"].analyzer
     #             broadcased_analyzer = spark.sparkContext.broadcast(analyzer)

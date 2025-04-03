@@ -10,7 +10,7 @@ from masking.utils.multi_nested_dict import MultiNestedDictHandler
 from masking.utils.presidio_handler import PresidioHandler
 
 
-class HashDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
+class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
     """Hashes a column using SHA256 algorithm."""
 
     def __init__(

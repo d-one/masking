@@ -4,11 +4,11 @@ from itertools import tee
 
 from pandas import DataFrame, Series
 
-from masking.base_operations.operation_dict import HashDictOperationBase
+from masking.base_operations.operation_dict import MaskDictOperationBase
 from masking.mask.operations.operation import PandasOperation
 
 
-class HashDictOperation(PandasOperation, HashDictOperationBase):
+class MaskDictOperation(PandasOperation, MaskDictOperationBase):
     """Hashes a column using SHA256 algorithm."""
 
     def _mask_data(self, data: DataFrame | Series) -> DataFrame | Series:

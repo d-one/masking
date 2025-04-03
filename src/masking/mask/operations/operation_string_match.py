@@ -4,7 +4,7 @@ from contextlib import suppress
 
 from pandas import DataFrame, Series
 
-from masking.base_operations.operation_match import StringMatchOperationBase
+from masking.base_operations.operation_string_match import StringMatchOperationBase
 from masking.mask.operations.operation import PandasOperation
 
 

@@ -1,8 +1,8 @@
 from masking.mask.operations.operation_dict import (
-    HashDictOperation as HashDictOperationPandas,
+    MaskDictOperation as MaskDictOperationPandas,
 )
 from masking.mask_spark.operations.operation import SparkOperation
 
 
-class HashDictOperation(SparkOperation, HashDictOperationPandas):
+class MaskDictOperation(SparkOperation, MaskDictOperationPandas):
     """Hashes a column using entity detection algorithm."""
