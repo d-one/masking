@@ -203,6 +203,8 @@ class Operation(ABC):
         masked = self._mask_line(self._get_operating_input(line), **kwargs)
         for _ in range(self.MAX_RETRY):
             if masked not in self.concordance_table.values():
+                # Update the concordance table with the new value
+                self.concordance_table[clear_value] = masked
                 return masked
 
             masked = self._mask_line(self._get_operating_input(line), **kwargs)

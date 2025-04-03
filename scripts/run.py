@@ -3,7 +3,10 @@ import shutil
 import time
 from pathlib import Path
 
+from masking.mask.operations.operation_fake_plz import FakePLZ
 from masking.mask.operations.operation_hash import HashOperation
+from masking.mask.operations.operation_presidio import HashPresidio
+from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
 from pandas import DataFrame, read_csv
@@ -25,6 +28,11 @@ if not path.exists():
 def measure_execution_time(config: dict) -> float:
     pipeline = MaskDataFramePipeline(config, workers=min(4, len(config)))
     data = read_csv(path)
+
+    # Cast the PLZ column to string
+    if "PLZ" in data.columns:
+        data["PLZ"] = data["PLZ"].astype(str)
+
     print(data)
 
     start_time = time.time()
@@ -60,6 +68,11 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
+    "PLZ": {
+        "masking_operation": FakePLZ(
+            col_name="PLZ", preserve=("district", "area", "route")
+        )
+    },
     "Name": [
         {
             "masking_operation": HashOperation(
@@ -81,28 +94,28 @@ config = {
                 }),
             )
         },
-    ]
-    # "Vorname": {
-    #     "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-    #     "concordance_table": DataFrame({
-    #         "clear_values": ["Darius"],
-    #         "masked_values": ["DA"],
-    #     }),
-    # },
-    # "Beschrieb": {
-    #     "masking_operation": HashPresidio(
-    #         col_name="Beschrieb",
-    #         masking_function=lambda x: "<MASKED>",
-    #         analyzer=analyzer,
-    #         allow_list=["Darius"],
-    #         pii_entities=["PERSON"],
-    #     )
-    # },
-    # "Geburtsdatum": {
-    #     "masking_operation": YYYYHashOperation(
-    #         col_name="Geburtsdatum", secret="my_secret"
-    #     )
-    # },
+    ],
+    "Vorname": {
+        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+        "concordance_table": DataFrame({
+            "clear_values": ["Darius"],
+            "masked_values": ["DA"],
+        }),
+    },
+    "Beschrieb": {
+        "masking_operation": HashPresidio(
+            col_name="Beschrieb",
+            masking_function=lambda x: "<MASKED>",
+            analyzer=analyzer,
+            allow_list=["Darius"],
+            pii_entities=["PERSON"],
+        )
+    },
+    "Geburtsdatum": {
+        "masking_operation": YYYYHashOperation(
+            col_name="Geburtsdatum", secret="my_secret"
+        )
+    },
     # "Extra": {
     #     "masking_operation": StringMatchOperation(
     #         col_name="Extra",
