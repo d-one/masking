@@ -4,6 +4,7 @@ import time
 from pathlib import Path
 
 import pandas as pd
+from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_fake_plz import FakePLZ
 from masking.mask_spark.operations.operation_hash import HashOperation
 from masking.mask_spark.operations.operation_presidio import HashPresidio
@@ -128,11 +129,28 @@ config = {
             pii_entities=["PERSON"],
         )
     },
-    "Geburtsdatum": {
-        "masking_operation": YYYYHashOperation(
-            col_name="Geburtsdatum", secret="my_secret"
-        )
-    },
+    "Geburtsdatum": [
+        {
+            "masking_operation": FakeDate(
+                col_name="Geburtsdatum",
+                preserve=("year", "month"),
+                concordance_table=pd.DataFrame({
+                    "clear_values": ["1979-04-24"],
+                    "masked_values": ["2050-01-01"],
+                }),
+            )
+        },
+        {
+            "masking_operation": YYYYHashOperation(
+                col_name="Geburtsdatum",
+                secret="my_secret",
+                concordance_table=pd.DataFrame({
+                    "clear_values": ["2050-01-01"],
+                    "masked_values": ["<MASKED>"],
+                }),
+            )
+        },
+    ],
     # "Extra": {
     #     "masking_operation": StringMatchOperation(
     #         col_name="Extra",
