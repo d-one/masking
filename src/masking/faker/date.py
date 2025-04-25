@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, ClassVar
 
+from dateparser import parse
 from faker.generator import Generator
 
 from .faker import FakeProvider
@@ -16,17 +17,20 @@ class FakeDateProvider(FakeProvider):
     _PRESERVED: ClassVar[set[str]] = set()
     _ADMISSIBLE: ClassVar[set[str]] = {"day", "month", "year"}
 
-    def __init__(self, preserve: str | tuple[str] = "year") -> None:
+    def __init__(self, preserve: str | tuple[str] | None = None) -> None:
         self.generator: Generator = self.get_generator()
 
-        if isinstance(preserve, str):
-            preserve = (preserve,)
+        self._PRESERVED = set()
 
-        # Check if the preserve values are admissible
-        msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE])}."""
-        assert all(s in self._ADMISSIBLE for s in preserve), msg  # noqa: S101
+        if preserve is not None:
+            if isinstance(preserve, str):
+                preserve = (preserve,)
 
-        self._PRESERVED = set(preserve)
+            # Check if the preserve values are admissible
+            msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE])}."""
+            assert all(s in self._ADMISSIBLE for s in preserve), msg  # noqa: S101
+
+            self._PRESERVED = set(preserve)
 
     @staticmethod
     def read_date_from_isoformat(date_str: str) -> datetime:
@@ -41,7 +45,7 @@ class FakeDateProvider(FakeProvider):
             datetime:
 
         """
-        return datetime.fromisoformat(date_str)
+        return parse(date_str)
 
     def get_preserved_ranges(self, real_date: datetime) -> dict[str, str]:
         """Get the preserved ranges for the real date.
@@ -60,7 +64,7 @@ class FakeDateProvider(FakeProvider):
             "day_end": "31",
             "month_start": "01",
             "month_end": "12",
-            "year_start": "1900",
+            "year_start": "1800",
             "year_end": str(datetime.now(tz=UTC).year),
         }
 
@@ -92,7 +96,7 @@ class FakeDateProvider(FakeProvider):
 
         return dates_range
 
-    def __call__(self, real_date: datetime | str) -> datetime:
+    def __call__(self, real_date: datetime | str) -> str:
         """Generate a uniqe date that is not equal in month and day.
 
         The function is recursively called if the generated date is equal to the real date.
@@ -110,23 +114,23 @@ class FakeDateProvider(FakeProvider):
             datetime: A unique date that is not equal in month and day.
 
         """
-        if isinstance(real_date, str):
+        if not isinstance(real_date, datetime):
             real_date = self.read_date_from_isoformat(real_date)
 
         dates_range = self.get_preserved_ranges(real_date)
         changed = self._ADMISSIBLE - self._PRESERVED
 
         for _ in range(self._DATE_MAX_ITERATIONS):
-            dt: datetime = self.get_date_from_year(dates_range)
+            dt: datetime = self.get_date_from_ranges(dates_range)
 
             # Find conditions to check
             if all(getattr(real_date, k) != getattr(dt, k) for k in changed):
-                return dt
+                return str(dt)
 
         msg = "Could not generate a unique date: too many iterations."
         raise ValueError(msg)
 
-    def get_date_from_year(self, dates_ranges: dict[str, str]) -> datetime:
+    def get_date_from_ranges(self, dates_ranges: dict[str, str]) -> datetime:
         """Generate a date from the given year.
 
         Args:
