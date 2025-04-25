@@ -23,18 +23,19 @@ class ConcordanceTable(ConcordanceTableBase):
 
         """
         try:
-            masked_values = (
+            data = (
                 self.masking_operation(
-                    data.withColumn("clear_values", col(self.column_name))
-                    .withColumn(self.column_name, col(self.column_name).cast("string"))
-                    .filter(col(self.column_name) != "")  # noqa: PLC1901
-                    .select(["clear_values", *self.serving_columns])
+                    data.select(
+                        col(self.column_name).alias("clear_values"),
+                        col(self.column_name).cast("string"),
+                        *[c for c in self.serving_columns if c != self.column_name],
+                    )
                 )
                 .withColumnRenamed(self.column_name, "masked_values")
                 .cache()
             )
 
-            return masked_values.filter(
+            return data.filter(
                 col("clear_values").cast("string") != col("masked_values")
             ).rdd.collectAsMap()
 
@@ -43,7 +44,7 @@ class ConcordanceTable(ConcordanceTableBase):
             raise ValueError(msg) from e
 
         finally:
-            masked_values.unpersist()
+            data.unpersist()
 
 
 class MaskDataFramePipeline(MaskDataFramePipelineBase):
@@ -76,9 +77,9 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             DataFrame: dataframe with masked column
 
         """
-        required = list({*necessary_columns, col_name})
-
-        return data.select(required).filter(col(col_name).isNotNull()).distinct()
+        return (
+            data.select(necessary_columns).filter(col(col_name).isNotNull()).distinct()
+        )
 
     @staticmethod
     def _substitute_masked_values(

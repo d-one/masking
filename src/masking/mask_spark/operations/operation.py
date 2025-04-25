@@ -2,7 +2,6 @@ from collections.abc import Iterator
 
 import pandas as pd
 from pyspark.sql import DataFrame
-from pyspark.sql.types import StructType
 
 from masking.base_operations.operation import Operation
 
@@ -36,9 +35,6 @@ class SparkOperation(Operation):
                 partition[self.col_name] = self._mask_data_pandas(
                     partition[self.serving_columns]
                 )
-                yield partition[["clear_values", self.col_name]]
+                yield partition
 
-        return data.mapInPandas(
-            mask_data_partition,
-            StructType([data.schema["clear_values"], data.schema[self.col_name]]),
-        )
+        return data.mapInPandas(mask_data_partition, data.schema)

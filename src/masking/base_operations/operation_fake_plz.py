@@ -25,12 +25,18 @@ class FakePLZBase(Operation):
         super().__init__(col_name=col_name, **kwargs)
         self.faker = FakePLZProvider(preserve=preserve, locale=locale)
 
-    def _mask_line(self, line: str) -> str:
+    @property
+    def _needs_unique_values(self) -> bool:
+        """Return if the operation needs to produce unique masked values."""
+        return True
+
+    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
+            **kwargs (dict): keyword arguments
 
         Returns:
         -------

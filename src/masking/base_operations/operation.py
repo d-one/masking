@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
+import polars as pl
 from pyspark.sql import DataFrame
 
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
-AnyDataFrame = pd.DataFrame | DataFrame
+AnyDataFrame = pd.DataFrame | DataFrame | pl.DataFrame
 
 
 class Operation(ABC):
@@ -46,10 +47,13 @@ class Operation(ABC):
         """Return the columns needed for serving the operation."""
         return [self.col_name]
 
+    @property
+    def _needs_unique_values(self) -> bool:
+        """Return if the operation needs to produce unique masked values."""
+        return False
+
     @staticmethod
-    def cast_concordance_table(
-        concordance_table: pd.DataFrame | DataFrame | dict | None,
-    ) -> dict:
+    def cast_concordance_table(concordance_table: AnyDataFrame | dict | None) -> dict:
         """Cast the concordance table to a dictionary.
 
         Args:
@@ -97,6 +101,20 @@ class Operation(ABC):
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e
 
+        if isinstance(concordance_table, pl.DataFrame):
+            # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
+            try:
+                return dict(
+                    zip(
+                        concordance_table["clear_values"].to_list(),
+                        concordance_table["masked_values"].to_list(),
+                        strict=False,
+                    )
+                )
+            except Exception as e:
+                msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
+                raise TypeError(msg) from e
+
         if isinstance(concordance_table, dict):
             if any([
                 len(concordance_table) == 0,
@@ -140,23 +158,6 @@ class Operation(ABC):
         self._cast_concordance_table()
         self.concordance_table.update(concordance_table)
 
-    def _get_operating_input(self, line: str | pd.Series) -> str:
-        """Get the input for the operation.
-
-        Args:
-        ----
-            line (str): input line
-
-        Returns:
-        -------
-            str: input for the operation
-
-        """
-        if isinstance(line, pd.Series) and len(self.serving_columns) == 1:
-            return line[self.col_name]
-
-        return line
-
     @abstractmethod
     def _mask_line(self, line: str) -> str:
         """Mask a single line.
@@ -176,13 +177,14 @@ class Operation(ABC):
         raise NotImplementedError(msg)
 
     def _check_mask_line(
-        self, line: str | pd.Series | None, **kwargs: dict
+        self, line: str | None, additional_values: dict | None = None, **kwargs: dict
     ) -> str | None:
         """Check if the line is masked.
 
         Args:
         ----
             line (str): input line
+            additional_values (dict): additional values to be masked
             kwargs: additional arguments for the masking operation
 
         Returns:
@@ -193,21 +195,22 @@ class Operation(ABC):
         if line is None:
             return None
 
-        clear_value = line
-        if isinstance(line, pd.Series):
-            clear_value = line[self.col_name]
+        if line in self.concordance_table:
+            return self.concordance_table[line]
 
-        if clear_value in self.concordance_table:
-            return self.concordance_table[clear_value]
-
-        masked = self._mask_line(self._get_operating_input(line), **kwargs)
+        masked = self._mask_line(
+            line=line, additional_values=additional_values, **kwargs
+        )
         for _ in range(self.MAX_RETRY):
             if masked not in self.concordance_table.values():
-                # Update the concordance table with the new value
-                self.concordance_table[clear_value] = masked
+                # Update the concordance table with the new value, if unique masked values are required
+                if self._needs_unique_values:
+                    self.concordance_table[line] = masked
                 return masked
 
-            masked = self._mask_line(self._get_operating_input(line), **kwargs)
+            masked = self._mask_line(
+                line=line, additional_values=additional_values, **kwargs
+            )
 
         # If the maximum number of retries is reached, raise an error
         msg = f"Maximum number of retries reached ({self.MAX_RETRY}) for column {self.col_name}."
@@ -227,9 +230,7 @@ class Operation(ABC):
             Any: dataframe or series with masked column
 
         """
-        msg = (
-            "Applying operation not implemented: please implement the __call__ method."
-        )
+        msg = "Applying operation not implemented: please implement the _mask_data_ method."
         raise NotImplementedError(msg)
 
     def __call__(self, data: AnyDataFrame) -> AnyDataFrame:

@@ -1,4 +1,4 @@
-from masking.base_operations.operation_date import FakeDateBase
+from masking.base_operations.operation_fake_date import FakeDateBase
 from masking.mask.operations.operation import PandasOperation
 
 

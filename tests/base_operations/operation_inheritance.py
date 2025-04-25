@@ -157,31 +157,6 @@ def test_update_concordance_table(
         assert v in op.concordance_table.values()
 
 
-def test_get_operating_input(
-    v_input_name_and_line: tuple, create_concrete_operation: Callable
-) -> None:
-    """Test if the _get_operating_input method returns the correct input for the operation.
-
-    Args:
-    ----
-        v_input_name_and_line (tuple): tuple with the column name and input line
-        create_concrete_operation (Callable): function to create the concrete operation
-
-    """
-    name, line = v_input_name_and_line
-    op = create_concrete_operation(name)
-
-    if line is None:
-        assert op._get_operating_input(line) is None
-        return
-
-    expected_line = line
-    if isinstance(line, pd.Series) and len(op.serving_columns) == 1:
-        expected_line = line[name]
-
-    assert op._get_operating_input(line) == expected_line
-
-
 def test_check_mask_line_without_concordance_table(
     v_input_name_and_line: tuple, create_concrete_operation: Callable
 ) -> None:

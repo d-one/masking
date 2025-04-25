@@ -59,6 +59,7 @@ numpy = "2.0.0"
 spacy = "^3.8.0"
 dateparser = "^1.2.0"
 presidio-anonymizer = "^2.2.356"
+polars = "^1.27.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.8"

@@ -107,5 +107,16 @@ class StringMatchOperationBase(Operation, PresidioHandler, MultiNestedDictHandle
 
         return PatternRecognizer(supported_entity=self._PII_ENTITY, patterns=patterns)
 
-    def _mask_line(self, line: str) -> str:
-        pass
+    def _mask_line(self, line: str, **kwargs: dict) -> str:
+        """Mask a single line.
+
+        Args:
+        ----
+            line (str): input line
+            **kwargs (dict): keyword arguments
+
+        Returns:
+        -------
+            str: masked line
+
+        """

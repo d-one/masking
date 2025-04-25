@@ -19,36 +19,17 @@ class ConcordanceTable(ConcordanceTableBase):
             pd.DataFrame or pd.Series: dataframe or series with masked column
 
         """
-        if isinstance(data, pd.Series):
-            data = data.dropna()
-            masked = self.masking_operation(data)
+        data["masked_values"] = self.masking_operation(data)
+        data = data.rename(columns={self.column_name: "clear_values"})
 
-            # Drop all the key-value pairs where key==value
-            index_to_drop = data == masked
-            return dict(
-                zip(
-                    data[~index_to_drop].tolist(),
-                    masked[~index_to_drop].tolist(),
-                    strict=False,
-                )
-            )
-
-        # If we reached this point, we have a DataFrame
-        data = data[self.serving_columns].dropna().reset_index(drop=True)
-
-        # Filter out the values that are already in the concordance table
-        masked = self.masking_operation(data)
-
-        data = data[self.column_name]
-        if isinstance(masked, pd.DataFrame):
-            masked = masked[self.column_name]
-
-        # Drop all the key-value pairs where key==value
-        index_to_drop = data == masked
+        # Filter out all the values where masked_values == clear_values
+        data = data[
+            data["clear_values"].astype(str) != data["masked_values"].astype(str)
+        ]
         return dict(
             zip(
-                data[~index_to_drop].tolist(),
-                masked[~index_to_drop].tolist(),
+                data["clear_values"].tolist(),
+                data["masked_values"].tolist(),
                 strict=False,
             )
         )
@@ -84,10 +65,12 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             pd.DataFrame: dataframe with masked column
 
         """
-        required = list({*necessary_columns, col_name})
-
         # Filter out all the row which have null valus on the col_name
-        return data[required].dropna(subset=[col_name]).drop_duplicates(keep="first")
+        return (
+            data[necessary_columns]
+            .dropna(subset=[col_name])
+            .drop_duplicates(keep="first")
+        )
 
     @staticmethod
     def _substitute_masked_values(

@@ -21,4 +21,10 @@ class PandasOperation(Operation):
         if isinstance(data, pd.Series):
             return data.map(self._check_mask_line)
 
-        return data[self.serving_columns].apply(self._check_mask_line, axis=1)
+        return data[self.serving_columns].apply(
+            lambda row: self._check_mask_line(
+                line=row[self.col_name],
+                additional_values=row.drop(self.col_name).to_dict(),
+            ),
+            axis=1,
+        )

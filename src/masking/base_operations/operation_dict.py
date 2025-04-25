@@ -63,6 +63,7 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
         leaf_to_mask: tuple | None = None,
         leaf_to_deny: tuple | None = None,
         entities: dict | None = None,
+        **kwargs: dict,  # noqa: ARG002
     ) -> str:
         """Mask a single line represented by a dictionary.
 
@@ -72,6 +73,7 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
             leaf_to_mask (tuple): leafs to mask
             leaf_to_deny (tuple): leafs to deny
             entities (dict): entities detected in the line
+            **kwargs (dict): additional arguments for the masking operation
 
         Returns:
         -------

@@ -36,18 +36,18 @@ class ConcordanceTableBase(ABC):
         """
         self.masking_operation = masking_operation
 
-        if column is None:
-            try:
-                column = self.masking_operation.col_name
-            except AttributeError as e:
-                msg = f"Column name must be provided: {e}"
-                raise ValueError(msg) from e
-
-        self.column_name = column
+        if column is not None and column != self.masking_operation.col_name:
+            msg = f"Column name {column} does not match the masking operation column name {self.masking_operation.col_name}"
+            raise ValueError(msg)
 
         if concordance_table is None:
             concordance_table = {}
         self.concordance_table = concordance_table
+
+    @property
+    def column_name(self) -> str:
+        """Return the column name."""
+        return self.masking_operation.col_name
 
     @property
     def serving_columns(self) -> list[str]:

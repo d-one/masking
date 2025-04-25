@@ -1,5 +1,5 @@
 import hashlib
-from collections.abc import Callable, Generator
+from collections.abc import Callable
 
 from masking.base_operations.operation import Operation
 from masking.utils.hash import hash_string
@@ -36,12 +36,13 @@ class HashOperationBase(Operation):
         self.secret = secret
         self.hash_function = hash_function
 
-    def _mask_line(self, line: str) -> Generator[str, None, None]:
+    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
+            **kwargs (dict): keyword arguments
 
         Returns:
         -------

@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pandas as pd
 from masking.mask_spark.operations.operation_hash import HashOperation
+from masking.mask_spark.operations.operation_presidio import HashPresidio
+from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
 from pyspark.sql import SparkSession
@@ -106,28 +108,43 @@ config = {
     "Name": [
         {
             "masking_operation": HashOperation(
-                col_name="Name", secret="my_secret", concordance_table={"Spiess": "SP"}
+                col_name="Name",
+                secret="my_secret",
+                concordance_table=pd.DataFrame({
+                    "clear_values": ["Spiess"],
+                    "masked_values": ["SP"],
+                }),
             )
-        }
+        },
+        {
+            "masking_operation": HashOperation(
+                col_name="Name",
+                secret="my_secret",
+                concordance_table=pd.DataFrame({
+                    "clear_values": ["SP"],
+                    "masked_values": ["123"],
+                }),
+            )
+        },
     ],
     "Vorname": {
         "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
         "concordance_table": {"Darius": "DA"},
     },
-    # "Beschrieb": {
-    #     "masking_operation": HashPresidio(
-    #         col_name="Beschrieb",
-    #         masking_function=lambda x: "<MASKED>",
-    #         analyzer=analyzer,
-    #         allow_list=["Darius"],
-    #         pii_entities=["PERSON"],
-    #     )
-    # },
-    # "Geburtsdatum": {
-    #     "masking_operation": YYYYHashOperation(
-    #         col_name="Geburtsdatum", secret="my_secret"
-    #     )
-    # },
+    "Beschrieb": {
+        "masking_operation": HashPresidio(
+            col_name="Beschrieb",
+            masking_function=lambda x: "<MASKED>",
+            analyzer=analyzer,
+            allow_list=["Darius"],
+            pii_entities=["PERSON"],
+        )
+    },
+    "Geburtsdatum": {
+        "masking_operation": YYYYHashOperation(
+            col_name="Geburtsdatum", secret="my_secret"
+        )
+    },
     # "Extra": {
     #     "masking_operation": StringMatchOperation(
     #         col_name="Extra",

@@ -168,7 +168,7 @@ class FakePLZProvider(FakeProvider):
             str: A random PLZ.
 
         """
-        if isinstance(plz, int):
+        if not isinstance(plz, str):
             plz = str(plz)
 
         plz_dict = self.parse_plz(plz)

@@ -13,12 +13,13 @@ class YYYYHashOperationBase(HashOperationBase):
     Example: 1990-01-01 -> 1990_hash(1990-01-01).
     """
 
-    def _mask_line(self, line: str | datetime) -> str:
+    def _mask_line(self, line: str | datetime, **kwargs: dict) -> str:  # noqa: ARG002
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
+            **kwargs (dict): additional arguments for the masking operation
 
         Returns:
         -------

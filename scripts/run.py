@@ -29,10 +29,6 @@ def measure_execution_time(config: dict) -> float:
     pipeline = MaskDataFramePipeline(config, workers=min(4, len(config)))
     data = read_csv(path)
 
-    # Cast the PLZ column to string
-    if "PLZ" in data.columns:
-        data["PLZ"] = data["PLZ"].astype(str)
-
     print(data)
 
     start_time = time.time()

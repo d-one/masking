@@ -34,13 +34,19 @@ class HashPresidioBase(Operation, PresidioHandler):
                 for entity in self._PII_ENTITIES
             }
 
-    def _mask_line(self, line: str, entities: list[str] | None = None) -> str:
+    def _mask_line(
+        self,
+        line: str,
+        entities: list[str] | None = None,
+        **kwargs: dict,  # noqa: ARG002
+    ) -> str:
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
             entities (list): list of entities to mask
+            **kwargs (dict): keyword arguments
 
         Returns:
         -------

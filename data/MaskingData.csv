@@ -1,301 +1,301 @@
-Unnamed: 0,Name,Name 2,Vorname,Strasse,PLZ,Ort,Beschrieb,Geburtsdatum,anaemia,creatinine_phosphokinase,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,sex,smoking,time,DEATH_EVENT
-0,Müller,,Darius,Talstrasse 5,5326,Unterentfelden,"Müller Darius könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, zum Beispiel an einer Myokarditis oder an einer Kardiomyopathie.",1979-04-24,0,582,0,20,1,265000.0,1.9,130,männlich,0,4,1
-1,Wüest,,Luís,Laufenplatz 145,4312,Wohlenschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Wüest Luís den kardiogenen Schock zu verhindern. ",2021-08-05,0,7861,0,38,0,263358.03,1.1,136,männlich,0,6,1
-2,Spiess,,Ayan,Gässli 265,8917,Schinznach-Dorf,"Spiess Ayan könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1976-03-09,0,146,0,20,0,162000.0,1.3,129,weiblich,1,7,1
-3,Caviezel,,Nicolas,Seetalstrasse 6,5725,Zuzgen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Caviezel Nicolas den kardiogenen Schock zu verhindern. ",1975-07-14,1,111,0,20,0,210000.0,1.9,137,männlich,0,7,1
-4,Wälti,,Mert,Schulstrasse 9,5619,Merenschwand,Wälti Mert hätte möglicherweise von einer Herztransplantation profitiert.,1934-02-24,1,160,1,20,0,327000.0,2.7,116,männlich,0,8,1
-5,Hediger,,Olivia,Rathausgasse 16,5505,Mägenwil,"Hediger Olivia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1938-08-30,1,47,0,40,1,204000.0,2.1,132,weiblich,1,8,1
-6,Lütolf,,Maël,Kanzleistrasse 8,5503,Hausen AG,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lütolf Maël den kardiogenen Schock zu verhindern. ",1967-03-12,1,246,0,15,0,127000.0,1.2,137,männlich,0,10,1
-7,Peric,,Liva,Dorfstrasse 624,5723,Bergdietikon,Peric Liva hätte möglicherweise von einer Herztransplantation profitiert.,2007-02-05,1,315,1,60,0,454000.0,1.1,131,weiblich,1,10,1
-8,Herzog,,Alessia,Seetalstrasse 6,5242,Zuzgen,"Herzog Alessia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2005-03-10,0,157,0,65,0,263358.03,1.5,138,weiblich,0,10,1
-9,Schwarz,,Attila,Friedlisbergstrasse 11,5623,Mettau,Schwarz Attila hätte möglicherweise von einer Herztransplantation profitiert.,1955-11-22,1,123,0,35,1,388000.0,9.4,133,männlich,1,10,1
-10,Grunder,,Carlo,Schulstrasse 6,5082,Obermumpf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Grunder Carlo den kardiogenen Schock zu verhindern. ",1949-10-02,1,81,0,38,1,368000.0,4.0,131,männlich,1,10,1
-11,Steinemann,,Varvara,Landstrasse 134a,5107,Fisibach,Steinemann Varvara hätte möglicherweise von einer Herztransplantation profitiert.,1971-08-17,0,231,0,25,1,253000.0,0.9,140,weiblich,1,10,1
-12,Früh,,Raoul,Hauptstrasse 64,5304,Rupperswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Früh Raoul den kardiogenen Schock zu verhindern. ",1991-09-19,1,981,0,30,0,136000.0,1.1,137,männlich,0,11,1
-13,Bertschinger,,Carlota,Hauptstrasse 22,5330,Hägglingen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Bertschinger Carlota den kardiogenen Schock zu verhindern. ",1934-11-01,1,168,0,38,1,276000.0,1.1,137,weiblich,0,11,1
-14,Herrmann,,Mihaela,Schulstrasse 2,5062,Brunegg,,2020-07-13,1,80,0,30,1,427000.0,1.0,138,weiblich,0,12,0
-15,Pfenninger,,Gabriel,Weidstrasse 1,4324,Mägenwil,"Pfenninger Gabriel könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1999-07-20,1,379,0,50,0,47000.0,1.3,136,männlich,0,13,1
-16,Mühlemann,,Agata,Oberdorfstrasse 2,5745,Künten,Mühlemann Agata hätte möglicherweise von einer Herztransplantation profitiert.,2023-05-10,1,149,0,38,0,262000.0,0.9,140,weiblich,0,14,1
-17,Künzler,,Yvette,Schul- und Gemeindehaus,5430,Remigen,"Künzler Yvette könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1953-04-22,0,582,0,14,0,166000.0,0.8,127,weiblich,0,14,1
-18,Ruch,,Fathima,Hauptstrasse,5603,Oberentfelden,Ruch Fathima hätte möglicherweise von einer Herztransplantation profitiert.,1981-11-15,1,125,0,25,1,237000.0,1.0,140,weiblich,0,15,1
-19,Tanner,,Nunzio,Alte Landstrasse 27,5103,Gränichen,"Tanner Nunzio könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1933-01-26,1,582,1,55,0,87000.0,1.9,121,männlich,0,15,1
-20,Hussein,,Quinn,Dorfstrasse 12,5272,Kallern AG,,1979-04-14,1,52,0,25,1,276000.0,1.3,137,männlich,0,16,0
-21,Friedli,,Yves,Schulhausstrasse 2,5647,Merenschwand,Friedli Yves hätte möglicherweise von einer Herztransplantation profitiert.,1976-08-08,1,128,1,30,1,297000.0,1.6,136,männlich,0,20,1
-22,Heuberger,,Piotr,Bollstrasse 100,5425,Zufikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Heuberger Piotr den kardiogenen Schock zu verhindern. ",1954-09-23,1,220,0,35,1,289000.0,0.9,140,männlich,1,20,1
-23,Caduff,,Volkan,Reinerstrasse 25,8905,Safenwil,,1998-01-16,0,63,1,60,0,368000.0,0.8,135,männlich,0,22,0
-24,Preisig,,Mohammad,Brotkorbstrasse 9,5420,Seengen,Preisig Mohammad hätte möglicherweise von einer Herztransplantation profitiert.,1998-10-04,0,582,1,30,1,263358.03,1.83,134,männlich,0,23,1
-25,Rohr,,Emma,Rathausgasse 16,8918,Bünzen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rohr Emma den kardiogenen Schock zu verhindern. ",1954-06-26,0,148,1,38,0,149000.0,1.9,144,weiblich,1,23,1
-26,Sprenger,,Younes,Haldenweg 332,5034,Beinwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Sprenger Younes den kardiogenen Schock zu verhindern. ",2001-05-20,1,112,0,40,1,196000.0,1.0,138,männlich,0,24,1
-27,Heller,,Robin,Gmeindhusplatz 3,4803,Besenbüren,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Heller Robin den kardiogenen Schock zu verhindern. ",1978-06-30,0,122,1,45,1,284000.0,1.3,136,weiblich,1,26,1
-28,Zeller,,Valbona,Hinterdorfstrasse 1,5300,Mandach,Zeller Valbona hätte möglicherweise von einer Herztransplantation profitiert.,2009-09-16,1,60,0,38,0,153000.0,5.8,134,weiblich,0,26,1
-29,Welti,,Petra,Hauptstrasse 87,8905,Veltheim,"Welti Petra könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1985-05-20,0,70,1,30,0,200000.0,1.2,132,weiblich,1,26,1
-30,Lin,,Carla,Alte Dorfstrasse 1,5236,Schupfart,Lin Carla hätte möglicherweise von einer Herztransplantation profitiert.,1959-03-08,0,582,1,38,1,263358.03,1.83,134,weiblich,0,27,1
-31,Allemann,,Joaquín,Schürweg 2,5413,Seon,Allemann Joaquín hätte möglicherweise von einer Herztransplantation profitiert.,1996-08-16,0,23,0,45,0,360000.0,3.0,132,männlich,0,28,1
-32,Salzmann,,Kaspar,Trottengasse 2,5619,Schupfart,"Salzmann Kaspar könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2018-02-27,1,249,1,35,1,319000.0,1.0,128,männlich,0,28,1
-33,Röthlisberger,,Eren,Dorfstrasse 7,5330,Niederwil AG,,1951-03-06,1,159,1,30,0,302000.0,1.2,138,männlich,0,29,0
-34,Gubser,,Orlando,Hauptstrasse 4,5504,Fislisbach,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Gubser Orlando den kardiogenen Schock zu verhindern. ",1979-12-29,0,94,1,50,1,188000.0,1.0,140,männlich,0,29,1
-35,Lange,,Samuel,Alte Dorfstrasse 1,5234,Zeihen,"Lange Samuel könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1958-11-11,0,582,1,35,0,228000.0,3.5,134,männlich,0,30,1
-36,Wettstein,,Nikhil,Schulstrasse 9,5722,Büttikon,"Wettstein Nikhil könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1946-03-08,1,60,1,50,0,226000.0,1.0,134,männlich,0,30,1
-37,Steiner,,Emilia,Banneggweg 1,5113,Merenschwand,"Steiner Emilia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2020-09-24,1,855,1,50,1,321000.0,1.0,145,weiblich,0,30,1
-38,Strub,,Catherine,Mitteldorfstrasse 69,5607,Eiken,,1978-06-22,0,2656,1,30,0,305000.0,2.3,137,weiblich,0,30,0
-39,Fritschi,,Dragica,Poststrasse 13,5642,Villigen,Fritschi Dragica hätte möglicherweise von einer Herztransplantation profitiert.,1944-04-28,0,235,1,38,0,329000.0,3.0,142,weiblich,0,30,1
-40,Bärtsch,,Josefine,Landstrasse 43,5075,Möriken,"Bärtsch Josefine könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1945-01-22,0,582,0,20,1,263358.03,1.83,134,weiblich,1,31,1
-41,Zürcher,,Maurizio,Staldenstrasse 10,5082,Mandach,"Zürcher Maurizio könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1999-05-02,0,124,1,30,1,153000.0,1.2,136,männlich,1,32,1
-42,Steiner,,Nicolas,Zopfgasse 20,5642,Villmergen,Steiner Nicolas hätte möglicherweise von einer Herztransplantation profitiert.,2009-11-11,0,571,1,45,1,185000.0,1.2,139,männlich,1,33,1
-43,Lange,,Grégoire,Unterdorf 5,8905,Bözberg,,1974-07-25,0,127,1,50,1,218000.0,1.0,134,männlich,0,33,0
-44,Käser,,Clemens,Friedlisbergstrasse 11,5000,Schinznach-Dorf,Käser Clemens hätte möglicherweise von einer Herztransplantation profitiert.,1981-01-23,1,588,1,60,0,194000.0,1.1,142,männlich,0,33,1
-45,Caviezel,,Anastasija,Badenerstrasse 25,5706,Rupperswil,Caviezel Anastasija hätte möglicherweise von einer Herztransplantation profitiert.,2013-06-27,0,582,1,38,0,310000.0,1.9,135,weiblich,1,35,1
-46,Linder,,Xin,Rathausgasse 1,5522,Auenstein,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Linder Xin den kardiogenen Schock zu verhindern. ",1940-03-18,0,1380,0,25,1,271000.0,0.9,130,weiblich,0,38,1
-47,Koller,,Siegfried,Schulgasse 2,5624,Leuggern,"Koller Siegfried könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1994-08-02,0,582,1,38,1,451000.0,0.6,138,männlich,1,40,1
-48,Gonzalez,,Marius,Zürichstrasse 30,5314,Ehrendingen,Gonzalez Marius hätte möglicherweise von einer Herztransplantation profitiert.,1999-09-05,1,553,0,20,1,140000.0,4.4,133,männlich,0,41,1
-49,Helbling,,Fabienne,Eikerstrasse 30,5023,Zeihen,Helbling Fabienne hätte möglicherweise von einer Herztransplantation profitiert.,1931-10-24,1,129,0,30,0,395000.0,1.0,140,weiblich,0,42,1
-50,Bosshard,,Melissa,Dorfstrasse 13,5505,Unterentfelden,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Bosshard Melissa den kardiogenen Schock zu verhindern. ",1985-02-18,1,577,0,25,1,166000.0,1.0,138,weiblich,0,43,1
-51,Hutter,,Panagiota,Weidstrasse 1,5737,Wohlenschwil,"Hutter Panagiota könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1980-08-06,1,91,0,20,1,418000.0,1.4,139,weiblich,0,43,1
-52,Chen,,Darren,Schulhausstrasse 8,8967,Uerkheim,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Chen Darren den kardiogenen Schock zu verhindern. ",1939-12-14,0,3964,1,62,0,263358.03,6.8,146,männlich,0,43,1
-53,Hager,,Ernst,Schulgasse 9,5742,Zofingen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Hager Ernst den kardiogenen Schock zu verhindern. ",1996-02-13,1,69,1,50,1,351000.0,1.0,134,männlich,0,44,1
-54,Lötscher,,Juan,Schulhausstrasse,5737,Mettau,Lötscher Juan hätte möglicherweise von einer Herztransplantation profitiert.,1978-12-13,1,260,1,38,0,255000.0,2.2,132,männlich,1,45,1
-55,Lutz,,Kirstin,Marktgasse 16,5107,Bottenwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lutz Kirstin den kardiogenen Schock zu verhindern. ",2013-04-12,1,371,0,30,0,461000.0,2.0,132,weiblich,0,50,1
-56,Schönenberger,,Benedikt,Laufenplatz 145,5505,Mellingen,,1960-06-20,1,75,0,35,0,223000.0,2.7,138,männlich,1,54,0
-57,Wernli,,Josef,Hauptstrasse 29,5742,Seengen,,1998-03-10,1,607,0,40,0,216000.0,0.6,138,männlich,1,54,0
-58,Manser,,Catalina,Kantonsstrasse 10,5603,Gipf-Oberfrick,"Manser Catalina könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2023-01-14,0,789,0,20,1,319000.0,1.1,136,weiblich,1,55,1
-59,Grieder,,Luigina,Dorfstrasse 4,5467,Rottenschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Grieder Luigina den kardiogenen Schock zu verhindern. ",1945-06-02,0,364,1,20,1,254000.0,1.3,136,weiblich,1,59,1
-60,Brand,,Kiana,Gemeindehausplatz 1,8966,Rheinfelden,Brand Kiana hätte möglicherweise von einer Herztransplantation profitiert.,1972-06-08,0,7702,1,25,1,390000.0,1.0,139,weiblich,0,60,1
-61,Stiefel,,Akram,Schulweg 3,5062,Muri,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Stiefel Akram den kardiogenen Schock zu verhindern. ",1965-11-04,0,318,0,40,1,216000.0,2.3,131,männlich,0,60,1
-62,Zhou,,Lara,Chilerain 2,5705,Oberentfelden,,1987-01-12,0,109,0,35,0,254000.0,1.1,139,weiblich,1,60,0
-63,Stevanovic,,Otto,Dohlenzelgstrasse 6,5040,Remetschwil,Stevanovic Otto hätte möglicherweise von einer Herztransplantation profitiert.,2023-05-06,0,582,0,35,0,385000.0,1.0,145,männlich,0,61,1
-64,Mohammed,,Mario,Schulstrasse 79,5603,Neuenhof,,1995-11-22,0,582,0,80,0,263358.03,1.18,137,männlich,0,63,0
-65,Pfister,,Oriana,"Schloss, Bahnhofstrasse 5",4314,Tegerfelden,"Pfister Oriana könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1968-11-02,0,68,0,20,0,119000.0,2.9,127,weiblich,1,64,1
-66,Altmann,,Iris,Alte Poststrasse 6,8964,Erlinsbach,"Altmann Iris könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1977-01-01,1,250,1,15,0,213000.0,1.3,136,weiblich,0,65,1
-67,Bickel,,Azra,Schulstrasse 19,5705,Kaiseraugst,"Bickel Azra könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1992-05-11,1,110,0,25,0,274000.0,1.0,140,weiblich,1,65,1
-68,Nagel,,Monika,Sedelstrasse 1,5235,Birr,Nagel Monika hätte möglicherweise von einer Herztransplantation profitiert.,2022-05-15,0,161,0,25,0,244000.0,1.2,142,weiblich,0,66,1
-69,Kägi,,Erkan,Alte Dorfstrasse 1,4313,Dürrenäsch,"Kägi Erkan könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1980-11-18,0,113,1,25,0,497000.0,1.83,135,männlich,0,67,1
-70,Rüfenacht,,Joao,Lenzburgerstrasse 1,5525,Mülligen,,1968-03-18,0,148,0,40,0,374000.0,0.8,140,männlich,1,68,0
-71,Weilenmann,,Oleg,Kirchrain 1,5723,Ammerswil,,1996-09-15,0,582,1,35,0,122000.0,0.9,139,männlich,1,71,0
-72,Tran,,Jochen,Stockfeldstrasse 1,8965,Schafisheim,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Tran Jochen den kardiogenen Schock zu verhindern. ",1972-04-21,0,5882,0,35,0,243000.0,1.0,132,männlich,1,72,1
-73,Bösch,,Rosana,Schulweg 3,6042,Hellikon,,1940-11-18,0,224,1,50,0,149000.0,1.3,137,weiblich,1,72,0
-74,Vogt,,Philip,Schulweg 3,5072,Leutwil,Vogt Philip hätte möglicherweise von einer Herztransplantation profitiert.,1934-05-20,0,582,0,20,0,266000.0,1.2,134,männlich,1,73,1
-75,Achermann,,Lillian,Schul- und Gemeindehaus,4814,Bettwil,Achermann Lillian hätte möglicherweise von einer Herztransplantation profitiert.,1964-05-18,1,47,0,20,0,204000.0,0.7,139,weiblich,1,73,1
-76,Gabriel,,Franziska,Schürmatt 1,5420,Habsburg,,1973-07-29,0,92,0,60,1,317000.0,0.8,140,weiblich,1,74,0
-77,Berisha,,Adem,Badenerstrasse 25,5733,Wohlenschwil,,1953-11-28,0,102,1,40,0,237000.0,1.2,140,männlich,0,74,0
-78,Peter,,Sinisa,Hauptstrasse,5436,Villmergen,,2009-05-22,1,203,1,38,1,283000.0,0.6,131,männlich,1,74,0
-79,Züger,,Isabella,Schulhausstrasse 8,4814,Hornussen,,1958-05-12,0,336,0,45,1,324000.0,0.9,140,weiblich,0,74,0
-80,Gubler,,Fabrice,Oberer Kirchweg 8,5737,Zofingen,,1950-01-19,0,69,0,40,0,293000.0,1.7,136,männlich,0,75,0
-81,Gschwend,,Jara,Oberdorfstrasse 222,5044,Unterlunkhofen,,1940-11-04,0,582,0,50,0,263358.03,1.18,137,weiblich,1,76,0
-82,Albrecht,,Artur,Hauptstrasse 36,5236,Dietwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Albrecht Artur den kardiogenen Schock zu verhindern. ",1970-09-01,1,76,1,25,0,196000.0,2.5,132,männlich,0,77,1
-83,Khan,,Karolina,Zopfgasse 20,4665,Meisterschwanden AG,,1946-10-12,1,55,0,50,1,172000.0,1.8,133,weiblich,0,78,0
-84,Steiner,,Ute,Pestalozzistrasse 10,8917,Büttikon,Steiner Ute hätte möglicherweise von einer Herztransplantation profitiert.,1947-12-25,1,280,1,25,1,302000.0,1.0,141,weiblich,0,78,1
-85,Friedrich,,Alexandre,Hubelstrasse 220,5737,Othmarsingen,,2002-04-04,0,78,0,50,0,406000.0,0.7,140,männlich,0,79,0
-86,Gabriel,,Mohammed,Brittnauerstrasse 3,5637,Lengnau,,2013-03-06,0,47,0,35,1,173000.0,1.1,137,männlich,0,79,0
-87,Stutz,,Elisabeth,Schulstrasse 79,5624,Mettau,,1983-11-28,1,68,1,60,1,304000.0,0.8,140,weiblich,0,79,0
-88,Hahn,,Pedro,Hauptstrasse 87,5237,Sarmenstorf,,1973-07-23,0,84,1,40,1,235000.0,0.7,139,männlich,0,79,0
-89,Adam,,Andrew,Schulweg 3,4322,Leuggern,,2009-06-08,1,115,0,25,1,181000.0,1.1,144,männlich,0,79,0
-90,Nägeli,,Kaja,Lenzburgerstrasse 1,5436,Villnachern,,2023-07-29,0,66,1,45,0,249000.0,0.8,136,weiblich,1,80,0
-91,Stiefel,,Selma,Rathausgasse 1,5314,Wohlen,,1955-01-04,0,897,1,45,0,297000.0,1.0,133,weiblich,0,80,0
-92,Brühlmann,,Jayden,Trottengasse 2,5213,Rothrist,,1964-03-09,0,582,0,60,0,263358.03,1.18,137,männlich,0,82,0
-93,Wolf,,Juliane,Zentralstrasse 12,5525,Birmenstorf,Wolf Juliane hätte möglicherweise von einer Herztransplantation profitiert.,1952-02-09,1,154,0,25,0,210000.0,1.7,135,weiblich,0,82,1
-94,Schaffner,,Hana,Bollstrasse 100,5300,Laufenburg,,1977-11-30,0,144,1,38,1,327000.0,0.7,142,weiblich,0,83,0
-95,Krebs,,Franca,Hauptstrasse 10,5725,Hellikon,,2016-04-03,1,133,0,60,1,219000.0,1.0,141,weiblich,0,83,0
-96,Hanselmann,,Flavia,Eikerstrasse 30,5620,Gipf-Oberfrick,,1965-05-28,1,514,1,25,1,254000.0,1.3,134,weiblich,0,83,0
-97,Wolf,,Christian,Hauptstrasse 4,5732,Neuenhof,,1978-01-12,1,59,0,60,0,255000.0,1.1,136,männlich,0,85,0
-98,Hammer,,Kay,Oberdorfstrasse 9,4313,Rottenschwil,,2004-07-10,1,156,1,25,1,318000.0,1.2,137,männlich,0,85,0
-99,Hofstetter,,Axel,Hauptstrasse 50,5212,Schwaderloch,,1998-07-02,1,61,1,40,0,221000.0,1.1,140,männlich,0,86,0
-100,Reimann,,Till,Landstrasse 134a,6042,Dottikon,,1946-04-03,1,305,0,25,0,298000.0,1.1,141,männlich,0,87,0
-101,Rieser,,Edouard,Kornfeldweg 2,5236,Berikon,,1993-09-28,0,582,0,45,1,263358.03,1.18,137,männlich,0,87,0
-102,Häusler,,Lucien,Oberdorfstrasse 1,5113,Aristau,,1999-02-21,0,898,0,25,0,149000.0,1.1,144,männlich,1,87,0
-103,Bernhard,,Labinot,Kirchweg 26,5042,Unterkulm,,1996-02-13,0,5209,0,30,0,226000.0,1.0,140,männlich,1,87,0
-104,Frischknecht,,Victoria,Aescherstrasse 2,5062,Bergdietikon,,1995-10-06,0,53,0,50,1,286000.0,2.3,143,weiblich,0,87,0
-105,Fischer,,Gaetano,Schürweg 2,5454,Rekingen,"Fischer Gaetano könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1987-08-02,1,328,0,30,1,621000.0,1.7,138,männlich,1,88,1
-106,Bertschinger,,Seraina,Schulhausstrasse 8,4323,Oberlunkhofen,,2012-06-30,0,748,0,45,0,263000.0,1.3,137,weiblich,0,88,0
-107,Roos,,Brian,Alte Landstrasse 27,5244,Villigen,,1956-05-31,1,1876,1,35,0,226000.0,0.9,138,männlich,0,88,0
-108,Weiss,,Josephine,Laufenplatz 145,5512,Staufen,,1979-06-14,0,936,0,38,0,304000.0,1.1,133,weiblich,1,88,0
-109,Wieser,,Danielle,Vordere Breite 1,5106,Zurzach,,1953-05-11,0,292,1,35,0,850000.0,1.3,142,weiblich,1,88,0
-110,Rohner,,Arnaud,Schulweg 3,5408,Sarmenstorf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rohner Arnaud den kardiogenen Schock zu verhindern. ",2000-11-18,0,129,0,60,0,306000.0,1.2,132,männlich,1,90,1
-111,Ernst,,Orlando,Kustergasse 1,4805,Merenschwand,,1970-05-13,0,60,0,35,0,228000.0,1.2,135,männlich,1,90,0
-112,Schaad,,Nikolaos,Seetalstrasse 6,5507,Jonen,,1955-08-12,0,369,1,25,0,252000.0,1.6,136,männlich,0,90,0
-113,Muhammad,,Julianna,Dohlenzelgstrasse 6,5037,Schöftland,Muhammad Julianna hätte möglicherweise von einer Herztransplantation profitiert.,1931-10-28,1,143,0,60,0,351000.0,1.3,137,weiblich,0,90,1
-114,Matter,,Adrienne,Propsteistrasse 1,4663,Unterlunkhofen,,1942-04-15,1,754,1,40,1,328000.0,1.2,126,weiblich,0,91,0
-115,Stieger,,Gianmarco,Kirchplatz 26,5044,Münchwilen,,1956-04-30,1,400,0,40,0,164000.0,1.0,139,männlich,0,91,0
-116,Berger,,Cosmo,Sedelstrasse 1,5102,Villmergen,,1951-03-24,1,96,1,60,1,271000.0,0.7,136,männlich,0,94,0
-117,Brand,,Jeanne,Hauptstrasse 21,5726,Olsberg,,1998-08-13,1,102,0,60,0,507000.0,3.2,138,weiblich,0,94,0
-118,Linder,,Saida,Hubelstrasse 220,5615,Schafisheim,,1989-12-05,1,113,1,60,1,203000.0,0.9,140,weiblich,0,94,0
-119,Stäheli,,Helena,Schul- und Gemeindehaus,4305,Wegenstetten,Stäheli Helena hätte möglicherweise von einer Herztransplantation profitiert.,1968-11-04,0,582,0,38,0,263358.03,1.83,134,weiblich,0,95,1
-120,Aschwanden,,Yu,Eikerstrasse 30,5643,Leutwil,,2023-07-29,1,737,0,60,1,210000.0,1.5,135,weiblich,1,95,0
-121,Zollinger,,Viviana,Dorfstrasse 12,4325,Kaiseraugst,,1983-07-12,1,68,1,38,1,162000.0,1.0,136,weiblich,0,95,0
-122,Schubert,,Jürg,Schulhausstrasse 7,8919,Kallern AG,,1968-03-03,0,96,1,38,0,228000.0,0.75,140,männlich,0,95,0
-123,Wüthrich,,Tamás,Dorfstrasse 39,5420,Würenlingen,,1952-04-26,1,582,0,30,1,127000.0,0.9,145,männlich,0,95,0
-124,Ahmeti,,Elda,Seebergstrasse 1,5325,Bergdietikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Ahmeti Elda den kardiogenen Schock zu verhindern. ",1999-10-15,0,582,0,40,0,217000.0,3.7,134,weiblich,0,96,1
-125,Scholz,,Sinan,Unterer Gerbiweg 6,5075,Büttikon,,1966-08-04,1,358,0,50,0,237000.0,1.3,135,männlich,0,97,0
-126,Schmidlin,,Mirza,Hintertrottenstrasse 7,5444,Remetschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Schmidlin Mirza den kardiogenen Schock zu verhindern. ",2007-06-30,0,168,1,17,1,271000.0,2.1,124,männlich,0,100,1
-127,Zahner,,Malena,Zugerstrasse 20,5054,Kaiseraugst,,1939-06-18,1,200,1,60,0,300000.0,0.8,137,weiblich,0,104,0
-128,Kleiner,,Mathilda,Schulstrasse 6,5605,Oberrohrdorf,,1959-05-15,0,248,0,30,1,267000.0,0.7,136,weiblich,1,104,0
-129,Zweifel,,Manuela,Unterdorf 5,5467,Schupfart,,1975-07-07,1,270,1,35,0,227000.0,3.4,145,weiblich,0,105,0
-130,Schenker,,Suzan,Zürichstrasse 30,5027,Aarburg,,1949-08-12,1,1808,0,60,1,249000.0,0.7,138,weiblich,1,106,0
-131,Hostettler,,Beat,Dorfstrasse 7,5443,Wallbach,,1953-11-05,1,1082,1,45,0,250000.0,6.1,131,männlich,0,107,0
-132,Seiler,,Gábor,Seetalstrasse 6,8905,Gebenstorf,,1990-12-10,0,719,0,40,1,263358.03,1.18,137,männlich,0,107,0
-133,Krüger,,Daria,Dorfstrasse 41,5408,Unterentfelden,,1988-01-09,0,193,0,60,1,295000.0,1.3,145,weiblich,1,107,0
-134,Menzi,,Fatima,Banneggweg 1,5452,Densbüren,,1940-08-26,0,4540,0,35,0,231000.0,1.18,137,weiblich,1,107,0
-135,Schaub,,Pedro,Winkelgasse 1,8967,Nussbaumen,,1943-04-10,0,582,0,40,0,263358.03,1.18,137,männlich,0,107,0
-136,Fässler,,Lauren,Schulstrasse 26,5742,Mandach,,1991-01-24,1,59,1,60,0,172000.0,0.9,137,weiblich,0,107,0
-137,Ilic,,Anik,Hauptstrasse 50,4316,Unterentfelden,,1979-12-01,1,646,0,25,0,305000.0,2.1,130,weiblich,0,108,0
-138,Abraham,,Rosina,Yul-Brynner-Platz,5620,Bergdietikon,,1956-08-07,0,281,1,35,0,221000.0,1.0,136,weiblich,0,108,0
-139,Kovacevic,,Adriana,Mitteldorfstrasse 3,4814,Villnachern,,1950-04-29,0,1548,0,30,1,211000.0,0.8,138,weiblich,0,108,0
-140,Becker,,Marcus,Schulhausstrasse 7,8966,Seengen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Becker Marcus den kardiogenen Schock zu verhindern. ",1948-05-21,0,805,0,38,0,263358.03,1.1,134,männlich,0,109,1
-141,Galli,,Dorian,Schulhausstrasse 2,8916,Fislisbach,,1937-07-25,1,291,0,35,0,348000.0,0.9,140,männlich,0,109,0
-142,Rüedi,,Serena,Oberdorfstrasse 222,5313,Birr,,1994-01-11,0,482,1,30,0,329000.0,0.9,132,weiblich,0,109,0
-143,Fritz,,Isabella,Dorfstrasse 164,5042,Bünzen,,1968-06-12,1,84,0,40,1,229000.0,0.9,141,weiblich,0,110,0
-144,Gabriel,,Melina,Schulgasse 2,8967,Sarmenstorf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Gabriel Melina den kardiogenen Schock zu verhindern. ",1970-01-25,1,943,0,25,1,338000.0,1.7,139,weiblich,1,111,1
-145,Gabriel,,Sara,Mitteldorfstrasse 69,5724,Endingen,,2022-12-01,0,185,0,30,0,266000.0,0.7,141,weiblich,1,112,0
-146,Ferrari,,Lea,Gmeindhusplatz 3,5306,Berikon,,2003-01-09,0,132,0,30,0,218000.0,0.7,136,weiblich,1,112,0
-147,Wirz,,Nicole,Hintertrottenstrasse 7,5000,Bottenwil,,1996-10-14,0,1610,0,60,0,242000.0,1.0,137,weiblich,0,113,0
-148,Lorenz,,Vincenzo,Alte Landstrasse 27,5420,Büttikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lorenz Vincenzo den kardiogenen Schock zu verhindern. ",2009-07-23,1,582,0,30,0,225000.0,1.83,134,männlich,0,113,1
-149,Etter,,Antonino,Hauptstrasse 21,4322,Klingnau,,1984-02-16,0,2261,0,35,1,228000.0,0.9,136,männlich,0,115,0
-150,Heer,,Michelle,Oberdorfstrasse 2,4317,Zurzach,Heer Michelle hätte möglicherweise von einer Herztransplantation profitiert.,1991-02-10,0,233,0,45,1,235000.0,2.5,135,weiblich,0,115,1
-151,Schneider,,Lilli,Hauptstrasse,4305,Rombach,,1934-08-21,0,30,1,60,1,244000.0,0.9,139,weiblich,0,117,0
-152,Fröhlich,,Lina,Hauptstrasse 19,5105,Kallern AG,,1972-03-08,0,115,0,45,1,184000.0,0.9,134,weiblich,1,118,0
-153,Herrmann,,Biagio,Neudorfstrasse 7,5043,Rekingen,,2014-08-28,0,1846,1,35,0,263358.03,1.18,137,männlich,1,119,0
-154,Kurz,,Chiara,Oberdorfstrasse 11,8917,Riniken,,1961-12-03,1,335,0,35,1,235000.0,0.8,136,weiblich,0,120,0
-155,von Allmen,,Naima,Kirchplatz 26,5637,Uerkheim,,1964-07-22,1,231,1,25,0,194000.0,1.7,140,weiblich,0,120,0
-156,Leemann,,Beda,Schulhausstrasse 7,5621,Boswil,,1969-08-11,1,58,0,35,0,277000.0,1.4,136,männlich,0,120,0
-157,Zimmermann,,Véronique,Ringstrasse 2,5702,Fisibach,,1989-11-19,0,250,0,25,0,262000.0,1.0,136,weiblich,1,120,0
-158,Mathys,,Julia,Hauptstrasse 166,5426,Schlossrued,,1940-12-08,1,910,0,50,0,235000.0,1.3,134,weiblich,0,121,0
-159,Isufi,,Yara,Schulstrasse 2,5600,Schmiedrued,,1976-12-27,1,129,0,45,1,362000.0,1.1,139,weiblich,1,121,0
-160,Wittwer,,Louis,Schladstrasse 2,4312,Mettau,,1987-06-28,1,72,0,40,1,242000.0,1.2,134,männlich,0,121,0
-161,Herzog,,Lina,Schulstrasse 2,5079,Unterentfelden,,1941-06-03,1,130,0,35,0,174000.0,0.8,139,weiblich,1,121,0
-162,Vasic,,Snezana,Dorfstrasse 4,5105,Islisberg,,1942-03-30,1,582,0,40,0,448000.0,0.9,137,weiblich,1,123,0
-163,Wälti,,Bob,Neue Stockstrasse 23,5107,Rupperswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Wälti Bob den kardiogenen Schock zu verhindern. ",1969-02-28,1,2334,1,35,0,75000.0,0.9,142,männlich,0,126,1
-164,Stern,,Fernanda,Sedelstrasse 1,5042,Fahrwangen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Stern Fernanda den kardiogenen Schock zu verhindern. ",2012-05-27,0,2442,1,30,0,334000.0,1.1,139,weiblich,0,129,1
-165,Reinhard,,Aurelio,Oberer Kirchweg 8,5436,Moosleerau,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Reinhard Aurelio den kardiogenen Schock zu verhindern. ",2005-01-15,0,776,1,38,1,192000.0,1.3,135,männlich,0,130,1
-166,Ingold,,Hanna,Unterer Gerbiweg 6,5742,Münchwilen,,1992-12-13,0,196,0,60,0,220000.0,0.7,133,weiblich,1,134,0
-167,Flückiger,,Marc,Zugerstrasse 20,5053,Kirchleerau,Flückiger Marc hätte möglicherweise von einer Herztransplantation profitiert.,1975-05-10,0,66,1,20,0,70000.0,2.4,134,männlich,0,135,1
-168,Scherrer,,Jean-Marie,Dorfstrasse 624,5436,Oberlunkhofen,,1943-11-18,0,582,1,40,0,270000.0,1.0,138,männlich,0,140,0
-169,Heeb,,Nadejda,Yul-Brynner-Platz,8965,Schmiedrued,,1956-02-13,0,835,0,35,1,305000.0,0.8,133,weiblich,0,145,0
-170,Yu,,Jesper,Kirchweg 26,5624,Dottikon,,1953-02-21,1,582,1,35,0,263358.03,1.5,136,männlich,1,145,0
-171,Leemann,,Dylan,Schulstrasse 19,5242,Strengelbach,,2008-03-07,0,3966,0,40,0,325000.0,0.9,140,männlich,1,146,0
-172,Knobel,,Fatemeh,Dorfplatz 354,5054,Zofingen,,1945-02-11,1,171,0,60,1,176000.0,1.1,145,weiblich,1,146,0
-173,Hofer,,Abraham,Hauptstrasse 50,5628,Hirschthal,,2010-11-25,1,115,0,20,0,189000.0,0.8,139,männlich,0,146,0
-174,Hager,,Nina,Zopfgasse 20,4803,Gansingen,,1960-08-04,0,198,1,35,1,281000.0,0.9,137,weiblich,1,146,0
-175,Weiss,,Gonçalo,Dorfstrasse 624,5462,Reinach AG,,1981-12-19,1,95,0,60,0,337000.0,1.0,138,männlich,1,146,0
-176,Bachmann,,Mladen,Brittnauerstrasse 3,5600,Bellikon,,1994-12-23,0,1419,0,40,0,105000.0,1.0,135,männlich,1,147,0
-177,Becker,,Margrit,Kirchbergstrasse 1,5330,Fislisbach,,1950-04-16,1,69,0,50,0,132000.0,1.0,140,weiblich,0,147,0
-178,Heller,,Annemarie,Alte Rebenstrasse 6,5037,Schlossrued,,2013-05-29,1,122,1,60,0,267000.0,1.2,145,weiblich,0,147,0
-179,Bauer,,Dragan,Kantonsstrasse 10,5057,Niederrohrdorf,,1951-11-26,0,835,0,40,0,279000.0,0.7,140,männlich,1,147,0
-180,Huwiler,,Aleksandar,Hauptstrasse 25,5600,Mühlau,,1983-02-06,0,478,1,30,0,303000.0,0.9,136,männlich,0,148,0
-181,Selimi,,Alain,Reinerstrasse 25,5430,Hausen AG,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Selimi Alain den kardiogenen Schock zu verhindern. ",1950-12-26,1,176,1,25,0,221000.0,1.0,136,männlich,1,150,1
-182,Bickel,,Chaim,Dorfstrasse 176,5072,Birr,"Bickel Chaim könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2022-09-25,0,395,1,25,0,265000.0,1.2,136,männlich,1,154,1
-183,Brütsch,,Nemanja,Chapf 9,5504,Schwaderloch,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Brütsch Nemanja den kardiogenen Schock zu verhindern. ",2013-07-30,0,99,0,38,1,224000.0,2.5,134,männlich,0,162,1
-184,Bloch,,Sara,Schulstrasse 9,8919,Beinwil am See,Bloch Sara hätte möglicherweise von einer Herztransplantation profitiert.,1935-12-21,1,145,0,25,0,219000.0,1.2,137,weiblich,1,170,1
-185,Rodriguez,,Stojan,Tramstrasse 12,5070,Brunegg,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rodriguez Stojan den kardiogenen Schock zu verhindern. ",1984-02-19,1,104,1,30,0,389000.0,1.5,136,männlich,0,171,1
-186,Mohamed,,Jeremias,Hauptstrasse 38,5072,Lupfig,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Mohamed Jeremias den kardiogenen Schock zu verhindern. ",2021-01-25,0,582,0,50,0,153000.0,0.6,134,männlich,0,172,1
-187,Hermann,,Sladana,Schulhausstrasse 8,8917,Unterkulm,"Hermann Sladana könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1997-09-05,0,1896,1,25,0,365000.0,2.1,144,weiblich,0,172,1
-188,Simmen,,Amber,Schulhausstrasse 2,5053,Siglistorf,,2000-08-10,1,151,1,40,1,201000.0,1.0,136,weiblich,0,172,0
-189,Zwahlen,,Freya,Dorfstrasse 48,5080,Niederrohrdorf,,2015-03-09,0,244,0,45,1,275000.0,0.9,140,weiblich,0,174,0
-190,Stutz,,Juri,Dorfstrasse 164,5212,Rüfenach,,1999-07-09,0,582,1,35,0,350000.0,2.1,134,männlich,0,174,0
-191,Steiger,,Natacha,Schulhausstrasse 8,5622,Oftringen,,1942-10-13,1,62,0,60,0,309000.0,1.5,135,weiblich,0,174,0
-192,Nagy,,Alexandre,Schulhausstrasse 4,5245,Dietwil,,1995-04-01,1,121,1,40,0,260000.0,0.7,130,männlich,0,175,0
-193,Waldvogel,,Dominique,Schulstrasse 19,5712,Hirschthal,,1934-08-14,1,231,1,30,0,160000.0,1.18,142,weiblich,1,180,0
-194,Erni,,Muhammad,Turnhallestrasse 623,5454,Hägglingen,Erni Muhammad hätte möglicherweise von einer Herztransplantation profitiert.,1954-08-01,0,582,0,20,1,126000.0,1.6,135,männlich,0,180,1
-195,Troxler,,Rodolfo,Hauptstrasse 3,5622,Ehrendingen,"Troxler Rodolfo könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1961-02-08,1,418,0,45,0,223000.0,1.8,145,männlich,0,180,1
-196,Huser,,Sérgio,Schulstrasse 15,5737,Leibstadt,,1942-11-29,0,582,1,38,1,263358.03,1.18,137,männlich,0,185,0
-197,Blumer,,Danijel,Alte Poststrasse 6,8962,Brunegg,,1954-05-16,0,167,0,30,0,259000.0,0.8,138,männlich,0,186,0
-198,Vollenweider,,Naomi,Oberdorfstrasse 1,5034,Oberentfelden,,2021-05-20,1,582,1,20,1,279000.0,1.0,134,weiblich,0,186,0
-199,Held,,Emma,Bremgartenstrasse 2,5604,Koblenz,,2023-05-31,0,1211,1,35,0,263358.03,1.8,113,weiblich,1,186,0
-200,Conrad,,Giancarlo,Schulstrasse 15,5201,Mägenwil,,1964-08-30,1,1767,0,45,0,73000.0,0.7,137,männlich,0,186,0
-201,,,Jesús,Breitenstrasse 14,5507,Reitnau,,2015-02-14,0,308,1,60,1,377000.0,1.0,136,männlich,0,186,0
-202,Ali,,Ronald,Zentrumstrasse 11,4303,Eiken,,1965-07-29,0,97,0,60,1,220000.0,0.9,138,männlich,0,186,0
-203,Hardegger,,Furkan,Dorfweg 3,4805,Fahrwangen,,1938-11-08,0,59,0,25,1,212000.0,3.5,136,männlich,1,187,0
-204,Fries,,Séverine,Alberich Zwyssig Strasse 76,5330,Holderbank AG,,1937-08-08,1,64,0,40,0,277000.0,0.7,137,weiblich,1,187,0
-205,Bodmer,,Miroslava,Rathausgasse 1,5462,Bottenwil,,1977-04-18,1,167,1,45,0,362000.0,1.0,136,weiblich,0,187,0
-206,Büchler,,Sean,Würenlingerstrasse 11,5727,Zuzgen,,1988-11-11,1,101,0,40,0,226000.0,0.8,141,männlich,0,187,0
-207,Ivanovic,,Jann,Schulstrasse 2,5201,Sins,,1933-05-18,0,212,0,38,0,186000.0,0.9,136,männlich,0,187,0
-208,Spörri,,Youri,Hauptstrasse 42,4324,Fisibach,,1970-02-20,1,2281,1,40,0,283000.0,1.0,141,männlich,0,187,0
-209,Wittwer,,Erich,Dorf 1,5413,Schöftland,,2017-11-12,0,972,1,35,1,268000.0,0.8,130,männlich,0,187,0
-210,Ferrari,,Janick,Schulstrasse 1,5722,Olsberg,,1991-05-09,0,212,1,17,1,389000.0,1.0,136,männlich,1,188,0
-211,Schulthess,,Silvia,Hauptstrasse 36,5624,Zufikon,,1959-07-01,0,582,0,62,1,147000.0,0.8,140,weiblich,1,192,0
-212,Weiss,,Fatma,Chillweg 6,4805,Dottikon,,1987-06-10,0,224,0,50,0,481000.0,1.4,138,weiblich,1,192,0
-213,Lüthy,,Laura,Oberdorfstrasse 222,5040,Safenwil,Lüthy Laura hätte möglicherweise von einer Herztransplantation profitiert.,1964-12-28,1,131,1,30,1,244000.0,1.6,130,weiblich,0,193,1
-214,Hansen,,Gamze,Bremgarterstrasse 1,4814,Strengelbach,,1952-01-11,1,135,0,35,1,290000.0,0.8,134,weiblich,0,194,0
-215,Bischoff,,Sally,Unterdorf 5,5057,Suhr,,1990-09-25,0,582,0,35,1,203000.0,1.3,134,weiblich,0,195,0
-216,Brun,,Reiner,Kirchweg 16,5332,Riniken,,2016-12-29,0,1202,0,50,1,358000.0,0.9,141,männlich,0,196,0
-217,Schenk,,Gonçalo,Achenbergstrasse 6,5022,Leibstadt,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Schenk Gonçalo den kardiogenen Schock zu verhindern. ",1939-10-18,1,427,0,70,1,151000.0,9.0,137,männlich,0,196,1
-218,Schürmann,,Cristiano,Gmeindhusplatz 3,5063,Koblenz,,1969-09-30,1,1021,1,35,0,271000.0,1.1,134,männlich,0,197,0
-219,Kuster,,Radojka,Schulstrasse 1,5436,Rottenschwil,,2006-02-26,0,582,1,35,1,371000.0,0.7,140,weiblich,0,197,0
-220,Savic,,Thuy,Bremgartenstrasse 2,5622,Rombach,"Savic Thuy könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1939-10-06,0,582,0,20,0,263358.03,1.83,134,weiblich,0,198,1
-221,Walser,,Eugenio,Dorfstrasse 46,5303,Bottenwil,,1988-08-03,0,118,0,50,0,194000.0,1.1,145,männlich,1,200,0
-222,Bolliger,,Gerd,Zürichstrasse 34,5064,Thalheim,,1954-04-16,1,86,0,35,0,365000.0,1.1,139,männlich,1,201,0
-223,Aschwanden,,Alice,Schulstrasse 10,4323,Schneisingen,,1965-12-10,0,582,0,25,0,130000.0,0.8,134,weiblich,0,201,0
-224,Özdemir,,Dominik,Rüstenschwilerstrasse 8,4853,Gipf-Oberfrick,,1999-09-19,0,582,1,25,0,504000.0,1.0,138,männlich,0,205,0
-225,Zogg,,Flurina,Schulweg 1,5628,Schlossrued,,1963-04-03,0,675,1,60,0,265000.0,1.4,125,weiblich,0,205,0
-226,Heller,,Miguel,Kirchweg 11,5745,Leibstadt,,1996-11-29,1,57,0,25,0,189000.0,1.3,132,männlich,1,205,0
-227,Lee,,Liubov,Hauptstrasse 46,5615,Frick,,1965-03-20,1,2794,0,35,1,141000.0,1.0,140,weiblich,0,206,0
-228,Levy,,Mohammad,Oberdorfstrasse 222,5644,Beinwil am See,,1941-06-02,0,56,0,25,0,237000.0,5.0,130,männlich,0,207,0
-229,Stäheli,,Vera,Zentrumstrasse 11,5018,Bözberg,,1936-04-29,0,211,0,25,0,274000.0,1.2,134,weiblich,0,207,0
-230,Zellweger,,Samuel,Hauptstrasse 15,5070,Wölflinswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Zellweger Samuel den kardiogenen Schock zu verhindern. ",1995-05-05,0,166,0,30,0,62000.0,1.7,127,männlich,0,207,1
-231,Osmani,,Lucia,Schulstrasse 19,5244,Wohlenschwil,,1948-02-01,0,93,0,35,0,185000.0,1.1,134,weiblich,1,208,0
-232,Gassmann,,Gustavo,Hauptstrasse 9,4305,Rupperswil,,1952-03-06,1,129,0,35,0,255000.0,0.9,137,männlich,0,209,0
-233,Mohammad,,Zdenek,Schulstrasse 26,4317,Fisibach,,1981-11-03,1,707,0,38,0,330000.0,1.4,137,männlich,1,209,0
-234,Iten,,Ivo,Schulstrasse 6,5201,Würenlingen,,2023-05-31,1,582,0,45,0,305000.0,1.1,137,männlich,1,209,0
-235,Suter,,Livia,Breitenstrasse 14,8956,Wohlen,,1983-01-12,1,109,0,50,1,406000.0,1.1,137,weiblich,0,209,0
-236,Baur,,Vito,Friedlisbergstrasse 11,5314,Dintikon,,1933-11-24,0,119,0,50,1,248000.0,1.1,148,männlich,0,209,0
-237,Keller,,Bayram,Dorfstrasse 8,5436,Olsberg,,2021-11-23,0,232,0,30,0,173000.0,1.2,132,männlich,0,210,0
-238,Fankhauser,,Mateusz,Kirchweg 11,4802,Leuggern,,1970-01-17,1,720,1,40,0,257000.0,1.0,136,männlich,0,210,0
-239,Rexhepi,,Ida,Staltig 14,5430,Safenwil,,1972-08-05,1,180,0,45,0,263358.03,1.18,137,weiblich,1,211,0
-240,Mohammad,,Janet,Rathausgasse 1,4803,Kaisten,,1987-05-02,0,81,1,35,1,533000.0,1.3,139,weiblich,0,212,0
-241,Holzer,,Léonie,Hauptstrasse 15,8965,Wittnau,,1974-12-26,0,582,1,30,0,249000.0,1.3,136,weiblich,1,212,0
-242,Kümin,,Julien,Schulhausstrasse 3,5073,Fischbach-Göslikon,,1937-11-24,0,90,0,35,0,255000.0,1.1,136,männlich,1,212,0
-243,Johnson,,Anika,Gmeindhusplatz 3,5034,Oberlunkhofen,,2000-10-25,1,1185,0,40,1,220000.0,0.9,141,weiblich,0,213,0
-244,Ulrich,,Hans-Rudolf,Dorfstrasse 624,5604,Schafisheim,,2001-10-26,0,582,1,38,0,264000.0,1.8,134,männlich,0,213,0
-245,Bertschi,,João,Reinerstrasse 25,5046,Zetzwil,,1958-12-16,1,80,1,38,0,282000.0,1.4,137,männlich,0,213,0
-246,Angst,,Constantin,Zopfgasse 20,5107,Oberkulm,Angst Constantin hätte möglicherweise von einer Herztransplantation profitiert.,2017-04-13,0,2017,0,25,0,314000.0,1.1,138,männlich,0,214,1
-247,Jenni,,Yue,Chilerain 2,4800,Riniken,,1999-10-31,0,143,0,25,0,246000.0,2.4,135,weiblich,0,214,0
-248,Maliqi,,Géza,Oberdorfstrasse 9,4303,Beinwil,,1951-03-21,0,624,0,35,0,301000.0,1.0,142,männlich,1,214,0
-249,Maier,,Anouk,Kirchweg 1,5728,Menziken,,1956-07-20,0,207,1,40,0,223000.0,1.2,130,weiblich,0,214,0
-250,Züger,,Ladina,Bremgarterstrasse 1,5072,Mellingen,,1946-08-03,0,2522,0,30,1,404000.0,0.5,139,weiblich,0,214,0
-251,Pfenninger,,Coralie,Vogelsangstrasse 2,4316,Hausen AG,,1993-11-17,0,572,1,35,0,231000.0,0.8,143,weiblich,0,215,0
-252,Ramseier,,Gaetano,Badenerstrasse 25,5462,Strengelbach,,1931-01-03,0,245,0,45,1,274000.0,1.0,133,männlich,0,215,0
-253,Hediger,,Kaltrina,Hinterdorfstrasse 1,5235,Bergdietikon,,2001-06-24,0,88,1,35,1,236000.0,1.2,132,weiblich,0,215,0
-254,Hofer,,Abdullah,Kirchstrasse 14,5605,Suhr,,1947-05-02,1,446,0,60,1,263358.03,1.0,139,männlich,0,215,0
-255,Ruckstuhl,,Pierre,Dorfplatz 354,5625,Siglistorf,,2001-10-26,1,191,1,30,1,334000.0,1.0,142,männlich,1,216,0
-256,von Allmen,,Zorka,Dorfstrasse 52,5512,Künten,,1984-05-18,0,326,0,38,0,294000.0,1.7,139,weiblich,0,220,0
-257,Rutz,,Louie,Oberdorfstrasse 9,5504,Neuenhof,,2010-03-12,0,132,1,38,1,253000.0,1.0,139,männlich,0,230,0
-258,Seifert,,Rosa,Kratz 4,5306,Rottenschwil,,2012-06-12,1,66,1,25,0,233000.0,0.8,135,weiblich,0,230,0
-259,Räber,,Dirk,Hauptstrasse 21,4814,Lupfig,,1982-01-14,0,56,0,50,0,308000.0,0.7,135,männlich,1,231,0
-260,Menzi,,Luís,Neue Stockstrasse 23,5425,Habsburg,,1975-12-12,0,66,0,40,0,203000.0,1.0,138,männlich,0,233,0
-261,Lüscher,,Valentin,Dorfstrasse 12,5036,Kleindöttingen,,1953-07-22,1,655,0,40,0,283000.0,0.7,133,männlich,0,233,0
-262,Ingold,,Conrad,Gmeindhusplatz 3,8964,Stein,"Ingold Conrad könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1959-12-23,1,258,1,25,0,198000.0,1.4,129,männlich,0,235,1
-263,Moser,,Günther,Kustergasse 1,4334,Zeiningen,,1953-02-16,1,157,1,60,0,208000.0,1.0,140,männlich,0,237,0
-264,Peters,,Clémence,Hauptstrasse 36,5706,Berikon,,1977-06-17,0,582,1,38,0,147000.0,1.2,141,weiblich,0,237,0
-265,Pauli,,Orhan,Schulstrasse 10,5313,Eiken,,1942-07-03,1,298,0,35,0,362000.0,0.9,140,männlich,1,240,0
-266,Stüssi,,Jaël,Hubelstrasse 220,5442,Schwaderloch,"Stüssi Jaël könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1940-02-02,0,1199,0,20,0,263358.03,1.83,134,weiblich,1,241,1
-267,Eckert,,Raphael,Lindenplatz 1,5063,Oberentfelden,,2019-05-24,1,135,1,38,0,133000.0,1.7,140,männlich,0,244,0
-268,Kummer,,Martino,Schulgasse 2,5452,Besenbüren,,1974-07-02,0,582,1,38,0,302000.0,0.9,140,männlich,0,244,0
-269,Urech,,Dominik,Rathausgasse 1,5035,Suhr,,1973-09-12,0,582,1,35,0,222000.0,1.0,132,männlich,0,244,0
-270,Fink,,Matej,Yul-Brynner-Platz,5322,Spreitenbach,,1986-04-21,0,582,1,30,1,263358.03,1.6,130,männlich,1,244,0
-271,Spörri,,Rodrigo,Bonstetterstrasse 2,5210,Arni,,1970-10-29,0,582,1,40,0,221000.0,0.9,134,männlich,0,244,0
-272,Benz,,Julija,Zugerstrasse 20,5330,Stetten,,1935-02-25,0,213,0,38,0,215000.0,1.2,133,weiblich,0,245,0
-273,Fink,,Iris,Zopfgasse 20,5408,Rothrist,,2009-04-04,0,64,0,40,0,189000.0,0.7,140,weiblich,0,245,0
-274,Rieser,,Andrea,Hauptstrasse 50,5242,Reitnau,,2022-07-06,1,257,1,30,0,150000.0,1.0,137,weiblich,1,245,0
-275,Yildiz,,Eduard,Kapellstrasse 1,5622,Freienwil,,1939-05-26,0,582,0,38,1,422000.0,0.8,137,männlich,0,245,0
-276,Enz,,Angelika,Dorfplatz 354,5712,Koblenz,,1970-01-14,0,618,0,35,0,327000.0,1.1,142,weiblich,0,245,0
-277,Wirz,,Milorad,Talstrasse 5,5210,Waltenschwil,,2001-06-13,0,582,1,38,0,25100.0,1.1,140,männlich,0,246,0
-278,Gerber,,Xuan,Mitteldorfstrasse 60,4663,Lupfig,,2007-05-25,1,1051,1,30,0,232000.0,0.7,136,weiblich,0,246,0
-279,Kiefer,,Nemanja,Dorfstrasse 52,4325,Sisseln,,1994-11-10,0,84,1,38,0,451000.0,1.3,136,männlich,0,246,0
-280,Meili,,Arthur,Mutschellenstrasse 19,8967,Büttikon,,1964-08-25,0,2695,1,40,0,241000.0,1.0,137,männlich,0,247,0
-281,Fries,,Sally,Schulstrasse 79,5616,Tägerig,,1976-07-03,0,582,0,40,0,51000.0,2.7,136,weiblich,1,250,0
-282,Alija,,Naemi,Schulstrasse 1,8962,Islisberg,,1941-07-30,0,64,0,30,0,215000.0,3.8,128,weiblich,1,250,0
-283,Andere Nachnamen,,Morten,Alberich Zwyssig Strasse 76,5423,Unterentfelden,,2023-10-20,0,1688,0,38,0,263358.03,1.1,138,männlich,1,250,0
-284,Nievergelt,,Rachel,Unterer Gerbiweg 6,4317,Schneisingen,,1951-04-14,1,54,0,40,0,279000.0,0.8,141,weiblich,0,250,0
-285,Graf,,Andrej,Oberdorfstrasse 222,5442,Hirschthal,,1957-04-27,1,170,1,40,0,336000.0,1.2,135,männlich,0,250,0
-286,Schaller,,Dusanka,Hubelstrasse 220,5040,Unterlunkhofen,,1934-03-21,0,253,0,35,0,279000.0,1.7,140,weiblich,0,250,0
-287,Ahmadi,,Aurèle,Gmeindhusplatz 3,5503,Zufikon,,1961-07-15,0,582,1,55,0,543000.0,1.0,132,männlich,0,250,0
-288,Bislimi,,Florian,Hauptstrasse 68,5505,Moosleerau,,1996-03-01,0,892,1,35,0,263358.03,1.1,142,männlich,0,256,0
-289,Grimm,,Vesna,Schulstrasse 19,5607,Brittnau,,1986-04-01,1,337,0,38,0,390000.0,0.9,144,weiblich,0,256,0
-290,Hürlimann,,Dennis,Schulhausstrasse,5070,Staufen,,1978-10-08,0,615,1,55,0,222000.0,0.8,141,männlich,0,257,0
-291,Baumann,,Benjamin,Hubelstrasse 220,5314,Schlossrued,,1991-08-16,0,320,0,35,0,133000.0,1.4,139,männlich,0,258,0
-292,Eberhard,,Marine,Schulhausstrasse 17,4814,Bellikon,,1994-10-30,0,190,1,38,0,382000.0,1.0,140,weiblich,1,258,0
-293,Mäder,,Mira,Haldenweg 332,5632,Koblenz,,1976-05-13,1,103,1,35,0,179000.0,0.9,136,weiblich,1,270,0
-294,Paul,,Tomas,Bahnhofstrasse 69,5443,Brittnau,,1964-03-04,0,61,1,38,1,155000.0,1.1,143,männlich,1,270,0
-295,Matter,,Sadije,Dorfstrasse 41,5734,Stetten,,2011-12-10,0,1820,0,38,0,270000.0,1.2,139,weiblich,0,271,0
-296,Bänziger,,Iuliia,Eikerstrasse 30,5623,Bellikon,,1947-07-23,0,2060,1,60,0,742000.0,0.8,138,weiblich,0,278,0
-297,Filipovic,,Jean,Schürweg 2,5036,Remetschwil,,1955-06-07,0,2413,0,38,0,140000.0,1.4,140,männlich,1,280,0
-298,Bajrami,,Yasar,Hauptstrasse 87,5722,Oberlunkhofen,,1985-08-30,0,196,0,45,0,395000.0,1.6,136,männlich,1,285,0
-299,Bajrami,,Yasar,Hauptstrasse 87,5722,Oberlunkhofen,,1985-08-30,0,196,0,45,0,395000.0,1.6,136,männlich,1,285,0
+Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Geburtsdatum,anaemia,creatinine_phosphokinase,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,sex,smoking,time,DEATH_EVENT
+0,Müller,Darius,Talstrasse 5,5326,Unterentfelden,"Müller Darius könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, zum Beispiel an einer Myokarditis oder an einer Kardiomyopathie.",1979-04-24,0,582,0,20,1,265000.0,1.9,130,männlich,0,4,1
+1,Wüest,Luís,Laufenplatz 145,4312,Wohlenschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Wüest Luís den kardiogenen Schock zu verhindern. ",2021-08-05,0,7861,0,38,0,263358.03,1.1,136,männlich,0,6,1
+2,Spiess,Ayan,Gässli 265,8917,Schinznach-Dorf,"Spiess Ayan könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1976-03-09,0,146,0,20,0,162000.0,1.3,129,weiblich,1,7,1
+3,Caviezel,Nicolas,Seetalstrasse 6,5725,Zuzgen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Caviezel Nicolas den kardiogenen Schock zu verhindern. ",1975-07-14,1,111,0,20,0,210000.0,1.9,137,männlich,0,7,1
+4,Wälti,Mert,Schulstrasse 9,5619,Merenschwand,Wälti Mert hätte möglicherweise von einer Herztransplantation profitiert.,1934-02-24,1,160,1,20,0,327000.0,2.7,116,männlich,0,8,1
+5,Hediger,Olivia,Rathausgasse 16,5505,Mägenwil,"Hediger Olivia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1938-08-30,1,47,0,40,1,204000.0,2.1,132,weiblich,1,8,1
+6,Lütolf,Maël,Kanzleistrasse 8,5503,Hausen AG,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lütolf Maël den kardiogenen Schock zu verhindern. ",1967-03-12,1,246,0,15,0,127000.0,1.2,137,männlich,0,10,1
+7,Peric,Liva,Dorfstrasse 624,5723,Bergdietikon,Peric Liva hätte möglicherweise von einer Herztransplantation profitiert.,2007-02-05,1,315,1,60,0,454000.0,1.1,131,weiblich,1,10,1
+8,Herzog,Alessia,Seetalstrasse 6,5242,Zuzgen,"Herzog Alessia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2005-03-10,0,157,0,65,0,263358.03,1.5,138,weiblich,0,10,1
+9,Schwarz,Attila,Friedlisbergstrasse 11,5623,Mettau,Schwarz Attila hätte möglicherweise von einer Herztransplantation profitiert.,1955-11-22,1,123,0,35,1,388000.0,9.4,133,männlich,1,10,1
+10,Grunder,Carlo,Schulstrasse 6,5082,Obermumpf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Grunder Carlo den kardiogenen Schock zu verhindern. ",1949-10-02,1,81,0,38,1,368000.0,4.0,131,männlich,1,10,1
+11,Steinemann,Varvara,Landstrasse 134a,5107,Fisibach,Steinemann Varvara hätte möglicherweise von einer Herztransplantation profitiert.,1971-08-17,0,231,0,25,1,253000.0,0.9,140,weiblich,1,10,1
+12,Früh,Raoul,Hauptstrasse 64,5304,Rupperswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Früh Raoul den kardiogenen Schock zu verhindern. ",1991-09-19,1,981,0,30,0,136000.0,1.1,137,männlich,0,11,1
+13,Bertschinger,Carlota,Hauptstrasse 22,5330,Hägglingen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Bertschinger Carlota den kardiogenen Schock zu verhindern. ",1934-11-01,1,168,0,38,1,276000.0,1.1,137,weiblich,0,11,1
+14,Herrmann,Mihaela,Schulstrasse 2,5062,Brunegg,,2020-07-13,1,80,0,30,1,427000.0,1.0,138,weiblich,0,12,0
+15,Pfenninger,Gabriel,Weidstrasse 1,4324,Mägenwil,"Pfenninger Gabriel könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1999-07-20,1,379,0,50,0,47000.0,1.3,136,männlich,0,13,1
+16,Mühlemann,Agata,Oberdorfstrasse 2,5745,Künten,Mühlemann Agata hätte möglicherweise von einer Herztransplantation profitiert.,2023-05-10,1,149,0,38,0,262000.0,0.9,140,weiblich,0,14,1
+17,Künzler,Yvette,Schul- und Gemeindehaus,5430,Remigen,"Künzler Yvette könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1953-04-22,0,582,0,14,0,166000.0,0.8,127,weiblich,0,14,1
+18,Ruch,Fathima,Hauptstrasse,5603,Oberentfelden,Ruch Fathima hätte möglicherweise von einer Herztransplantation profitiert.,1981-11-15,1,125,0,25,1,237000.0,1.0,140,weiblich,0,15,1
+19,Tanner,Nunzio,Alte Landstrasse 27,5103,Gränichen,"Tanner Nunzio könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1933-01-26,1,582,1,55,0,87000.0,1.9,121,männlich,0,15,1
+20,Hussein,Quinn,Dorfstrasse 12,5272,Kallern AG,,1979-04-14,1,52,0,25,1,276000.0,1.3,137,männlich,0,16,0
+21,Friedli,Yves,Schulhausstrasse 2,5647,Merenschwand,Friedli Yves hätte möglicherweise von einer Herztransplantation profitiert.,1976-08-08,1,128,1,30,1,297000.0,1.6,136,männlich,0,20,1
+22,Heuberger,Piotr,Bollstrasse 100,5425,Zufikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Heuberger Piotr den kardiogenen Schock zu verhindern. ",1954-09-23,1,220,0,35,1,289000.0,0.9,140,männlich,1,20,1
+23,Caduff,Volkan,Reinerstrasse 25,8905,Safenwil,,1998-01-16,0,63,1,60,0,368000.0,0.8,135,männlich,0,22,0
+24,Preisig,Mohammad,Brotkorbstrasse 9,5420,Seengen,Preisig Mohammad hätte möglicherweise von einer Herztransplantation profitiert.,1998-10-04,0,582,1,30,1,263358.03,1.83,134,männlich,0,23,1
+25,Rohr,Emma,Rathausgasse 16,8918,Bünzen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rohr Emma den kardiogenen Schock zu verhindern. ",1954-06-26,0,148,1,38,0,149000.0,1.9,144,weiblich,1,23,1
+26,Sprenger,Younes,Haldenweg 332,5034,Beinwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Sprenger Younes den kardiogenen Schock zu verhindern. ",2001-05-20,1,112,0,40,1,196000.0,1.0,138,männlich,0,24,1
+27,Heller,Robin,Gmeindhusplatz 3,4803,Besenbüren,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Heller Robin den kardiogenen Schock zu verhindern. ",1978-06-30,0,122,1,45,1,284000.0,1.3,136,weiblich,1,26,1
+28,Zeller,Valbona,Hinterdorfstrasse 1,5300,Mandach,Zeller Valbona hätte möglicherweise von einer Herztransplantation profitiert.,2009-09-16,1,60,0,38,0,153000.0,5.8,134,weiblich,0,26,1
+29,Welti,Petra,Hauptstrasse 87,8905,Veltheim,"Welti Petra könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1985-05-20,0,70,1,30,0,200000.0,1.2,132,weiblich,1,26,1
+30,Lin,Carla,Alte Dorfstrasse 1,5236,Schupfart,Lin Carla hätte möglicherweise von einer Herztransplantation profitiert.,1959-03-08,0,582,1,38,1,263358.03,1.83,134,weiblich,0,27,1
+31,Allemann,Joaquín,Schürweg 2,5413,Seon,Allemann Joaquín hätte möglicherweise von einer Herztransplantation profitiert.,1996-08-16,0,23,0,45,0,360000.0,3.0,132,männlich,0,28,1
+32,Salzmann,Kaspar,Trottengasse 2,5619,Schupfart,"Salzmann Kaspar könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2018-02-27,1,249,1,35,1,319000.0,1.0,128,männlich,0,28,1
+33,Röthlisberger,Eren,Dorfstrasse 7,5330,Niederwil AG,,1951-03-06,1,159,1,30,0,302000.0,1.2,138,männlich,0,29,0
+34,Gubser,Orlando,Hauptstrasse 4,5504,Fislisbach,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Gubser Orlando den kardiogenen Schock zu verhindern. ",1979-12-29,0,94,1,50,1,188000.0,1.0,140,männlich,0,29,1
+35,Lange,Samuel,Alte Dorfstrasse 1,5234,Zeihen,"Lange Samuel könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1958-11-11,0,582,1,35,0,228000.0,3.5,134,männlich,0,30,1
+36,Wettstein,Nikhil,Schulstrasse 9,5722,Büttikon,"Wettstein Nikhil könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1946-03-08,1,60,1,50,0,226000.0,1.0,134,männlich,0,30,1
+37,Steiner,Emilia,Banneggweg 1,5113,Merenschwand,"Steiner Emilia könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2020-09-24,1,855,1,50,1,321000.0,1.0,145,weiblich,0,30,1
+38,Strub,Catherine,Mitteldorfstrasse 69,5607,Eiken,,1978-06-22,0,2656,1,30,0,305000.0,2.3,137,weiblich,0,30,0
+39,Fritschi,Dragica,Poststrasse 13,5642,Villigen,Fritschi Dragica hätte möglicherweise von einer Herztransplantation profitiert.,1944-04-28,0,235,1,38,0,329000.0,3.0,142,weiblich,0,30,1
+40,Bärtsch,Josefine,Landstrasse 43,5075,Möriken,"Bärtsch Josefine könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1945-01-22,0,582,0,20,1,263358.03,1.83,134,weiblich,1,31,1
+41,Zürcher,Maurizio,Staldenstrasse 10,5082,Mandach,"Zürcher Maurizio könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1999-05-02,0,124,1,30,1,153000.0,1.2,136,männlich,1,32,1
+42,Steiner,Nicolas,Zopfgasse 20,5642,Villmergen,Steiner Nicolas hätte möglicherweise von einer Herztransplantation profitiert.,2009-11-11,0,571,1,45,1,185000.0,1.2,139,männlich,1,33,1
+43,Lange,Grégoire,Unterdorf 5,8905,Bözberg,,1974-07-25,0,127,1,50,1,218000.0,1.0,134,männlich,0,33,0
+44,Käser,Clemens,Friedlisbergstrasse 11,5000,Schinznach-Dorf,Käser Clemens hätte möglicherweise von einer Herztransplantation profitiert.,1981-01-23,1,588,1,60,0,194000.0,1.1,142,männlich,0,33,1
+45,Caviezel,Anastasija,Badenerstrasse 25,5706,Rupperswil,Caviezel Anastasija hätte möglicherweise von einer Herztransplantation profitiert.,2013-06-27,0,582,1,38,0,310000.0,1.9,135,weiblich,1,35,1
+46,Linder,Xin,Rathausgasse 1,5522,Auenstein,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Linder Xin den kardiogenen Schock zu verhindern. ",1940-03-18,0,1380,0,25,1,271000.0,0.9,130,weiblich,0,38,1
+47,Koller,Siegfried,Schulgasse 2,5624,Leuggern,"Koller Siegfried könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1994-08-02,0,582,1,38,1,451000.0,0.6,138,männlich,1,40,1
+48,Gonzalez,Marius,Zürichstrasse 30,5314,Ehrendingen,Gonzalez Marius hätte möglicherweise von einer Herztransplantation profitiert.,1999-09-05,1,553,0,20,1,140000.0,4.4,133,männlich,0,41,1
+49,Helbling,Fabienne,Eikerstrasse 30,5023,Zeihen,Helbling Fabienne hätte möglicherweise von einer Herztransplantation profitiert.,1931-10-24,1,129,0,30,0,395000.0,1.0,140,weiblich,0,42,1
+50,Bosshard,Melissa,Dorfstrasse 13,5505,Unterentfelden,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Bosshard Melissa den kardiogenen Schock zu verhindern. ",1985-02-18,1,577,0,25,1,166000.0,1.0,138,weiblich,0,43,1
+51,Hutter,Panagiota,Weidstrasse 1,5737,Wohlenschwil,"Hutter Panagiota könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1980-08-06,1,91,0,20,1,418000.0,1.4,139,weiblich,0,43,1
+52,Chen,Darren,Schulhausstrasse 8,8967,Uerkheim,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Chen Darren den kardiogenen Schock zu verhindern. ",1939-12-14,0,3964,1,62,0,263358.03,6.8,146,männlich,0,43,1
+53,Hager,Ernst,Schulgasse 9,5742,Zofingen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Hager Ernst den kardiogenen Schock zu verhindern. ",1996-02-13,1,69,1,50,1,351000.0,1.0,134,männlich,0,44,1
+54,Lötscher,Juan,Schulhausstrasse,5737,Mettau,Lötscher Juan hätte möglicherweise von einer Herztransplantation profitiert.,1978-12-13,1,260,1,38,0,255000.0,2.2,132,männlich,1,45,1
+55,Lutz,Kirstin,Marktgasse 16,5107,Bottenwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lutz Kirstin den kardiogenen Schock zu verhindern. ",2013-04-12,1,371,0,30,0,461000.0,2.0,132,weiblich,0,50,1
+56,Schönenberger,Benedikt,Laufenplatz 145,5505,Mellingen,,1960-06-20,1,75,0,35,0,223000.0,2.7,138,männlich,1,54,0
+57,Wernli,Josef,Hauptstrasse 29,5742,Seengen,,1998-03-10,1,607,0,40,0,216000.0,0.6,138,männlich,1,54,0
+58,Manser,Catalina,Kantonsstrasse 10,5603,Gipf-Oberfrick,"Manser Catalina könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2023-01-14,0,789,0,20,1,319000.0,1.1,136,weiblich,1,55,1
+59,Grieder,Luigina,Dorfstrasse 4,5467,Rottenschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Grieder Luigina den kardiogenen Schock zu verhindern. ",1945-06-02,0,364,1,20,1,254000.0,1.3,136,weiblich,1,59,1
+60,Brand,Kiana,Gemeindehausplatz 1,8966,Rheinfelden,Brand Kiana hätte möglicherweise von einer Herztransplantation profitiert.,1972-06-08,0,7702,1,25,1,390000.0,1.0,139,weiblich,0,60,1
+61,Stiefel,Akram,Schulweg 3,5062,Muri,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Stiefel Akram den kardiogenen Schock zu verhindern. ",1965-11-04,0,318,0,40,1,216000.0,2.3,131,männlich,0,60,1
+62,Zhou,Lara,Chilerain 2,5705,Oberentfelden,,1987-01-12,0,109,0,35,0,254000.0,1.1,139,weiblich,1,60,0
+63,Stevanovic,Otto,Dohlenzelgstrasse 6,5040,Remetschwil,Stevanovic Otto hätte möglicherweise von einer Herztransplantation profitiert.,2023-05-06,0,582,0,35,0,385000.0,1.0,145,männlich,0,61,1
+64,Mohammed,Mario,Schulstrasse 79,5603,Neuenhof,,1995-11-22,0,582,0,80,0,263358.03,1.18,137,männlich,0,63,0
+65,Pfister,Oriana,"Schloss, Bahnhofstrasse 5",4314,Tegerfelden,"Pfister Oriana könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1968-11-02,0,68,0,20,0,119000.0,2.9,127,weiblich,1,64,1
+66,Altmann,Iris,Alte Poststrasse 6,8964,Erlinsbach,"Altmann Iris könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1977-01-01,1,250,1,15,0,213000.0,1.3,136,weiblich,0,65,1
+67,Bickel,Azra,Schulstrasse 19,5705,Kaiseraugst,"Bickel Azra könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1992-05-11,1,110,0,25,0,274000.0,1.0,140,weiblich,1,65,1
+68,Nagel,Monika,Sedelstrasse 1,5235,Birr,Nagel Monika hätte möglicherweise von einer Herztransplantation profitiert.,2022-05-15,0,161,0,25,0,244000.0,1.2,142,weiblich,0,66,1
+69,Kägi,Erkan,Alte Dorfstrasse 1,4313,Dürrenäsch,"Kägi Erkan könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1980-11-18,0,113,1,25,0,497000.0,1.83,135,männlich,0,67,1
+70,Rüfenacht,Joao,Lenzburgerstrasse 1,5525,Mülligen,,1968-03-18,0,148,0,40,0,374000.0,0.8,140,männlich,1,68,0
+71,Weilenmann,Oleg,Kirchrain 1,5723,Ammerswil,,1996-09-15,0,582,1,35,0,122000.0,0.9,139,männlich,1,71,0
+72,Tran,Jochen,Stockfeldstrasse 1,8965,Schafisheim,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Tran Jochen den kardiogenen Schock zu verhindern. ",1972-04-21,0,5882,0,35,0,243000.0,1.0,132,männlich,1,72,1
+73,Bösch,Rosana,Schulweg 3,6042,Hellikon,,1940-11-18,0,224,1,50,0,149000.0,1.3,137,weiblich,1,72,0
+74,Vogt,Philip,Schulweg 3,5072,Leutwil,Vogt Philip hätte möglicherweise von einer Herztransplantation profitiert.,1934-05-20,0,582,0,20,0,266000.0,1.2,134,männlich,1,73,1
+75,Achermann,Lillian,Schul- und Gemeindehaus,4814,Bettwil,Achermann Lillian hätte möglicherweise von einer Herztransplantation profitiert.,1964-05-18,1,47,0,20,0,204000.0,0.7,139,weiblich,1,73,1
+76,Gabriel,Franziska,Schürmatt 1,5420,Habsburg,,1973-07-29,0,92,0,60,1,317000.0,0.8,140,weiblich,1,74,0
+77,Berisha,Adem,Badenerstrasse 25,5733,Wohlenschwil,,1953-11-28,0,102,1,40,0,237000.0,1.2,140,männlich,0,74,0
+78,Peter,Sinisa,Hauptstrasse,5436,Villmergen,,2009-05-22,1,203,1,38,1,283000.0,0.6,131,männlich,1,74,0
+79,Züger,Isabella,Schulhausstrasse 8,4814,Hornussen,,1958-05-12,0,336,0,45,1,324000.0,0.9,140,weiblich,0,74,0
+80,Gubler,Fabrice,Oberer Kirchweg 8,5737,Zofingen,,1950-01-19,0,69,0,40,0,293000.0,1.7,136,männlich,0,75,0
+81,Gschwend,Jara,Oberdorfstrasse 222,5044,Unterlunkhofen,,1940-11-04,0,582,0,50,0,263358.03,1.18,137,weiblich,1,76,0
+82,Albrecht,Artur,Hauptstrasse 36,5236,Dietwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Albrecht Artur den kardiogenen Schock zu verhindern. ",1970-09-01,1,76,1,25,0,196000.0,2.5,132,männlich,0,77,1
+83,Khan,Karolina,Zopfgasse 20,4665,Meisterschwanden AG,,1946-10-12,1,55,0,50,1,172000.0,1.8,133,weiblich,0,78,0
+84,Steiner,Ute,Pestalozzistrasse 10,8917,Büttikon,Steiner Ute hätte möglicherweise von einer Herztransplantation profitiert.,1947-12-25,1,280,1,25,1,302000.0,1.0,141,weiblich,0,78,1
+85,Friedrich,Alexandre,Hubelstrasse 220,5737,Othmarsingen,,2002-04-04,0,78,0,50,0,406000.0,0.7,140,männlich,0,79,0
+86,Gabriel,Mohammed,Brittnauerstrasse 3,5637,Lengnau,,2013-03-06,0,47,0,35,1,173000.0,1.1,137,männlich,0,79,0
+87,Stutz,Elisabeth,Schulstrasse 79,5624,Mettau,,1983-11-28,1,68,1,60,1,304000.0,0.8,140,weiblich,0,79,0
+88,Hahn,Pedro,Hauptstrasse 87,5237,Sarmenstorf,,1973-07-23,0,84,1,40,1,235000.0,0.7,139,männlich,0,79,0
+89,Adam,Andrew,Schulweg 3,4322,Leuggern,,2009-06-08,1,115,0,25,1,181000.0,1.1,144,männlich,0,79,0
+90,Nägeli,Kaja,Lenzburgerstrasse 1,5436,Villnachern,,2023-07-29,0,66,1,45,0,249000.0,0.8,136,weiblich,1,80,0
+91,Stiefel,Selma,Rathausgasse 1,5314,Wohlen,,1955-01-04,0,897,1,45,0,297000.0,1.0,133,weiblich,0,80,0
+92,Brühlmann,Jayden,Trottengasse 2,5213,Rothrist,,1964-03-09,0,582,0,60,0,263358.03,1.18,137,männlich,0,82,0
+93,Wolf,Juliane,Zentralstrasse 12,5525,Birmenstorf,Wolf Juliane hätte möglicherweise von einer Herztransplantation profitiert.,1952-02-09,1,154,0,25,0,210000.0,1.7,135,weiblich,0,82,1
+94,Schaffner,Hana,Bollstrasse 100,5300,Laufenburg,,1977-11-30,0,144,1,38,1,327000.0,0.7,142,weiblich,0,83,0
+95,Krebs,Franca,Hauptstrasse 10,5725,Hellikon,,2016-04-03,1,133,0,60,1,219000.0,1.0,141,weiblich,0,83,0
+96,Hanselmann,Flavia,Eikerstrasse 30,5620,Gipf-Oberfrick,,1965-05-28,1,514,1,25,1,254000.0,1.3,134,weiblich,0,83,0
+97,Wolf,Christian,Hauptstrasse 4,5732,Neuenhof,,1978-01-12,1,59,0,60,0,255000.0,1.1,136,männlich,0,85,0
+98,Hammer,Kay,Oberdorfstrasse 9,4313,Rottenschwil,,2004-07-10,1,156,1,25,1,318000.0,1.2,137,männlich,0,85,0
+99,Hofstetter,Axel,Hauptstrasse 50,5212,Schwaderloch,,1998-07-02,1,61,1,40,0,221000.0,1.1,140,männlich,0,86,0
+100,Reimann,Till,Landstrasse 134a,6042,Dottikon,,1946-04-03,1,305,0,25,0,298000.0,1.1,141,männlich,0,87,0
+101,Rieser,Edouard,Kornfeldweg 2,5236,Berikon,,1993-09-28,0,582,0,45,1,263358.03,1.18,137,männlich,0,87,0
+102,Häusler,Lucien,Oberdorfstrasse 1,5113,Aristau,,1999-02-21,0,898,0,25,0,149000.0,1.1,144,männlich,1,87,0
+103,Bernhard,Labinot,Kirchweg 26,5042,Unterkulm,,1996-02-13,0,5209,0,30,0,226000.0,1.0,140,männlich,1,87,0
+104,Frischknecht,Victoria,Aescherstrasse 2,5062,Bergdietikon,,1995-10-06,0,53,0,50,1,286000.0,2.3,143,weiblich,0,87,0
+105,Fischer,Gaetano,Schürweg 2,5454,Rekingen,"Fischer Gaetano könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1987-08-02,1,328,0,30,1,621000.0,1.7,138,männlich,1,88,1
+106,Bertschinger,Seraina,Schulhausstrasse 8,4323,Oberlunkhofen,,2012-06-30,0,748,0,45,0,263000.0,1.3,137,weiblich,0,88,0
+107,Roos,Brian,Alte Landstrasse 27,5244,Villigen,,1956-05-31,1,1876,1,35,0,226000.0,0.9,138,männlich,0,88,0
+108,Weiss,Josephine,Laufenplatz 145,5512,Staufen,,1979-06-14,0,936,0,38,0,304000.0,1.1,133,weiblich,1,88,0
+109,Wieser,Danielle,Vordere Breite 1,5106,Zurzach,,1953-05-11,0,292,1,35,0,850000.0,1.3,142,weiblich,1,88,0
+110,Rohner,Arnaud,Schulweg 3,5408,Sarmenstorf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rohner Arnaud den kardiogenen Schock zu verhindern. ",2000-11-18,0,129,0,60,0,306000.0,1.2,132,männlich,1,90,1
+111,Ernst,Orlando,Kustergasse 1,4805,Merenschwand,,1970-05-13,0,60,0,35,0,228000.0,1.2,135,männlich,1,90,0
+112,Schaad,Nikolaos,Seetalstrasse 6,5507,Jonen,,1955-08-12,0,369,1,25,0,252000.0,1.6,136,männlich,0,90,0
+113,Muhammad,Julianna,Dohlenzelgstrasse 6,5037,Schöftland,Muhammad Julianna hätte möglicherweise von einer Herztransplantation profitiert.,1931-10-28,1,143,0,60,0,351000.0,1.3,137,weiblich,0,90,1
+114,Matter,Adrienne,Propsteistrasse 1,4663,Unterlunkhofen,,1942-04-15,1,754,1,40,1,328000.0,1.2,126,weiblich,0,91,0
+115,Stieger,Gianmarco,Kirchplatz 26,5044,Münchwilen,,1956-04-30,1,400,0,40,0,164000.0,1.0,139,männlich,0,91,0
+116,Berger,Cosmo,Sedelstrasse 1,5102,Villmergen,,1951-03-24,1,96,1,60,1,271000.0,0.7,136,männlich,0,94,0
+117,Brand,Jeanne,Hauptstrasse 21,5726,Olsberg,,1998-08-13,1,102,0,60,0,507000.0,3.2,138,weiblich,0,94,0
+118,Linder,Saida,Hubelstrasse 220,5615,Schafisheim,,1989-12-05,1,113,1,60,1,203000.0,0.9,140,weiblich,0,94,0
+119,Stäheli,Helena,Schul- und Gemeindehaus,4305,Wegenstetten,Stäheli Helena hätte möglicherweise von einer Herztransplantation profitiert.,1968-11-04,0,582,0,38,0,263358.03,1.83,134,weiblich,0,95,1
+120,Aschwanden,Yu,Eikerstrasse 30,5643,Leutwil,,2023-07-29,1,737,0,60,1,210000.0,1.5,135,weiblich,1,95,0
+121,Zollinger,Viviana,Dorfstrasse 12,4325,Kaiseraugst,,1983-07-12,1,68,1,38,1,162000.0,1.0,136,weiblich,0,95,0
+122,Schubert,Jürg,Schulhausstrasse 7,8919,Kallern AG,,1968-03-03,0,96,1,38,0,228000.0,0.75,140,männlich,0,95,0
+123,Wüthrich,Tamás,Dorfstrasse 39,5420,Würenlingen,,1952-04-26,1,582,0,30,1,127000.0,0.9,145,männlich,0,95,0
+124,Ahmeti,Elda,Seebergstrasse 1,5325,Bergdietikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Ahmeti Elda den kardiogenen Schock zu verhindern. ",1999-10-15,0,582,0,40,0,217000.0,3.7,134,weiblich,0,96,1
+125,Scholz,Sinan,Unterer Gerbiweg 6,5075,Büttikon,,1966-08-04,1,358,0,50,0,237000.0,1.3,135,männlich,0,97,0
+126,Schmidlin,Mirza,Hintertrottenstrasse 7,5444,Remetschwil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Schmidlin Mirza den kardiogenen Schock zu verhindern. ",2007-06-30,0,168,1,17,1,271000.0,2.1,124,männlich,0,100,1
+127,Zahner,Malena,Zugerstrasse 20,5054,Kaiseraugst,,1939-06-18,1,200,1,60,0,300000.0,0.8,137,weiblich,0,104,0
+128,Kleiner,Mathilda,Schulstrasse 6,5605,Oberrohrdorf,,1959-05-15,0,248,0,30,1,267000.0,0.7,136,weiblich,1,104,0
+129,Zweifel,Manuela,Unterdorf 5,5467,Schupfart,,1975-07-07,1,270,1,35,0,227000.0,3.4,145,weiblich,0,105,0
+130,Schenker,Suzan,Zürichstrasse 30,5027,Aarburg,,1949-08-12,1,1808,0,60,1,249000.0,0.7,138,weiblich,1,106,0
+131,Hostettler,Beat,Dorfstrasse 7,5443,Wallbach,,1953-11-05,1,1082,1,45,0,250000.0,6.1,131,männlich,0,107,0
+132,Seiler,Gábor,Seetalstrasse 6,8905,Gebenstorf,,1990-12-10,0,719,0,40,1,263358.03,1.18,137,männlich,0,107,0
+133,Krüger,Daria,Dorfstrasse 41,5408,Unterentfelden,,1988-01-09,0,193,0,60,1,295000.0,1.3,145,weiblich,1,107,0
+134,Menzi,Fatima,Banneggweg 1,5452,Densbüren,,1940-08-26,0,4540,0,35,0,231000.0,1.18,137,weiblich,1,107,0
+135,Schaub,Pedro,Winkelgasse 1,8967,Nussbaumen,,1943-04-10,0,582,0,40,0,263358.03,1.18,137,männlich,0,107,0
+136,Fässler,Lauren,Schulstrasse 26,5742,Mandach,,1991-01-24,1,59,1,60,0,172000.0,0.9,137,weiblich,0,107,0
+137,Ilic,Anik,Hauptstrasse 50,4316,Unterentfelden,,1979-12-01,1,646,0,25,0,305000.0,2.1,130,weiblich,0,108,0
+138,Abraham,Rosina,Yul-Brynner-Platz,5620,Bergdietikon,,1956-08-07,0,281,1,35,0,221000.0,1.0,136,weiblich,0,108,0
+139,Kovacevic,Adriana,Mitteldorfstrasse 3,4814,Villnachern,,1950-04-29,0,1548,0,30,1,211000.0,0.8,138,weiblich,0,108,0
+140,Becker,Marcus,Schulhausstrasse 7,8966,Seengen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Becker Marcus den kardiogenen Schock zu verhindern. ",1948-05-21,0,805,0,38,0,263358.03,1.1,134,männlich,0,109,1
+141,Galli,Dorian,Schulhausstrasse 2,8916,Fislisbach,,1937-07-25,1,291,0,35,0,348000.0,0.9,140,männlich,0,109,0
+142,Rüedi,Serena,Oberdorfstrasse 222,5313,Birr,,1994-01-11,0,482,1,30,0,329000.0,0.9,132,weiblich,0,109,0
+143,Fritz,Isabella,Dorfstrasse 164,5042,Bünzen,,1968-06-12,1,84,0,40,1,229000.0,0.9,141,weiblich,0,110,0
+144,Gabriel,Melina,Schulgasse 2,8967,Sarmenstorf,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Gabriel Melina den kardiogenen Schock zu verhindern. ",1970-01-25,1,943,0,25,1,338000.0,1.7,139,weiblich,1,111,1
+145,Gabriel,Sara,Mitteldorfstrasse 69,5724,Endingen,,2022-12-01,0,185,0,30,0,266000.0,0.7,141,weiblich,1,112,0
+146,Ferrari,Lea,Gmeindhusplatz 3,5306,Berikon,,2003-01-09,0,132,0,30,0,218000.0,0.7,136,weiblich,1,112,0
+147,Wirz,Nicole,Hintertrottenstrasse 7,5000,Bottenwil,,1996-10-14,0,1610,0,60,0,242000.0,1.0,137,weiblich,0,113,0
+148,Lorenz,Vincenzo,Alte Landstrasse 27,5420,Büttikon,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Lorenz Vincenzo den kardiogenen Schock zu verhindern. ",2009-07-23,1,582,0,30,0,225000.0,1.83,134,männlich,0,113,1
+149,Etter,Antonino,Hauptstrasse 21,4322,Klingnau,,1984-02-16,0,2261,0,35,1,228000.0,0.9,136,männlich,0,115,0
+150,Heer,Michelle,Oberdorfstrasse 2,4317,Zurzach,Heer Michelle hätte möglicherweise von einer Herztransplantation profitiert.,1991-02-10,0,233,0,45,1,235000.0,2.5,135,weiblich,0,115,1
+151,Schneider,Lilli,Hauptstrasse,4305,Rombach,,1934-08-21,0,30,1,60,1,244000.0,0.9,139,weiblich,0,117,0
+152,Fröhlich,Lina,Hauptstrasse 19,5105,Kallern AG,,1972-03-08,0,115,0,45,1,184000.0,0.9,134,weiblich,1,118,0
+153,Herrmann,Biagio,Neudorfstrasse 7,5043,Rekingen,,2014-08-28,0,1846,1,35,0,263358.03,1.18,137,männlich,1,119,0
+154,Kurz,Chiara,Oberdorfstrasse 11,8917,Riniken,,1961-12-03,1,335,0,35,1,235000.0,0.8,136,weiblich,0,120,0
+155,von Allmen,Naima,Kirchplatz 26,5637,Uerkheim,,1964-07-22,1,231,1,25,0,194000.0,1.7,140,weiblich,0,120,0
+156,Leemann,Beda,Schulhausstrasse 7,5621,Boswil,,1969-08-11,1,58,0,35,0,277000.0,1.4,136,männlich,0,120,0
+157,Zimmermann,Véronique,Ringstrasse 2,5702,Fisibach,,1989-11-19,0,250,0,25,0,262000.0,1.0,136,weiblich,1,120,0
+158,Mathys,Julia,Hauptstrasse 166,5426,Schlossrued,,1940-12-08,1,910,0,50,0,235000.0,1.3,134,weiblich,0,121,0
+159,Isufi,Yara,Schulstrasse 2,5600,Schmiedrued,,1976-12-27,1,129,0,45,1,362000.0,1.1,139,weiblich,1,121,0
+160,Wittwer,Louis,Schladstrasse 2,4312,Mettau,,1987-06-28,1,72,0,40,1,242000.0,1.2,134,männlich,0,121,0
+161,Herzog,Lina,Schulstrasse 2,5079,Unterentfelden,,1941-06-03,1,130,0,35,0,174000.0,0.8,139,weiblich,1,121,0
+162,Vasic,Snezana,Dorfstrasse 4,5105,Islisberg,,1942-03-30,1,582,0,40,0,448000.0,0.9,137,weiblich,1,123,0
+163,Wälti,Bob,Neue Stockstrasse 23,5107,Rupperswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Wälti Bob den kardiogenen Schock zu verhindern. ",1969-02-28,1,2334,1,35,0,75000.0,0.9,142,männlich,0,126,1
+164,Stern,Fernanda,Sedelstrasse 1,5042,Fahrwangen,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Stern Fernanda den kardiogenen Schock zu verhindern. ",2012-05-27,0,2442,1,30,0,334000.0,1.1,139,weiblich,0,129,1
+165,Reinhard,Aurelio,Oberer Kirchweg 8,5436,Moosleerau,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Reinhard Aurelio den kardiogenen Schock zu verhindern. ",2005-01-15,0,776,1,38,1,192000.0,1.3,135,männlich,0,130,1
+166,Ingold,Hanna,Unterer Gerbiweg 6,5742,Münchwilen,,1992-12-13,0,196,0,60,0,220000.0,0.7,133,weiblich,1,134,0
+167,Flückiger,Marc,Zugerstrasse 20,5053,Kirchleerau,Flückiger Marc hätte möglicherweise von einer Herztransplantation profitiert.,1975-05-10,0,66,1,20,0,70000.0,2.4,134,männlich,0,135,1
+168,Scherrer,Jean-Marie,Dorfstrasse 624,5436,Oberlunkhofen,,1943-11-18,0,582,1,40,0,270000.0,1.0,138,männlich,0,140,0
+169,Heeb,Nadejda,Yul-Brynner-Platz,8965,Schmiedrued,,1956-02-13,0,835,0,35,1,305000.0,0.8,133,weiblich,0,145,0
+170,Yu,Jesper,Kirchweg 26,5624,Dottikon,,1953-02-21,1,582,1,35,0,263358.03,1.5,136,männlich,1,145,0
+171,Leemann,Dylan,Schulstrasse 19,5242,Strengelbach,,2008-03-07,0,3966,0,40,0,325000.0,0.9,140,männlich,1,146,0
+172,Knobel,Fatemeh,Dorfplatz 354,5054,Zofingen,,1945-02-11,1,171,0,60,1,176000.0,1.1,145,weiblich,1,146,0
+173,Hofer,Abraham,Hauptstrasse 50,5628,Hirschthal,,2010-11-25,1,115,0,20,0,189000.0,0.8,139,männlich,0,146,0
+174,Hager,Nina,Zopfgasse 20,4803,Gansingen,,1960-08-04,0,198,1,35,1,281000.0,0.9,137,weiblich,1,146,0
+175,Weiss,Gonçalo,Dorfstrasse 624,5462,Reinach AG,,1981-12-19,1,95,0,60,0,337000.0,1.0,138,männlich,1,146,0
+176,Bachmann,Mladen,Brittnauerstrasse 3,5600,Bellikon,,1994-12-23,0,1419,0,40,0,105000.0,1.0,135,männlich,1,147,0
+177,Becker,Margrit,Kirchbergstrasse 1,5330,Fislisbach,,1950-04-16,1,69,0,50,0,132000.0,1.0,140,weiblich,0,147,0
+178,Heller,Annemarie,Alte Rebenstrasse 6,5037,Schlossrued,,2013-05-29,1,122,1,60,0,267000.0,1.2,145,weiblich,0,147,0
+179,Bauer,Dragan,Kantonsstrasse 10,5057,Niederrohrdorf,,1951-11-26,0,835,0,40,0,279000.0,0.7,140,männlich,1,147,0
+180,Huwiler,Aleksandar,Hauptstrasse 25,5600,Mühlau,,1983-02-06,0,478,1,30,0,303000.0,0.9,136,männlich,0,148,0
+181,Selimi,Alain,Reinerstrasse 25,5430,Hausen AG,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Selimi Alain den kardiogenen Schock zu verhindern. ",1950-12-26,1,176,1,25,0,221000.0,1.0,136,männlich,1,150,1
+182,Bickel,Chaim,Dorfstrasse 176,5072,Birr,"Bickel Chaim könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",2022-09-25,0,395,1,25,0,265000.0,1.2,136,männlich,1,154,1
+183,Brütsch,Nemanja,Chapf 9,5504,Schwaderloch,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Brütsch Nemanja den kardiogenen Schock zu verhindern. ",2013-07-30,0,99,0,38,1,224000.0,2.5,134,männlich,0,162,1
+184,Bloch,Sara,Schulstrasse 9,8919,Beinwil am See,Bloch Sara hätte möglicherweise von einer Herztransplantation profitiert.,1935-12-21,1,145,0,25,0,219000.0,1.2,137,weiblich,1,170,1
+185,Rodriguez,Stojan,Tramstrasse 12,5070,Brunegg,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Rodriguez Stojan den kardiogenen Schock zu verhindern. ",1984-02-19,1,104,1,30,0,389000.0,1.5,136,männlich,0,171,1
+186,Mohamed,Jeremias,Hauptstrasse 38,5072,Lupfig,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Mohamed Jeremias den kardiogenen Schock zu verhindern. ",2021-01-25,0,582,0,50,0,153000.0,0.6,134,männlich,0,172,1
+187,Hermann,Sladana,Schulhausstrasse 8,8917,Unterkulm,"Hermann Sladana könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1997-09-05,0,1896,1,25,0,365000.0,2.1,144,weiblich,0,172,1
+188,Simmen,Amber,Schulhausstrasse 2,5053,Siglistorf,,2000-08-10,1,151,1,40,1,201000.0,1.0,136,weiblich,0,172,0
+189,Zwahlen,Freya,Dorfstrasse 48,5080,Niederrohrdorf,,2015-03-09,0,244,0,45,1,275000.0,0.9,140,weiblich,0,174,0
+190,Stutz,Juri,Dorfstrasse 164,5212,Rüfenach,,1999-07-09,0,582,1,35,0,350000.0,2.1,134,männlich,0,174,0
+191,Steiger,Natacha,Schulhausstrasse 8,5622,Oftringen,,1942-10-13,1,62,0,60,0,309000.0,1.5,135,weiblich,0,174,0
+192,Nagy,Alexandre,Schulhausstrasse 4,5245,Dietwil,,1995-04-01,1,121,1,40,0,260000.0,0.7,130,männlich,0,175,0
+193,Waldvogel,Dominique,Schulstrasse 19,5712,Hirschthal,,1934-08-14,1,231,1,30,0,160000.0,1.18,142,weiblich,1,180,0
+194,Erni,Muhammad,Turnhallestrasse 623,5454,Hägglingen,Erni Muhammad hätte möglicherweise von einer Herztransplantation profitiert.,1954-08-01,0,582,0,20,1,126000.0,1.6,135,männlich,0,180,1
+195,Troxler,Rodolfo,Hauptstrasse 3,5622,Ehrendingen,"Troxler Rodolfo könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1961-02-08,1,418,0,45,0,223000.0,1.8,145,männlich,0,180,1
+196,Huser,Sérgio,Schulstrasse 15,5737,Leibstadt,,1942-11-29,0,582,1,38,1,263358.03,1.18,137,männlich,0,185,0
+197,Blumer,Danijel,Alte Poststrasse 6,8962,Brunegg,,1954-05-16,0,167,0,30,0,259000.0,0.8,138,männlich,0,186,0
+198,Vollenweider,Naomi,Oberdorfstrasse 1,5034,Oberentfelden,,2021-05-20,1,582,1,20,1,279000.0,1.0,134,weiblich,0,186,0
+199,Held,Emma,Bremgartenstrasse 2,5604,Koblenz,,2023-05-31,0,1211,1,35,0,263358.03,1.8,113,weiblich,1,186,0
+200,Conrad,Giancarlo,Schulstrasse 15,5201,Mägenwil,,1964-08-30,1,1767,0,45,0,73000.0,0.7,137,männlich,0,186,0
+201,,Jesús,Breitenstrasse 14,5507,Reitnau,,2015-02-14,0,308,1,60,1,377000.0,1.0,136,männlich,0,186,0
+202,Ali,Ronald,Zentrumstrasse 11,4303,Eiken,,1965-07-29,0,97,0,60,1,220000.0,0.9,138,männlich,0,186,0
+203,Hardegger,Furkan,Dorfweg 3,4805,Fahrwangen,,1938-11-08,0,59,0,25,1,212000.0,3.5,136,männlich,1,187,0
+204,Fries,Séverine,Alberich Zwyssig Strasse 76,5330,Holderbank AG,,1937-08-08,1,64,0,40,0,277000.0,0.7,137,weiblich,1,187,0
+205,Bodmer,Miroslava,Rathausgasse 1,5462,Bottenwil,,1977-04-18,1,167,1,45,0,362000.0,1.0,136,weiblich,0,187,0
+206,Büchler,Sean,Würenlingerstrasse 11,5727,Zuzgen,,1988-11-11,1,101,0,40,0,226000.0,0.8,141,männlich,0,187,0
+207,Ivanovic,Jann,Schulstrasse 2,5201,Sins,,1933-05-18,0,212,0,38,0,186000.0,0.9,136,männlich,0,187,0
+208,Spörri,Youri,Hauptstrasse 42,4324,Fisibach,,1970-02-20,1,2281,1,40,0,283000.0,1.0,141,männlich,0,187,0
+209,Wittwer,Erich,Dorf 1,5413,Schöftland,,2017-11-12,0,972,1,35,1,268000.0,0.8,130,männlich,0,187,0
+210,Ferrari,Janick,Schulstrasse 1,5722,Olsberg,,1991-05-09,0,212,1,17,1,389000.0,1.0,136,männlich,1,188,0
+211,Schulthess,Silvia,Hauptstrasse 36,5624,Zufikon,,1959-07-01,0,582,0,62,1,147000.0,0.8,140,weiblich,1,192,0
+212,Weiss,Fatma,Chillweg 6,4805,Dottikon,,1987-06-10,0,224,0,50,0,481000.0,1.4,138,weiblich,1,192,0
+213,Lüthy,Laura,Oberdorfstrasse 222,5040,Safenwil,Lüthy Laura hätte möglicherweise von einer Herztransplantation profitiert.,1964-12-28,1,131,1,30,1,244000.0,1.6,130,weiblich,0,193,1
+214,Hansen,Gamze,Bremgarterstrasse 1,4814,Strengelbach,,1952-01-11,1,135,0,35,1,290000.0,0.8,134,weiblich,0,194,0
+215,Bischoff,Sally,Unterdorf 5,5057,Suhr,,1990-09-25,0,582,0,35,1,203000.0,1.3,134,weiblich,0,195,0
+216,Brun,Reiner,Kirchweg 16,5332,Riniken,,2016-12-29,0,1202,0,50,1,358000.0,0.9,141,männlich,0,196,0
+217,Schenk,Gonçalo,Achenbergstrasse 6,5022,Leibstadt,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Schenk Gonçalo den kardiogenen Schock zu verhindern. ",1939-10-18,1,427,0,70,1,151000.0,9.0,137,männlich,0,196,1
+218,Schürmann,Cristiano,Gmeindhusplatz 3,5063,Koblenz,,1969-09-30,1,1021,1,35,0,271000.0,1.1,134,männlich,0,197,0
+219,Kuster,Radojka,Schulstrasse 1,5436,Rottenschwil,,2006-02-26,0,582,1,35,1,371000.0,0.7,140,weiblich,0,197,0
+220,Savic,Thuy,Bremgartenstrasse 2,5622,Rombach,"Savic Thuy könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1939-10-06,0,582,0,20,0,263358.03,1.83,134,weiblich,0,198,1
+221,Walser,Eugenio,Dorfstrasse 46,5303,Bottenwil,,1988-08-03,0,118,0,50,0,194000.0,1.1,145,männlich,1,200,0
+222,Bolliger,Gerd,Zürichstrasse 34,5064,Thalheim,,1954-04-16,1,86,0,35,0,365000.0,1.1,139,männlich,1,201,0
+223,Aschwanden,Alice,Schulstrasse 10,4323,Schneisingen,,1965-12-10,0,582,0,25,0,130000.0,0.8,134,weiblich,0,201,0
+224,Özdemir,Dominik,Rüstenschwilerstrasse 8,4853,Gipf-Oberfrick,,1999-09-19,0,582,1,25,0,504000.0,1.0,138,männlich,0,205,0
+225,Zogg,Flurina,Schulweg 1,5628,Schlossrued,,1963-04-03,0,675,1,60,0,265000.0,1.4,125,weiblich,0,205,0
+226,Heller,Miguel,Kirchweg 11,5745,Leibstadt,,1996-11-29,1,57,0,25,0,189000.0,1.3,132,männlich,1,205,0
+227,Lee,Liubov,Hauptstrasse 46,5615,Frick,,1965-03-20,1,2794,0,35,1,141000.0,1.0,140,weiblich,0,206,0
+228,Levy,Mohammad,Oberdorfstrasse 222,5644,Beinwil am See,,1941-06-02,0,56,0,25,0,237000.0,5.0,130,männlich,0,207,0
+229,Stäheli,Vera,Zentrumstrasse 11,5018,Bözberg,,1936-04-29,0,211,0,25,0,274000.0,1.2,134,weiblich,0,207,0
+230,Zellweger,Samuel,Hauptstrasse 15,5070,Wölflinswil,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Zellweger Samuel den kardiogenen Schock zu verhindern. ",1995-05-05,0,166,0,30,0,62000.0,1.7,127,männlich,0,207,1
+231,Osmani,Lucia,Schulstrasse 19,5244,Wohlenschwil,,1948-02-01,0,93,0,35,0,185000.0,1.1,134,weiblich,1,208,0
+232,Gassmann,Gustavo,Hauptstrasse 9,4305,Rupperswil,,1952-03-06,1,129,0,35,0,255000.0,0.9,137,männlich,0,209,0
+233,Mohammad,Zdenek,Schulstrasse 26,4317,Fisibach,,1981-11-03,1,707,0,38,0,330000.0,1.4,137,männlich,1,209,0
+234,Iten,Ivo,Schulstrasse 6,5201,Würenlingen,,2023-05-31,1,582,0,45,0,305000.0,1.1,137,männlich,1,209,0
+235,Suter,Livia,Breitenstrasse 14,8956,Wohlen,,1983-01-12,1,109,0,50,1,406000.0,1.1,137,weiblich,0,209,0
+236,Baur,Vito,Friedlisbergstrasse 11,5314,Dintikon,,1933-11-24,0,119,0,50,1,248000.0,1.1,148,männlich,0,209,0
+237,Keller,Bayram,Dorfstrasse 8,5436,Olsberg,,2021-11-23,0,232,0,30,0,173000.0,1.2,132,männlich,0,210,0
+238,Fankhauser,Mateusz,Kirchweg 11,4802,Leuggern,,1970-01-17,1,720,1,40,0,257000.0,1.0,136,männlich,0,210,0
+239,Rexhepi,Ida,Staltig 14,5430,Safenwil,,1972-08-05,1,180,0,45,0,263358.03,1.18,137,weiblich,1,211,0
+240,Mohammad,Janet,Rathausgasse 1,4803,Kaisten,,1987-05-02,0,81,1,35,1,533000.0,1.3,139,weiblich,0,212,0
+241,Holzer,Léonie,Hauptstrasse 15,8965,Wittnau,,1974-12-26,0,582,1,30,0,249000.0,1.3,136,weiblich,1,212,0
+242,Kümin,Julien,Schulhausstrasse 3,5073,Fischbach-Göslikon,,1937-11-24,0,90,0,35,0,255000.0,1.1,136,männlich,1,212,0
+243,Johnson,Anika,Gmeindhusplatz 3,5034,Oberlunkhofen,,2000-10-25,1,1185,0,40,1,220000.0,0.9,141,weiblich,0,213,0
+244,Ulrich,Hans-Rudolf,Dorfstrasse 624,5604,Schafisheim,,2001-10-26,0,582,1,38,0,264000.0,1.8,134,männlich,0,213,0
+245,Bertschi,João,Reinerstrasse 25,5046,Zetzwil,,1958-12-16,1,80,1,38,0,282000.0,1.4,137,männlich,0,213,0
+246,Angst,Constantin,Zopfgasse 20,5107,Oberkulm,Angst Constantin hätte möglicherweise von einer Herztransplantation profitiert.,2017-04-13,0,2017,0,25,0,314000.0,1.1,138,männlich,0,214,1
+247,Jenni,Yue,Chilerain 2,4800,Riniken,,1999-10-31,0,143,0,25,0,246000.0,2.4,135,weiblich,0,214,0
+248,Maliqi,Géza,Oberdorfstrasse 9,4303,Beinwil,,1951-03-21,0,624,0,35,0,301000.0,1.0,142,männlich,1,214,0
+249,Maier,Anouk,Kirchweg 1,5728,Menziken,,1956-07-20,0,207,1,40,0,223000.0,1.2,130,weiblich,0,214,0
+250,Züger,Ladina,Bremgarterstrasse 1,5072,Mellingen,,1946-08-03,0,2522,0,30,1,404000.0,0.5,139,weiblich,0,214,0
+251,Pfenninger,Coralie,Vogelsangstrasse 2,4316,Hausen AG,,1993-11-17,0,572,1,35,0,231000.0,0.8,143,weiblich,0,215,0
+252,Ramseier,Gaetano,Badenerstrasse 25,5462,Strengelbach,,1931-01-03,0,245,0,45,1,274000.0,1.0,133,männlich,0,215,0
+253,Hediger,Kaltrina,Hinterdorfstrasse 1,5235,Bergdietikon,,2001-06-24,0,88,1,35,1,236000.0,1.2,132,weiblich,0,215,0
+254,Hofer,Abdullah,Kirchstrasse 14,5605,Suhr,,1947-05-02,1,446,0,60,1,263358.03,1.0,139,männlich,0,215,0
+255,Ruckstuhl,Pierre,Dorfplatz 354,5625,Siglistorf,,2001-10-26,1,191,1,30,1,334000.0,1.0,142,männlich,1,216,0
+256,von Allmen,Zorka,Dorfstrasse 52,5512,Künten,,1984-05-18,0,326,0,38,0,294000.0,1.7,139,weiblich,0,220,0
+257,Rutz,Louie,Oberdorfstrasse 9,5504,Neuenhof,,2010-03-12,0,132,1,38,1,253000.0,1.0,139,männlich,0,230,0
+258,Seifert,Rosa,Kratz 4,5306,Rottenschwil,,2012-06-12,1,66,1,25,0,233000.0,0.8,135,weiblich,0,230,0
+259,Räber,Dirk,Hauptstrasse 21,4814,Lupfig,,1982-01-14,0,56,0,50,0,308000.0,0.7,135,männlich,1,231,0
+260,Menzi,Luís,Neue Stockstrasse 23,5425,Habsburg,,1975-12-12,0,66,0,40,0,203000.0,1.0,138,männlich,0,233,0
+261,Lüscher,Valentin,Dorfstrasse 12,5036,Kleindöttingen,,1953-07-22,1,655,0,40,0,283000.0,0.7,133,männlich,0,233,0
+262,Ingold,Conrad,Gmeindhusplatz 3,8964,Stein,"Ingold Conrad könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1959-12-23,1,258,1,25,0,198000.0,1.4,129,männlich,0,235,1
+263,Moser,Günther,Kustergasse 1,4334,Zeiningen,,1953-02-16,1,157,1,60,0,208000.0,1.0,140,männlich,0,237,0
+264,Peters,Clémence,Hauptstrasse 36,5706,Berikon,,1977-06-17,0,582,1,38,0,147000.0,1.2,141,weiblich,0,237,0
+265,Pauli,Orhan,Schulstrasse 10,5313,Eiken,,1942-07-03,1,298,0,35,0,362000.0,0.9,140,männlich,1,240,0
+266,Stüssi,Jaël,Hubelstrasse 220,5442,Schwaderloch,"Stüssi Jaël könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie.",1940-02-02,0,1199,0,20,0,263358.03,1.83,134,weiblich,1,241,1
+267,Eckert,Raphael,Lindenplatz 1,5063,Oberentfelden,,2019-05-24,1,135,1,38,0,133000.0,1.7,140,männlich,0,244,0
+268,Kummer,Martino,Schulgasse 2,5452,Besenbüren,,1974-07-02,0,582,1,38,0,302000.0,0.9,140,männlich,0,244,0
+269,Urech,Dominik,Rathausgasse 1,5035,Suhr,,1973-09-12,0,582,1,35,0,222000.0,1.0,132,männlich,0,244,0
+270,Fink,Matej,Yul-Brynner-Platz,5322,Spreitenbach,,1986-04-21,0,582,1,30,1,263358.03,1.6,130,männlich,1,244,0
+271,Spörri,Rodrigo,Bonstetterstrasse 2,5210,Arni,,1970-10-29,0,582,1,40,0,221000.0,0.9,134,männlich,0,244,0
+272,Benz,Julija,Zugerstrasse 20,5330,Stetten,,1935-02-25,0,213,0,38,0,215000.0,1.2,133,weiblich,0,245,0
+273,Fink,Iris,Zopfgasse 20,5408,Rothrist,,2009-04-04,0,64,0,40,0,189000.0,0.7,140,weiblich,0,245,0
+274,Rieser,Andrea,Hauptstrasse 50,5242,Reitnau,,2022-07-06,1,257,1,30,0,150000.0,1.0,137,weiblich,1,245,0
+275,Yildiz,Eduard,Kapellstrasse 1,5622,Freienwil,,1939-05-26,0,582,0,38,1,422000.0,0.8,137,männlich,0,245,0
+276,Enz,Angelika,Dorfplatz 354,5712,Koblenz,,1970-01-14,0,618,0,35,0,327000.0,1.1,142,weiblich,0,245,0
+277,Wirz,Milorad,Talstrasse 5,5210,Waltenschwil,,2001-06-13,0,582,1,38,0,25100.0,1.1,140,männlich,0,246,0
+278,Gerber,Xuan,Mitteldorfstrasse 60,4663,Lupfig,,2007-05-25,1,1051,1,30,0,232000.0,0.7,136,weiblich,0,246,0
+279,Kiefer,Nemanja,Dorfstrasse 52,4325,Sisseln,,1994-11-10,0,84,1,38,0,451000.0,1.3,136,männlich,0,246,0
+280,Meili,Arthur,Mutschellenstrasse 19,8967,Büttikon,,1964-08-25,0,2695,1,40,0,241000.0,1.0,137,männlich,0,247,0
+281,Fries,Sally,Schulstrasse 79,5616,Tägerig,,1976-07-03,0,582,0,40,0,51000.0,2.7,136,weiblich,1,250,0
+282,Alija,Naemi,Schulstrasse 1,8962,Islisberg,,1941-07-30,0,64,0,30,0,215000.0,3.8,128,weiblich,1,250,0
+283,Andere Nachnamen,Morten,Alberich Zwyssig Strasse 76,5423,Unterentfelden,,2023-10-20,0,1688,0,38,0,263358.03,1.1,138,männlich,1,250,0
+284,Nievergelt,Rachel,Unterer Gerbiweg 6,4317,Schneisingen,,1951-04-14,1,54,0,40,0,279000.0,0.8,141,weiblich,0,250,0
+285,Graf,Andrej,Oberdorfstrasse 222,5442,Hirschthal,,1957-04-27,1,170,1,40,0,336000.0,1.2,135,männlich,0,250,0
+286,Schaller,Dusanka,Hubelstrasse 220,5040,Unterlunkhofen,,1934-03-21,0,253,0,35,0,279000.0,1.7,140,weiblich,0,250,0
+287,Ahmadi,Aurèle,Gmeindhusplatz 3,5503,Zufikon,,1961-07-15,0,582,1,55,0,543000.0,1.0,132,männlich,0,250,0
+288,Bislimi,Florian,Hauptstrasse 68,5505,Moosleerau,,1996-03-01,0,892,1,35,0,263358.03,1.1,142,männlich,0,256,0
+289,Grimm,Vesna,Schulstrasse 19,5607,Brittnau,,1986-04-01,1,337,0,38,0,390000.0,0.9,144,weiblich,0,256,0
+290,Hürlimann,Dennis,Schulhausstrasse,5070,Staufen,,1978-10-08,0,615,1,55,0,222000.0,0.8,141,männlich,0,257,0
+291,Baumann,Benjamin,Hubelstrasse 220,5314,Schlossrued,,1991-08-16,0,320,0,35,0,133000.0,1.4,139,männlich,0,258,0
+292,Eberhard,Marine,Schulhausstrasse 17,4814,Bellikon,,1994-10-30,0,190,1,38,0,382000.0,1.0,140,weiblich,1,258,0
+293,Mäder,Mira,Haldenweg 332,5632,Koblenz,,1976-05-13,1,103,1,35,0,179000.0,0.9,136,weiblich,1,270,0
+294,Paul,Tomas,Bahnhofstrasse 69,5443,Brittnau,,1964-03-04,0,61,1,38,1,155000.0,1.1,143,männlich,1,270,0
+295,Matter,Sadije,Dorfstrasse 41,5734,Stetten,,2011-12-10,0,1820,0,38,0,270000.0,1.2,139,weiblich,0,271,0
+296,Bänziger,Iuliia,Eikerstrasse 30,5623,Bellikon,,1947-07-23,0,2060,1,60,0,742000.0,0.8,138,weiblich,0,278,0
+297,Filipovic,Jean,Schürweg 2,5036,Remetschwil,,1955-06-07,0,2413,0,38,0,140000.0,1.4,140,männlich,1,280,0
+298,Bajrami,Yasar,Hauptstrasse 87,5722,Oberlunkhofen,,1985-08-30,0,196,0,45,0,395000.0,1.6,136,männlich,1,285,0
+299,Bajrami,Yasar,Hauptstrasse 87,5722,Oberlunkhofen,,1985-08-30,0,196,0,45,0,395000.0,1.6,136,männlich,1,285,0

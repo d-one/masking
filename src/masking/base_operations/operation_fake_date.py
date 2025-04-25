@@ -17,12 +17,18 @@ class FakeDateBase(Operation):
         self.col_name = col_name
         self.faker = FakeDateProvider(preserve=preserve)
 
-    def _mask_line(self, line: str) -> str:
+    @property
+    def _needs_unique_values(self) -> bool:
+        """Return if the operation needs to produce unique masked values."""
+        return True
+
+    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
+            **kwargs (dict): additional arguments for the masking operation
 
         Returns:
         -------
