@@ -4,6 +4,7 @@ import time
 from pathlib import Path
 
 import pandas as pd
+from masking.mask_spark.operations.operation_fake_plz import FakePLZ
 from masking.mask_spark.operations.operation_hash import HashOperation
 from masking.mask_spark.operations.operation_presidio import HashPresidio
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
@@ -54,24 +55,6 @@ def measure_execution_time(config: dict) -> float:
     # Print the number of workers
     print("Number of workers: ", spark.sparkContext.defaultParallelism)
 
-    # if any(
-    #     isinstance(
-    #         config[col_name]["masking_operation"], MaskDictOperation | HashPresidio
-    #     )
-    #     for col_name in config
-    # ):
-    #     # Update the analyzer in the config
-    #     for col_name in config:
-    #         if isinstance(
-    #             config[col_name]["masking_operation"], MaskDictOperation | HashPresidio
-    #         ):
-    #             analyzer = config[col_name]["masking_operation"].analyzer
-    #             broadcased_analyzer = spark.sparkContext.broadcast(analyzer)
-
-    #             config[col_name]["masking_operation"].update_analyzer(
-    #                 broadcased_analyzer.value
-    #             )
-
     start_time = time.time()
 
     pipeline = MaskDataFramePipeline(config, workers=min(4, len(config)))
@@ -105,6 +88,11 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
+    "PLZ": {
+        "masking_operation": FakePLZ(
+            col_name="PLZ", preserve=("district", "area", "route")
+        )
+    },
     "Name": [
         {
             "masking_operation": HashOperation(

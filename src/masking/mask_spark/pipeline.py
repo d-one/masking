@@ -25,18 +25,23 @@ class ConcordanceTable(ConcordanceTableBase):
         try:
             data = (
                 self.masking_operation(
-                    data.select(
+                    data.select(*[
                         col(self.column_name).alias("clear_values"),
-                        col(self.column_name).cast("string"),
-                        *[c for c in self.serving_columns if c != self.column_name],
-                    )
+                        col(self.column_name),
+                        *[
+                            col(c)
+                            for c in self.serving_columns
+                            if c != self.column_name
+                        ],
+                    ])
                 )
                 .withColumnRenamed(self.column_name, "masked_values")
                 .cache()
             )
 
             return data.filter(
-                col("clear_values").cast("string") != col("masked_values")
+                col("clear_values").cast("string")
+                != col("masked_values").cast("string")
             ).rdd.collectAsMap()
 
         except Exception as e:

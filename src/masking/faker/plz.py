@@ -185,13 +185,13 @@ class FakePLZProvider(FakeProvider):
         ].tolist()
 
         if int(plz) not in admissible:
-            return plz
+            return str(plz)
 
         for _ in range(self._MAX_ITERATIONS):
             new_plz = self.generator.random_element(admissible)
 
             if new_plz != plz:
-                return new_plz
+                return str(new_plz)
 
         msg = "Could not generate a unique PLZ: too many iterations."
         raise ValueError(msg)
