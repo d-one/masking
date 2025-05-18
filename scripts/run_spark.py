@@ -151,15 +151,6 @@ config = {
             )
         },
     ],
-    # "Extra": {
-    #     "masking_operation": StringMatchOperation(
-    #         col_name="Extra",
-    #         pii_cols=["Name", "Vorname", "Geburtsdatum"],
-    #         allow_list=["Darius"],
-    #         deny_keys=["Doctor"],
-    #         masking_function=lambda x: "<MASKED>",
-    #     )
-    # },
 }
 
 times = [measure_execution_time(config) for _ in range(1)]

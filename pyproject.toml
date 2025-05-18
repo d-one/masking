@@ -21,13 +21,7 @@ ignore = [
 select = ["ALL"]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/try_presidio.py" = ["T201", "ANN2", "ERA001"]
-"scripts/try_faker.py" = ["T201", "ANN2", "ERA001"]
-"scripts/run.py" = ["T201", "S106","INP001", "ERA001", "PLW0108", "ARG005"]
-"scripts/run_spark.py" = ["T201", "INP001", "S106", "ERA001", "FBT003", "PLW0108", "ARG005"]
-"scripts/run_demasking.py" = ["T201", "ERA001", "S101"]
-"src/masking/mask/operations/__init__.py" = ["PLC0415"]
-"src/masking/mask_spark/operations/__init__.py" = ["PLC0415"]
+"scripts/*" = ["T201", "ANN2", "ERA001", "INP001", "S106", "ARG005"]
 "tests/*" = ["S101", "SLF0", "PLC0415"]
 
 ############################# POETRY ##########################
