@@ -6,7 +6,7 @@ from masking.base_operations.operation import Operation
 from masking.utils.presidio_handler import PresidioHandler
 
 
-class HashPresidioBase(Operation, PresidioHandler):
+class MaskPresidioBase(Operation, PresidioHandler):
     """Hashes a text using hashlib algorithm and presidio to detect entities."""
 
     # Hashing function

@@ -7,7 +7,7 @@ import pandas as pd
 from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_fake_plz import FakePLZ
 from masking.mask_spark.operations.operation_hash import HashOperation
-from masking.mask_spark.operations.operation_presidio import HashPresidio
+from masking.mask_spark.operations.operation_presidio import MaskPresidio
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
@@ -121,7 +121,7 @@ config = {
         "concordance_table": {"Darius": "DA"},
     },
     "Beschrieb": {
-        "masking_operation": HashPresidio(
+        "masking_operation": MaskPresidio(
             col_name="Beschrieb",
             masking_function=lambda x: "<MASKED>",
             analyzer=analyzer,

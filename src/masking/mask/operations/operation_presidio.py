@@ -3,11 +3,11 @@ from collections import defaultdict
 import pandas as pd
 from pandas import DataFrame, Series
 
-from masking.base_operations.operation_presidio import HashPresidioBase
+from masking.base_operations.operation_presidio import MaskPresidioBase
 from masking.mask.operations.operation import PandasOperation
 
 
-class HashPresidio(HashPresidioBase, PandasOperation):
+class MaskPresidio(MaskPresidioBase, PandasOperation):
     """Hashes a text using hashlib algorithm and presidio to detect entities."""
 
     def _mask_data(self, data: DataFrame | Series) -> DataFrame | Series:
