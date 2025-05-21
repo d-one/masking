@@ -66,40 +66,40 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "PLZ": {
-        "masking_operation": FakePLZ(
-            col_name="PLZ", preserve=("district", "area", "route")
-        )
-    },
-    "Name": [
-        {
-            "masking_operation": HashOperation(
-                col_name="Name",
-                secret="my_secret",
-                concordance_table=DataFrame({
-                    "clear_values": ["Spiess"],
-                    "masked_values": ["SP"],
-                }),
-            )
-        },
-        {
-            "masking_operation": HashOperation(
-                col_name="Name",
-                secret="my_secret",
-                concordance_table=DataFrame({
-                    "clear_values": ["SP"],
-                    "masked_values": ["123"],
-                }),
-            )
-        },
-    ],
-    "Vorname": {
-        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-        "concordance_table": DataFrame({
-            "clear_values": ["Darius"],
-            "masked_values": ["DA"],
-        }),
-    },
+    # "PLZ": {
+    #     "masking_operation": FakePLZ(
+    #         col_name="PLZ", preserve=("district", "area", "route")
+    #     )
+    # },
+    # "Name": [
+    #     {
+    #         "masking_operation": HashOperation(
+    #             col_name="Name",
+    #             secret="my_secret",
+    #             concordance_table=DataFrame({
+    #                 "clear_values": ["Spiess"],
+    #                 "masked_values": ["SP"],
+    #             }),
+    #         )
+    #     },
+    #     {
+    #         "masking_operation": HashOperation(
+    #             col_name="Name",
+    #             secret="my_secret",
+    #             concordance_table=DataFrame({
+    #                 "clear_values": ["SP"],
+    #                 "masked_values": ["123"],
+    #             }),
+    #         )
+    #     },
+    # ],
+    # "Vorname": {
+    #     "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+    #     "concordance_table": DataFrame({
+    #         "clear_values": ["Darius"],
+    #         "masked_values": ["DA"],
+    #     }),
+    # },
     "Beschrieb": [
         {
             "masking_operation": StringMatchOperation(
@@ -119,28 +119,28 @@ config = {
             )
         },
     ],
-    "Geburtsdatum": [
-        {
-            "masking_operation": FakeDate(
-                col_name="Geburtsdatum",
-                preserve=("year", "month"),
-                concordance_table=DataFrame({
-                    "clear_values": ["1979-04-24"],
-                    "masked_values": ["2050-01-01"],
-                }),
-            )
-        },
-        {
-            "masking_operation": YYYYHashOperation(
-                col_name="Geburtsdatum",
-                secret="my_secret",
-                concordance_table=DataFrame({
-                    "clear_values": ["2050-01-01"],
-                    "masked_values": ["<MASKED>"],
-                }),
-            )
-        },
-    ],
+    # "Geburtsdatum": [
+    #     {
+    #         "masking_operation": FakeDate(
+    #             col_name="Geburtsdatum",
+    #             preserve=("year", "month"),
+    #             concordance_table=DataFrame({
+    #                 "clear_values": ["1979-04-24"],
+    #                 "masked_values": ["2050-01-01"],
+    #             }),
+    #         )
+    #     },
+    #     {
+    #         "masking_operation": YYYYHashOperation(
+    #             col_name="Geburtsdatum",
+    #             secret="my_secret",
+    #             concordance_table=DataFrame({
+    #                 "clear_values": ["2050-01-01"],
+    #                 "masked_values": ["<MASKED>"],
+    #             }),
+    #         )
+    #     },
+    # ],
 }
 
 times = [measure_execution_time(config) for _ in range(1)]
