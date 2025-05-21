@@ -35,8 +35,10 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
                 for entity in self._PII_ENTITIES
             }
 
-    def _get_leafs(self, line: dict | str) -> tuple[Generator[str, None, None]]:
-        """Get the leafs of a nested dictionary.
+    def _get_path_to_mask_and_deny(
+        self, line: dict | str
+    ) -> tuple[Generator[str, None, None]]:
+        """Get the paths to mask and deny.
 
         Args:
         ----
@@ -88,7 +90,7 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
                 print(msg)  # noqa: T201
 
         if leaf_to_deny is None and leaf_to_mask is None:
-            leaf_to_mask, leaf_to_deny = self._get_leafs(line)
+            leaf_to_mask, leaf_to_deny = self._get_path_to_mask_and_deny(line)
 
         for leaf in leaf_to_deny:
             value = self._get_leaf(line, self._undeny_path(leaf))
@@ -103,14 +105,16 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
         if entities is None:
             entities = defaultdict(set)
             for lang in self.analyzer.supported_languages:
-                for leaf, doc in self.analyzer.nlp_engine.process_batch(
+                for value, doc in self.analyzer.nlp_engine.process_batch(
                     [
                         self._get_leaf(line, leaf.split(self.path_separator))
                         for leaf in leaf_to_mask
                     ],
                     language=lang,
                 ):
-                    entities[leaf].update(self._get_language_entities(leaf, lang, doc))
+                    entities[value].update(
+                        self._get_language_entities(value, lang, doc)
+                    )
 
         for leaf in leaf_to_mask:
             value = self._get_leaf(line, leaf)

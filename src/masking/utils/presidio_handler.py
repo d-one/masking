@@ -1,3 +1,4 @@
+import operator
 from functools import reduce
 from typing import ClassVar
 
@@ -82,7 +83,7 @@ class PresidioHandler:
 
     def _get_language_entities(
         self, line: str, language: str, nlp_artifacts: list | None = None
-    ) -> set[str]:
+    ) -> list:
         """Get entities in a text.
 
         Args:
@@ -93,7 +94,7 @@ class PresidioHandler:
 
         Returns:
         -------
-            dict[str, set[str]]: dictionary with entities detected in the text
+            list: dictionary with entities detected in the text
 
         """
         params = {
@@ -121,7 +122,7 @@ class PresidioHandler:
 
         """
         return reduce(
-            lambda x, y: x.union(y),
+            operator.add,
             (
                 self._get_language_entities(line, lang)
                 for lang in self.analyzer.supported_languages

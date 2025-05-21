@@ -7,6 +7,7 @@ from masking.mask.operations.operation_fake_date import FakeDate
 from masking.mask.operations.operation_fake_plz import FakePLZ
 from masking.mask.operations.operation_hash import HashOperation
 from masking.mask.operations.operation_presidio import MaskPresidio
+from masking.mask.operations.operation_presidio_dict import MaskDictOperation
 from masking.mask.operations.operation_string_match import StringMatchOperation
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
@@ -119,6 +120,16 @@ config = {
             )
         },
     ],
+    "Report": {
+        "masking_operation": MaskDictOperation(
+            col_name="Report",
+            masking_function=lambda x: "<MASKED>",
+            analyzer=analyzer,
+            pii_entities=["PERSON"],
+            # path_separator=".",
+            # deny_keys=["*.patient"],
+        )
+    },
     "Geburtsdatum": [
         {
             "masking_operation": FakeDate(

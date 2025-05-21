@@ -4,7 +4,7 @@ from itertools import tee
 
 from pandas import DataFrame, Series
 
-from masking.base_operations.operation_dict import MaskDictOperationBase
+from masking.base_operations.operation_presidio_dict import MaskDictOperationBase
 from masking.mask.operations.operation import PandasOperation
 
 
@@ -12,25 +12,32 @@ class MaskDictOperation(PandasOperation, MaskDictOperationBase):
     """Hashes a column using SHA256 algorithm."""
 
     def _mask_data(self, data: DataFrame | Series) -> DataFrame | Series:
-        values = data
-        if isinstance(data, DataFrame):
-            values = data[self.col_name]
+        """Mask the data.
 
-        leafts_to_mask = (
+        Args:
+        ----
+            data (DataFrame | Series): input data
+
+        Returns:
+        -------
+            DataFrame | Series: masked data
+
+        """
+        gen_values_to_mask = (
             (
                 self._get_leaf(
                     line if isinstance(line, dict) else json.loads(line), leaf
                 ),
                 line,
             )
-            for line in values
+            for line in (data if isinstance(data, Series) else data[self.col_name])
             for leaf in self._find_leaf_path(
                 line if isinstance(line, dict) else json.loads(line)
             )
             if not self._is_denied_path(leaf)
         )
 
-        gen1, gen2 = tee(leafts_to_mask)
+        gen1, gen2 = tee(gen_values_to_mask)
         entities = defaultdict(lambda: defaultdict(set))
 
         for lang in self.analyzer.supported_languages:
