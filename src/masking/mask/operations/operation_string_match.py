@@ -4,11 +4,11 @@ from contextlib import suppress
 
 from pandas import DataFrame, Series
 
-from masking.base_operations.operation_string_match import StringMatchOperationBase
+from masking.base_operations.operation_string_match import StringMatchDictOperationBase
 from masking.mask.operations.operation import PandasOperation
 
 
-class StringMatchOperation(PandasOperation, StringMatchOperationBase):
+class StringMatchDictOperation(PandasOperation, StringMatchDictOperationBase):
     """String matching operation."""
 
     def _find_leafs_to_mask(self, line: Series) -> Generator[tuple, None, None]:

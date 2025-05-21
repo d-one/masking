@@ -11,7 +11,7 @@ from masking.utils.multi_nested_dict import MultiNestedDictHandler
 from masking.utils.presidio_handler import PresidioHandler
 
 
-class StringMatchOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
+class StringMatchDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
     _PII_ENTITY = "PATIENT_DATA"
 
     def __init__(

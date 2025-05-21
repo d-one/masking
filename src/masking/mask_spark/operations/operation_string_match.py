@@ -1,8 +1,8 @@
 from masking.mask.operations.operation_string_match import (
-    StringMatchOperation as StringMatchOperationPandas,
+    StringMatchDictOperation as StringMatchDictOperationPandas,
 )
 from masking.mask_spark.operations.operation import SparkOperation
 
 
-class StringMatchOperation(SparkOperation, StringMatchOperationPandas):
+class StringMatchDictOperation(SparkOperation, StringMatchDictOperationPandas):
     """String matching operation."""
