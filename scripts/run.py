@@ -6,7 +6,8 @@ from pathlib import Path
 from masking.mask.operations.operation_fake_date import FakeDate
 from masking.mask.operations.operation_fake_plz import FakePLZ
 from masking.mask.operations.operation_hash import HashOperation
-from masking.mask.operations.operation_string_match import StringMatch
+from masking.mask.operations.operation_presidio import MaskPresidio
+from masking.mask.operations.operation_string_match import StringMatchOperation
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
 from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
@@ -99,24 +100,25 @@ config = {
             "masked_values": ["DA"],
         }),
     },
-    # "Beschrieb": {
-    #     "masking_operation": MaskPresidio(
-    #         col_name="Beschrieb",
-    #         masking_function=lambda x: "<MASKED>",
-    #         analyzer=analyzer,
-    #         allow_list=["Darius"],
-    #         pii_entities=["PERSON"],
-    #     )
-    # },
-    "Beschrieb": {
-        "masking_operation": StringMatch(
-            col_name="Beschrieb",
-            masking_function=lambda x: "<MASKED>",
-            analyzer=analyzer,
-            allow_list=["Darius"],
-            pii_entities=["PERSON"],
-        )
-    },
+    "Beschrieb": [
+        {
+            "masking_operation": StringMatchOperation(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                pii_cols=["Vorname", "Name"],
+            )
+        },
+        {
+            "masking_operation": MaskPresidio(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                allow_list=["Darius"],
+                pii_entities=["PERSON"],
+            )
+        },
+    ],
     "Geburtsdatum": [
         {
             "masking_operation": FakeDate(
