@@ -1,4 +1,5 @@
 import operator
+from collections.abc import Callable
 from functools import reduce
 from typing import ClassVar
 
@@ -30,6 +31,7 @@ class PresidioHandler:
         analyzer: AnalyzerEngine = None,
         anonymizer: AnonymizerEngine = None,
         operators: dict[str, OperatorConfig] | None = None,
+        masking_function: Callable[[str], str] | None = None,
         allow_list: list[str] | None = None,
         pii_entities: list[str] | None = None,
         **kwargs: dict,
@@ -41,6 +43,7 @@ class PresidioHandler:
             analyzer (AnalyzerEngine): presidio analyzer engine
             anonymizer (AnonymizerEngine): presidio anonymizer engine
             operators (dict[str, OperatorConfig]): operators for masking
+            masking_function (Callable[[str], str]): function to mask the text
             allow_list (list[str]): list of allowed entities
             pii_entities (list[str]): list of entities to detect
             **kwargs: keyword arguments
@@ -60,6 +63,15 @@ class PresidioHandler:
             entity: OperatorConfig("replace", {"new_value": "<MASKED>"})
             for entity in self._PII_ENTITIES
         }
+
+        # The masking function can be used to mask path on dictionaries of parts of dictionaries.
+        # This can be different from the operator used in the anonymizer.
+        if masking_function:
+            self.operators = {
+                entity: OperatorConfig("custom", {"lambda": masking_function})
+                for entity in self._PII_ENTITIES
+            }
+            self.masking_function = masking_function
 
     def update_analyzer(self, analyzer: AnalyzerEngine) -> None:
         """Update the analyzer engine.

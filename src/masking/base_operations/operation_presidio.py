@@ -1,7 +1,3 @@
-from collections.abc import Callable
-
-from presidio_anonymizer import OperatorConfig
-
 from masking.base_operations.operation import Operation
 from masking.utils.presidio_handler import PresidioHandler
 
@@ -9,12 +5,7 @@ from masking.utils.presidio_handler import PresidioHandler
 class MaskPresidioBase(Operation, PresidioHandler):
     """Hashes a text using hashlib algorithm and presidio to detect entities."""
 
-    # Hashing function
-    masking_function: Callable[[str], str]  # function to hash the input string
-
-    def __init__(
-        self, col_name: str, masking_function: Callable[[str], str], **kwargs: dict
-    ) -> None:
+    def __init__(self, col_name: str, **kwargs: dict) -> None:
         """Initialize the HashTextSHA256 class.
 
         Args:
@@ -25,14 +16,6 @@ class MaskPresidioBase(Operation, PresidioHandler):
 
         """
         super().__init__(col_name=col_name, **kwargs)
-
-        self.masking_function = masking_function
-
-        if kwargs.get("operators", None) is None:
-            self.operators = {
-                entity: OperatorConfig("custom", {"lambda": self.masking_function})
-                for entity in self._PII_ENTITIES
-            }
 
     def _mask_line(
         self,
