@@ -5,6 +5,8 @@ from masking.faker.plz import FakePLZProvider
 class FakePLZBase(Operation):
     """Mask a column with fake PLZ data."""
 
+    MAX_RETRY_MASK_LINE = 100
+
     def __init__(
         self,
         col_name: str,
@@ -43,4 +45,15 @@ class FakePLZBase(Operation):
             str: masked line
 
         """
-        return self.faker(line)
+        masked = self.faker(line)
+
+        counter = 0
+        while masked == line and counter < self.MAX_RETRY_MASK_LINE:
+            masked = self.faker(line)
+            counter += 1
+
+        if masked == line:
+            msg = f"Unable to mask the line {line} after {self.MAX_RETRY} attempts."
+            raise ValueError(msg)
+
+        return masked

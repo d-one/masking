@@ -5,6 +5,8 @@ from masking.faker.date import FakeDateProvider
 class FakeDateBase(Operation):
     """Hashes a column using SHA256 algorithm."""
 
+    MAX_RETRY_MASK_LINE = 100
+
     def __init__(
         self, col_name: str, preserve: str | tuple[str] | None = None, **kwargs: dict
     ) -> None:
@@ -38,4 +40,15 @@ class FakeDateBase(Operation):
             str: masked line
 
         """
-        return self.faker(line)
+        masked = self.faker(line)
+
+        counter = 0
+        while masked == line and counter < self.MAX_RETRY_MASK_LINE:
+            masked = self.faker(line)
+            counter += 1
+
+        if masked == line:
+            msg = f"Unable to mask the line {line} after {self.MAX_RETRY} attempts."
+            raise ValueError(msg)
+
+        return masked
