@@ -14,7 +14,7 @@ class Operation(ABC):
     col_name: str  # column name to be masked
     concordance_table: dict | AnyDataFrame | None = None
 
-    MAX_RETRY = 50
+    MAX_RETRY = 100
 
     def __init__(
         self,

@@ -3,7 +3,15 @@ import shutil
 import time
 from pathlib import Path
 
+from masking.mask.operations.operation_fake_date import FakeDate
+from masking.mask.operations.operation_fake_name import FakeNameOperation
 from masking.mask.operations.operation_fake_plz import FakePLZ
+from masking.mask.operations.operation_hash import HashOperation
+from masking.mask.operations.operation_presidio import MaskPresidio
+from masking.mask.operations.operation_presidio_dict import MaskDictOperation
+from masking.mask.operations.operation_string_match import StringMatchOperation
+from masking.mask.operations.operation_string_match_dict import StringMatchDictOperation
+from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask.pipeline import MaskDataFramePipeline
 from masking.utils.entity_detection import PresidioMultilingualAnalyzer
 from pandas import DataFrame, read_csv
@@ -65,97 +73,97 @@ config = {
         "masking_operation": FakePLZ(
             col_name="PLZ", preserve=("district", "area", "route")
         )
-    }
-    # "Name": [
-    #     {
-    #         "masking_operation": HashOperation(
-    #             col_name="Name",
-    #             secret="my_secret",
-    #             concordance_table=DataFrame({
-    #                 "clear_values": ["Spiess"],
-    #                 "masked_values": ["SP"],
-    #             }),
-    #         )
-    #     },
-    #     {
-    #         "masking_operation": HashOperation(
-    #             col_name="Name",
-    #             secret="my_secret",
-    #             concordance_table=DataFrame({
-    #                 "clear_values": ["SP"],
-    #                 "masked_values": ["123"],
-    #             }),
-    #         )
-    #     },
-    # ],
-    # "Vorname": {
-    #     "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-    #     "concordance_table": DataFrame({
-    #         "clear_values": ["Darius"],
-    #         "masked_values": ["DA"],
-    #     }),
-    # },
-    # "Beschrieb": [
-    #     {
-    #         "masking_operation": StringMatchOperation(
-    #             col_name="Beschrieb",
-    #             masking_function=lambda x: "<MASKED>",
-    #             pii_cols=["Vorname", "Name"],
-    #         )
-    #     },
-    #     {
-    #         "masking_operation": MaskPresidio(
-    #             col_name="Beschrieb",
-    #             masking_function=lambda x: "<MASKED>",
-    #             analyzer=analyzer,
-    #             allow_list=["Darius"],
-    #             pii_entities=["PERSON"],
-    #         )
-    #     },
-    # ],
-    # "Report": [
-    #     {
-    #         "masking_operation": MaskDictOperation(
-    #             col_name="Report",
-    #             masking_function=lambda x: "<MASKED>",
-    #             analyzer=analyzer,
-    #             pii_entities=["PERSON"],
-    #             # path_separator=".",
-    #             # deny_keys=["*.patient"],
-    #         )
-    #     },
-    #     {
-    #         "masking_operation": StringMatchDictOperation(
-    #             col_name="Report",
-    #             masking_function=lambda x: "<MASKED>",
-    #             pii_cols=["Vorname", "Name"],
-    #             # path_separator=".",
-    #             # deny_keys=["*.patient"],
-    #         )
-    #     },
-    # ],
-    # "Geburtsdatum": [
-    #     {
-    #         "masking_operation": FakeDate(
-    #             col_name="Geburtsdatum",
-    #             preserve=("year", "month"),
-    #             concordance_table=DataFrame({
-    #                 "clear_values": ["1979-04-24"],
-    #                 "masked_values": ["2050-01-01"],
-    #             }),
-    #         )
-    #     },
-    #     {
-    #         "masking_operation": YYYYHashOperation(
-    #             col_name="Geburtsdatum",
-    #             secret="my_secret",
-    #             concordance_table=DataFrame({
-    #                 "clear_values": ["2050-01-01"],
-    #                 "masked_values": ["<MASKED>"],
-    #             }),
-    #         )
-    #     },
-    # ],
+    },
+    "Name": [
+        {
+            "masking_operation": FakeNameOperation(
+                col_name="Name",
+                concordance_table=DataFrame({
+                    "clear_values": ["Spiess"],
+                    "masked_values": ["SP"],
+                }),
+                name_type="last",
+            )
+        },
+        {
+            "masking_operation": HashOperation(
+                col_name="Name",
+                secret="my_secret",
+                concordance_table=DataFrame({
+                    "clear_values": ["SP"],
+                    "masked_values": ["123"],
+                }),
+            )
+        },
+    ],
+    "Vorname": {
+        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+        "concordance_table": DataFrame({
+            "clear_values": ["Darius"],
+            "masked_values": ["DA"],
+        }),
+    },
+    "Beschrieb": [
+        {
+            "masking_operation": StringMatchOperation(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                pii_cols=["Vorname", "Name"],
+            )
+        },
+        {
+            "masking_operation": MaskPresidio(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                allow_list=["Darius"],
+                pii_entities=["PERSON"],
+            )
+        },
+    ],
+    "Report": [
+        {
+            "masking_operation": MaskDictOperation(
+                col_name="Report",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                pii_entities=["PERSON"],
+                # path_separator=".",
+                # deny_keys=["*.patient"],
+            )
+        },
+        {
+            "masking_operation": StringMatchDictOperation(
+                col_name="Report",
+                masking_function=lambda x: "<MASKED>",
+                pii_cols=["Vorname", "Name"],
+                # path_separator=".",
+                # deny_keys=["*.patient"],
+            )
+        },
+    ],
+    "Geburtsdatum": [
+        {
+            "masking_operation": FakeDate(
+                col_name="Geburtsdatum",
+                preserve=("year", "month"),
+                concordance_table=DataFrame({
+                    "clear_values": ["1979-04-24"],
+                    "masked_values": ["2050-01-01"],
+                }),
+            )
+        },
+        {
+            "masking_operation": YYYYHashOperation(
+                col_name="Geburtsdatum",
+                secret="my_secret",
+                concordance_table=DataFrame({
+                    "clear_values": ["2050-01-01"],
+                    "masked_values": ["<MASKED>"],
+                }),
+            )
+        },
+    ],
 }
 
 times = [measure_execution_time(config) for _ in range(1)]
