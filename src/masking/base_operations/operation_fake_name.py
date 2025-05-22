@@ -1,14 +1,13 @@
 import random
 from typing import ClassVar
 
-from masking.base_operations.operation import Operation
+from masking.base_operations.operation_fake import FakerOperation
 from masking.faker.name import FakeNameProvider
 
 
-class FakeNameBase(Operation):
+class FakeNameBase(FakerOperation):
     """Mask a column with fake name data."""
 
-    MAX_RETRY_MASK_LINE = 100
     _SEEN_INPUTS: ClassVar[set[str]] = set()
 
     def __init__(
@@ -30,8 +29,9 @@ class FakeNameBase(Operation):
             **kwargs (dict): keyword arguments
 
         """
-        super().__init__(col_name=col_name, **kwargs)
-        self.faker = FakeNameProvider(locale=locale)
+        super().__init__(
+            col_name=col_name, provider=FakeNameProvider(locale=locale), **kwargs
+        )
 
         self.gender = gender
         valid_genders = {"male", "female", "m", "f", "nonbinary", "nb", None}
@@ -46,11 +46,6 @@ class FakeNameBase(Operation):
         if self.name_type not in valid_name_types:
             msg = f"Name type variable should be in the following valid values: {valid_name_types}. Default is 'full'."
             raise ValueError(msg)
-
-    @property
-    def _needs_unique_values(self) -> bool:
-        """Return if the operation needs to produce unique masked values."""
-        return True
 
     def _mask_line_generate(self) -> str:
         """Mask a single line with gender and name type.
@@ -85,8 +80,8 @@ class FakeNameBase(Operation):
         msg = "Cannot generate new fake name."
         raise ValueError(msg)
 
-    def _mask_line_seen_or_generate(self, line: str) -> str:
-        """Mask a single line if it has been seen before or generate a new one.
+    def _mask_like_faker(self, line: str) -> str:
+        """Mask a single line.
 
         Args:
         ----
@@ -108,30 +103,4 @@ class FakeNameBase(Operation):
 
         masked = random.choice(list(self._SEEN_INPUTS))  # noqa: S311
         self._SEEN_INPUTS.remove(masked)
-        return masked
-
-    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
-        """Mask a single line.
-
-        Args:
-        ----
-            line (str): input line
-            **kwargs (dict): additional arguments for the masking operation
-
-        Returns:
-        -------
-            str: masked line
-
-        """
-        masked = self._mask_line_seen_or_generate(line)
-
-        counter = 0
-        while masked == line and counter < self.MAX_RETRY_MASK_LINE:
-            masked = self._mask_line_seen_or_generate(line)
-            counter += 1
-
-        if masked == line:
-            msg = f"Unable to mask the line {line} after {self.MAX_RETRY} attempts."
-            raise ValueError(msg)
-
         return masked

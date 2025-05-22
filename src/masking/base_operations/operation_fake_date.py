@@ -1,11 +1,9 @@
-from masking.base_operations.operation import Operation
+from masking.base_operations.operation_fake import FakerOperation
 from masking.faker.date import FakeDateProvider
 
 
-class FakeDateBase(Operation):
-    """Hashes a column using SHA256 algorithm."""
-
-    MAX_RETRY_MASK_LINE = 100
+class FakeDateBase(FakerOperation):
+    """Mask a column with fake Date data."""
 
     def __init__(
         self, col_name: str, preserve: str | tuple[str] | None = None, **kwargs: dict
@@ -19,36 +17,20 @@ class FakeDateBase(Operation):
             **kwargs (dict): keyword arguments
 
         """
-        super().__init__(col_name=col_name, **kwargs)
-        self.faker = FakeDateProvider(preserve=preserve)
+        super().__init__(
+            col_name=col_name, provider=FakeDateProvider(preserve=preserve), **kwargs
+        )
 
-    @property
-    def _needs_unique_values(self) -> bool:
-        """Return if the operation needs to produce unique masked values."""
-        return True
-
-    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
+    def _mask_like_faker(self, line: str) -> str:
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
-            **kwargs (dict): additional arguments for the masking operation
 
         Returns:
         -------
             str: masked line
 
         """
-        masked = self.faker(line)
-
-        counter = 0
-        while masked == line and counter < self.MAX_RETRY_MASK_LINE:
-            masked = self.faker(line)
-            counter += 1
-
-        if masked == line:
-            msg = f"Unable to mask the line {line} after {self.MAX_RETRY} attempts."
-            raise ValueError(msg)
-
-        return masked
+        return self.faker(line)

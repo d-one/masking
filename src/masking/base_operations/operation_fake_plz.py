@@ -1,11 +1,9 @@
-from masking.base_operations.operation import Operation
+from masking.base_operations.operation_fake import FakerOperation
 from masking.faker.plz import FakePLZProvider
 
 
-class FakePLZBase(Operation):
+class FakePLZBase(FakerOperation):
     """Mask a column with fake PLZ data."""
-
-    MAX_RETRY_MASK_LINE = 100
 
     def __init__(
         self,
@@ -24,36 +22,22 @@ class FakePLZBase(Operation):
             **kwargs (dict): keyword arguments
 
         """
-        super().__init__(col_name=col_name, **kwargs)
-        self.faker = FakePLZProvider(preserve=preserve, locale=locale)
+        super().__init__(
+            col_name=col_name,
+            provider=FakePLZProvider(preserve=preserve, locale=locale),
+            **kwargs,
+        )
 
-    @property
-    def _needs_unique_values(self) -> bool:
-        """Return if the operation needs to produce unique masked values."""
-        return True
-
-    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
+    def _mask_like_faker(self, line: str) -> str:
         """Mask a single line.
 
         Args:
         ----
             line (str): input line
-            **kwargs (dict): keyword arguments
 
         Returns:
         -------
             str: masked line
 
         """
-        masked = self.faker(line)
-
-        counter = 0
-        while masked == line and counter < self.MAX_RETRY_MASK_LINE:
-            masked = self.faker(line)
-            counter += 1
-
-        if masked == line:
-            msg = f"Unable to mask the line {line} after {self.MAX_RETRY} attempts."
-            raise ValueError(msg)
-
-        return masked
+        return self.faker(line)
