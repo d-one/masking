@@ -70,7 +70,7 @@ class StringMatchDictOperationBase(
             ).text
             line = self._set_leaf(line, leaf, masked)
 
-        if isinstance(line, str):
+        if isinstance(line, dict):
             line = json.dumps(line, ensure_ascii=False)
 
         return line

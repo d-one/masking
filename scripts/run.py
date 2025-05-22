@@ -123,20 +123,20 @@ config = {
     ],
     "Report": [
         {
-            "masking_operation": MaskDictOperation(
+            "masking_operation": StringMatchDictOperation(
                 col_name="Report",
                 masking_function=lambda x: "<MASKED>",
-                analyzer=analyzer,
-                pii_entities=["PERSON"],
+                pii_cols=["Vorname", "Name"],
                 # path_separator=".",
                 # deny_keys=["*.patient"],
             )
         },
         {
-            "masking_operation": StringMatchDictOperation(
+            "masking_operation": MaskDictOperation(
                 col_name="Report",
                 masking_function=lambda x: "<MASKED>",
-                pii_cols=["Vorname", "Name"],
+                analyzer=analyzer,
+                pii_entities=["PERSON"],
                 # path_separator=".",
                 # deny_keys=["*.patient"],
             )
