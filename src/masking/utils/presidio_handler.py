@@ -5,7 +5,7 @@ from typing import ClassVar
 
 from presidio_anonymizer import AnonymizerEngine, OperatorConfig
 
-from masking.utils.entity_detection import AnalyzerEngine, PresidioMultilingualAnalyzer
+from masking.utils.entity_detection import AnalyzerEngine
 
 
 class PresidioHandler:
@@ -57,7 +57,7 @@ class PresidioHandler:
         if pii_entities:
             self._PII_ENTITIES = pii_entities
 
-        self.analyzer = analyzer or PresidioMultilingualAnalyzer().analyzer
+        self.analyzer = analyzer  # or PresidioMultilingualAnalyzer().analyzer
         self.anonymizer = anonymizer or AnonymizerEngine()
         self.operators = operators or {
             entity: OperatorConfig("replace", {"new_value": "<MASKED>"})

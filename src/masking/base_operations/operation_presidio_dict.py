@@ -1,9 +1,5 @@
-import hashlib
 import json
 from collections import defaultdict
-from collections.abc import Callable, Generator
-
-from presidio_anonymizer import OperatorConfig
 
 from masking.base_operations.operation import Operation
 from masking.utils.multi_nested_dict import MultiNestedDictHandler
@@ -12,52 +8,6 @@ from masking.utils.presidio_handler import PresidioHandler
 
 class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
     """Hashes a column using SHA256 algorithm."""
-
-    def __init__(
-        self, col_name: str, masking_function: Callable = hashlib.sha256, **kwargs: dict
-    ) -> None:
-        """Initialize the HashOperation class.
-
-        Args:
-        ----
-            col_name (str): column name to be hashed
-            masking_function (Callable): function to hash the line string
-            **kwargs (dict): keyword arguments
-
-        """
-        super().__init__(col_name=col_name, **kwargs)
-
-        self.masking_function = masking_function
-
-        if kwargs.get("operators", None) is None:
-            self.operators = {
-                entity: OperatorConfig("custom", {"lambda": self.masking_function})
-                for entity in self._PII_ENTITIES
-            }
-
-    def _get_path_to_mask_and_deny(
-        self, line: dict | str
-    ) -> tuple[Generator[str, None, None]]:
-        """Get the paths to mask and deny.
-
-        Args:
-        ----
-            line (dict): input dictionary
-
-        Returns:
-        -------
-            tuple[Generator[str, None, None]]: generator of leafs
-
-        """
-        leafs_to_mask, leafs_to_deny = [], []
-        for leaf in self._find_leaf_path(line):
-            if self._is_denied_path(leaf):
-                leafs_to_deny.append(leaf)
-                continue
-
-            leafs_to_mask.append(leaf)
-
-        return leafs_to_mask, leafs_to_deny
 
     def _mask_line(
         self,
@@ -90,7 +40,7 @@ class MaskDictOperationBase(Operation, PresidioHandler, MultiNestedDictHandler):
                 print(msg)  # noqa: T201
 
         if leaf_to_deny is None and leaf_to_mask is None:
-            leaf_to_mask, leaf_to_deny = self._get_path_to_mask_and_deny(line)
+            leaf_to_mask, leaf_to_deny = self._get_undenied_and_denied_paths(line)
 
         for leaf in leaf_to_deny:
             value = self._get_leaf(line, self._undeny_path(leaf))

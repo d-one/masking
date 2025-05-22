@@ -325,6 +325,30 @@ class MultiNestedDictHandler:
                 raise KeyError(msg) from e
         return d
 
+    def _get_undenied_and_denied_paths(
+        self, line: dict | str
+    ) -> tuple[Generator[str, None, None]]:
+        """Get the paths to mask and deny.
+
+        Args:
+        ----
+            line (dict): input dictionary
+
+        Returns:
+        -------
+            tuple[Generator[str, None, None]]: generator of leafs
+
+        """
+        leafs_to_mask, leafs_to_deny = [], []
+        for leaf in self._find_leaf_path(line):
+            if self._is_denied_path(leaf):
+                leafs_to_deny.append(leaf)
+                continue
+
+            leafs_to_mask.append(leaf)
+
+        return leafs_to_mask, leafs_to_deny
+
     def _set_leaf(
         self, data: str | dict | list, path: str | list, value: str
     ) -> str | dict | list:
