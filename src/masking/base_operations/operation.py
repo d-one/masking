@@ -118,10 +118,7 @@ class Operation(ABC):
         if isinstance(concordance_table, dict):
             if any([
                 len(concordance_table) == 0,
-                all(
-                    isinstance(value, str) and isinstance(k, str)
-                    for k, value in concordance_table.items()
-                ),
+                all(isinstance(value, str) for value in concordance_table.values()),
             ]):
                 return concordance_table
 
