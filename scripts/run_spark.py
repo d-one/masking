@@ -5,12 +5,19 @@ from pathlib import Path
 
 import pandas as pd
 from masking.mask_spark.operations.operation_fake_date import FakeDate
+from masking.mask_spark.operations.operation_fake_name import FakeNameOperation
 from masking.mask_spark.operations.operation_fake_plz import FakePLZ
 from masking.mask_spark.operations.operation_hash import HashOperation
+from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
 from masking.mask_spark.operations.operation_presidio import MaskPresidio
+from masking.mask_spark.operations.operation_presidio_dict import MaskDictOperation
+from masking.mask_spark.operations.operation_string_match import StringMatchOperation
+from masking.mask_spark.operations.operation_string_match_dict import (
+    StringMatchDictOperation,
+)
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline
-from masking.utils.presidio_handler import PresidioMultilingualAnalyzer
+from masking.utils.entity_detection import PresidioMultilingualAnalyzer
 from pyspark.sql import SparkSession
 
 # Parse command-line arguments
@@ -47,7 +54,8 @@ def measure_execution_time(config: dict) -> float:
     # Cast the colum Geburtsdatum to Timestamp
     if "Geburtsdatum" in data.columns:
         data = data.withColumn("Geburtsdatum", data["Geburtsdatum"].cast("timestamp"))
-        # data = data.withColumn("Extra", data["Extra"].cast("string"))
+
+    # Repartition the DataFrame to a single partition
     data = data.repartition(1)
 
     # Print the number of partitions
@@ -89,20 +97,19 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "PLZ": {
-        "masking_operation": FakePLZ(
-            col_name="PLZ", preserve=("district", "area", "route")
-        )
-    },
+    "PLZ": [
+        {"masking_operation": FakePLZ(col_name="PLZ", preserve=("district"))},
+        {"masking_operation": MedStatsOperation(col_name="PLZ")},
+    ],
     "Name": [
         {
-            "masking_operation": HashOperation(
+            "masking_operation": FakeNameOperation(
                 col_name="Name",
-                secret="my_secret",
                 concordance_table=pd.DataFrame({
                     "clear_values": ["Spiess"],
                     "masked_values": ["SP"],
                 }),
+                name_type="last",
             )
         },
         {
@@ -118,17 +125,50 @@ config = {
     ],
     "Vorname": {
         "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-        "concordance_table": {"Darius": "DA"},
+        "concordance_table": pd.DataFrame({
+            "clear_values": ["Darius"],
+            "masked_values": ["DA"],
+        }),
     },
-    "Beschrieb": {
-        "masking_operation": MaskPresidio(
-            col_name="Beschrieb",
-            masking_function=lambda x: "<MASKED>",
-            analyzer=analyzer,
-            allow_list=["Darius"],
-            pii_entities=["PERSON"],
-        )
-    },
+    "Beschrieb": [
+        {
+            "masking_operation": StringMatchOperation(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                pii_cols=["Vorname", "Name"],
+            )
+        },
+        {
+            "masking_operation": MaskPresidio(
+                col_name="Beschrieb",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                allow_list=["Darius"],
+                pii_entities=["PERSON"],
+            )
+        },
+    ],
+    "Report": [
+        {
+            "masking_operation": StringMatchDictOperation(
+                col_name="Report",
+                masking_function=lambda x: "<MASKED>",
+                pii_cols=["Vorname", "Name"],
+                # path_separator=".",
+                # deny_keys=["*.patient"],
+            )
+        },
+        {
+            "masking_operation": MaskDictOperation(
+                col_name="Report",
+                masking_function=lambda x: "<MASKED>",
+                analyzer=analyzer,
+                pii_entities=["PERSON"],
+                # path_separator=".",
+                # deny_keys=["*.patient"],
+            )
+        },
+    ],
     "Geburtsdatum": [
         {
             "masking_operation": FakeDate(

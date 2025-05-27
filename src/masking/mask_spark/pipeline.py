@@ -39,10 +39,14 @@ class ConcordanceTable(ConcordanceTableBase):
                 .cache()
             )
 
-            return data.filter(
-                col("clear_values").cast("string")
-                != col("masked_values").cast("string")
-            ).rdd.collectAsMap()
+            return (
+                data.filter(
+                    col("clear_values").cast("string")
+                    != col("masked_values").cast("string")
+                )
+                .select("clear_values", "masked_values")
+                .rdd.collectAsMap()
+            )
 
         except Exception as e:
             msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
@@ -142,7 +146,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         Args:
         ----
             data (DataFrame): input dataframe
-            columns_order (dict): dictionary with the order of the columns
+            columns_order (dict): dictionary with the order of the columns {<col_name>:<position>}
 
         Returns:
         -------

@@ -34,8 +34,6 @@ class FakePLZProvider(FakeProvider):
         3: "postcode",
     }
 
-    _MAX_ITERATIONS: int = 10
-
     def __init__(
         self, preserve: str | tuple[str] | None = None, locale: str = "de_CH"
     ) -> None:
@@ -183,18 +181,7 @@ class FakePLZProvider(FakeProvider):
         admissible = self.files["PLZ"][
             (self.files["PLZ"] >= ranges["start"]) & (self.files["PLZ"] < ranges["end"])
         ].tolist()
-
-        if int(plz) not in admissible:
-            return str(plz)
-
-        for _ in range(self._MAX_ITERATIONS):
-            new_plz = self.generator.random_element(admissible)
-
-            if new_plz != plz:
-                return str(new_plz)
-
-        msg = "Could not generate a unique PLZ: too many iterations."
-        raise ValueError(msg)
+        return str(self.generator.random_element(admissible))
 
     def __exit__(
         self,

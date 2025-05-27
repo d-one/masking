@@ -25,7 +25,6 @@ args = parser.parse_args()
 
 # Load the data
 path = Path(args.data).resolve()
-
 if not path.exists():
     msg = f"File not found: {path}"
     raise FileNotFoundError(msg)

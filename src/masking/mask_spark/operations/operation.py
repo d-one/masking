@@ -36,6 +36,7 @@ class SparkOperation(Operation):
                 partition[self.col_name] = self._mask_data_pandas(
                     partition[self.serving_columns]
                 )
+
                 yield partition
 
         return data.mapInPandas(

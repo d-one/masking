@@ -113,7 +113,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         Args:
         ----
             data (pd.DataFrame): input dataframe
-            columns_order (dict): dictionary with the columns order
+            columns_order (dict): dictionary with the columns order {<col_name>:<position>}
 
         Returns:
         -------
