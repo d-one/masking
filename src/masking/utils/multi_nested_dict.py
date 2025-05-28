@@ -1,3 +1,4 @@
+from collections import deque
 from collections.abc import Callable, Generator
 
 from masking.utils.string_handler import strip_key
@@ -336,18 +337,38 @@ class MultiNestedDictHandler:
 
         Returns:
         -------
-            tuple[Generator[str, None, None]]: generator of leafs
+            tuple[Generator[str, None, None]]: The paths to mask and deny
 
         """
-        leafs_to_mask, leafs_to_deny = [], []
+        mask_queue = deque()
+        deny_queue = deque()
+
+        def mask_generator() -> Generator[str, None, None]:
+            """Generate for the paths to mask.
+
+            Pops from left of the queue and yields the path.
+            """
+            while mask_queue:
+                yield mask_queue.popleft()
+
+        def deny_generator() -> Generator[str, None, None]:
+            """Generate for the paths to deny.
+
+            Pops from left of the queue and yields the path.
+            """
+            while deny_queue:
+                yield deny_queue.popleft()
+
+        # Fill the queues with paths
         for leaf in self._find_leaf_path(line):
             if self._is_denied_path(leaf):
-                leafs_to_deny.append(leaf)
+                deny_queue.append(self._undeny_path(leaf))
                 continue
 
-            leafs_to_mask.append(leaf)
+            mask_queue.append(leaf)
 
-        return leafs_to_mask, leafs_to_deny
+        # Return the generators
+        return mask_generator(), deny_generator()
 
     def _set_leaf(
         self, data: str | dict | list, path: str | list, value: str

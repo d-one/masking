@@ -1,13 +1,12 @@
-import json
+from itertools import tee
 
-from masking.base_operations.operation import Operation
-from masking.utils.multi_nested_dict import MultiNestedDictHandler
+from masking.base_operations.operation_dict import DictOperationBase
 from masking.utils.presidio_handler import PresidioHandler
 from masking.utils.string_match_handler import StringMatchHandler
 
 
 class StringMatchDictOperationBase(
-    Operation, StringMatchHandler, PresidioHandler, MultiNestedDictHandler
+    DictOperationBase, StringMatchHandler, PresidioHandler
 ):
     """String Match Operation Base Class."""
 
@@ -15,62 +14,49 @@ class StringMatchDictOperationBase(
     def serving_columns(self) -> list[str]:
         return [self.col_name, *self.pii_cols]
 
-    def _mask_line(
+    def _handle_masking_paths(
         self,
-        line: str | dict,
+        line: dict,
+        leaf_to_mask: tuple,
+        analyzer_results: dict | None = None,
         additional_values: dict | None = None,
-        leaf_to_mask: tuple | None = None,
-        leaf_to_deny: tuple | None = None,
         **kwargs: dict,  # noqa: ARG002
-    ) -> str:
-        """Mask a single line.
+    ) -> dict:
+        """Handle paths that need to be masked in the line.
 
         Args:
         ----
-            line (str): input line
-            additional_values (dict): additional values to mask
-            leaf_to_mask (tuple): leafs to mask
-            leaf_to_deny (tuple): leafs to deny
-            **kwargs (dict): keyword arguments
+            line (dict): input line as a dictionary
+            leaf_to_mask (tuple): paths to mask
+            analyzer_results (dict | None): results from the analyzer
+            additional_values (dict | None): additional values to mask
+            **kwargs (dict): additional keyword arguments
 
         Returns:
         -------
-            str: masked line
+            dict: line with masked paths
 
         """
-        if isinstance(line, str):
-            try:
-                line = json.loads(line)
-            except json.JSONDecodeError:
-                msg = "Failed to parse line, treat it as a string."
-                print(msg)  # noqa: T201
+        if analyzer_results is None:
+            analyzer_results = {}
+            leaf_to_mask, leaf_to_mask_cp = tee(leaf_to_mask)
 
-        if leaf_to_deny is None and leaf_to_mask is None:
-            leaf_to_mask, leaf_to_deny = self._get_undenied_and_denied_paths(line)
-
-        for leaf in leaf_to_deny:
-            value = self._get_leaf(line, self._undeny_path(leaf))
-            masked = self.masking_function(
-                value
-                if isinstance(value, str)
-                else json.dumps(value, ensure_ascii=False)
+            recognizer = self._get_pattern_recognizer(
+                self._get_pii_values(additional_values)
             )
-            line = self._set_leaf(line, self._undeny_path(leaf), masked)
 
-        # Filter all the NaN or NaT values
-        recognizer = self._get_pattern_recognizer(
-            self._get_pii_values(additional_values)
-        )
+            for leaf in leaf_to_mask_cp:
+                value = self._get_leaf(line, leaf)
+                res = recognizer.analyze(value, entities=list(self._PII_ENTITIES))
+                analyzer_results[value] = res
 
         for leaf in leaf_to_mask:
             value = self._get_leaf(line, leaf)
-            res = recognizer.analyze(value, entities=list(self._PII_ENTITIES))
             masked = self.anonymizer.anonymize(
-                value, res, operators=self.operators
+                value,
+                analyzer_results=analyzer_results.get(value, []),
+                operators=self.operators,
             ).text
             line = self._set_leaf(line, leaf, masked)
-
-        if isinstance(line, dict):
-            line = json.dumps(line, ensure_ascii=False)
 
         return line

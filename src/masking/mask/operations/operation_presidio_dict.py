@@ -52,11 +52,6 @@ class MaskDictOperation(PandasOperation, MaskDictOperationBase):
                     self._get_language_entities(leaf, lang, doc)
                 )
 
-        if isinstance(data, Series):
-            return data.map(
-                lambda line: self._check_mask_line(line, entities=entities[line])
-            )
-
         return data[self.col_name].apply(
             lambda line: self._check_mask_line(line, entities=entities[line])
         )
