@@ -73,9 +73,5 @@ class MedStatsOperationBase(Operation):
             msg = f"Error converting line to string: {e}"
             raise ValueError(msg) from e
 
-        # If the line is not in the lookup table, return the original line
-        if line not in self._MEDSTATS_LOOKUP_TABLE:
-            return line
-
         # Return the masked line using the lookup table
-        return self._MEDSTATS_LOOKUP_TABLE[line]
+        return self._MEDSTATS_LOOKUP_TABLE.get(line, line)
