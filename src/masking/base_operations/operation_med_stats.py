@@ -1,12 +1,17 @@
+from pathlib import Path
+
 import pandas as pd
 
 from masking.base_operations.operation import Operation
 
 
 class MedStatsOperationBase(Operation):
-    """Anonymize a column using MedStat regions."""
+    """Anonymize a column using MedStat regions.
 
-    _MEDSTATS_URL = "https://dam-api.bfs.admin.ch/hub/api/dam/assets/33347910/master"
+    Definition and source:
+    https://dam-api.bfs.admin.ch/hub/api/dam/assets/33347910/master
+    """
+
     _MEDSTATS_LOOKUP_TABLE: dict[str, str] | None = None
 
     def __init__(self, col_name: str, **kwargs: dict) -> None:
@@ -24,12 +29,10 @@ class MedStatsOperationBase(Operation):
 
         # Initialize the med_stats lookup table
         if self._MEDSTATS_LOOKUP_TABLE is None:
-            self._MEDSTATS_LOOKUP_TABLE = self._get_medstats_lookup_table(
-                self._MEDSTATS_URL
-            )
+            self._MEDSTATS_LOOKUP_TABLE = self._get_medstats_lookup_table()
 
     @staticmethod
-    def _get_medstats_lookup_table(url: str) -> dict[str, str]:
+    def _get_medstats_lookup_table() -> dict[str, str]:
         """Get the MedStat lookup table from the given URL, by parsing the XLSX file and returning a dictionary.
 
         Args:
@@ -41,8 +44,11 @@ class MedStatsOperationBase(Operation):
             dict[str, str]: A dictionary mapping region names to their corresponding codes.
 
         """
-        # Download the XLSX file, and read it into a DataFrame.
-        medstats = pd.read_excel(url, sheet_name="REGION=CH", engine="openpyxl")
+        # Read the MedStat regions from the provided Excel file.
+        med_stat_file = Path(__file__).parent / "sources" / "med_stats_2024.xlsx"
+        medstats = pd.read_excel(
+            med_stat_file, sheet_name="REGION=CH", engine="openpyxl"
+        )
 
         # Create a dictionary mapping region names to their corresponding codes.
         # The 'NPA/PLZ' column contains the region codes, and the 'MedStat' column contains the region names.
