@@ -52,8 +52,8 @@ def measure_execution_time(config: dict) -> float:
     data.show(10)
 
     # Cast the colum Geburtsdatum to Timestamp
-    if "Geburtsdatum" in data.columns:
-        data = data.withColumn("Geburtsdatum", data["Geburtsdatum"].cast("timestamp"))
+    # if "Geburtsdatum" in data.columns:
+    #     data = data.withColumn("Geburtsdatum", data["Geburtsdatum"].cast("timestamp"))
 
     # Repartition the DataFrame to a single partition
     data = data.repartition(1)

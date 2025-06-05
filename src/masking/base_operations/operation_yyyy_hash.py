@@ -1,9 +1,8 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from dateparser import parse
 
 from masking.base_operations.operation_hash import HashOperationBase
-from masking.utils.hash import hash_string
 
 
 class YYYYHashOperationBase(HashOperationBase):
@@ -26,25 +25,16 @@ class YYYYHashOperationBase(HashOperationBase):
             str: masked line
 
         """
+        if not isinstance(line, str):
+            line = str(line)
+
         # Extract the year from the date
-        if isinstance(line, str):
-            try:
-                line_date = parse(line)
-                year = line_date.year
-            except Exception as e:
-                msg = f"Failed to parse date {line}: {e}"
-                raise ValueError(msg) from e
+        try:
+            line_date = parse(line)
+            year = line_date.year
+        except Exception as e:
+            msg = f"Could not parse date from line: {line}. Error: {e}"
+            raise ValueError(msg) from e
 
-        if any(isinstance(line, t) for t in (datetime, date)):
-            year = line.year
-
-        def hash_function(x: str) -> str:
-            return hash_string(x, self.secret, method=self.hash_function)
-
-        if self.secret is None:
-
-            def hash_function(x: str) -> str:
-                return self.hash_function(x.encode()).hexdigest()
-
-        signature = hash_function(str(line))
-        return "_".join([str(year), signature])
+        signature = self._hashing_function(line)
+        return "_".join([str(year).zfill(4), signature])

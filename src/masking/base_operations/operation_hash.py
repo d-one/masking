@@ -36,7 +36,24 @@ class HashOperationBase(Operation):
         self.secret = secret
         self.hash_function = hash_function
 
-    def _mask_line(self, line: str, **kwargs: dict) -> str:  # noqa: ARG002
+    def _hashing_function(self, line: str) -> str:
+        """Hash a single line.
+
+        Args:
+        ----
+            line (str): input line
+
+        Returns:
+        -------
+            str: hashed line
+
+        """
+        if self.secret is None:
+            return self.hash_function(line.encode()).hexdigest()
+
+        return hash_string(line, self.secret, method=self.hash_function)
+
+    def _mask_line(self, line: str | int, **kwargs: dict) -> str:  # noqa: ARG002
         """Mask a single line.
 
         Args:
@@ -56,7 +73,4 @@ class HashOperationBase(Operation):
                 msg = f"Input line must be a string. Tried to convert to string but en error occured: {e}"
                 raise ValueError(msg) from e
 
-        if self.secret is None:
-            return self.hash_function(line.encode()).hexdigest()
-
-        return hash_string(line, self.secret, method=self.hash_function)
+        return self._hashing_function(line)
