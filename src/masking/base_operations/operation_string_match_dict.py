@@ -45,18 +45,20 @@ class StringMatchDictOperationBase(
                 self._get_pii_values(additional_values)
             )
 
-            for leaf in leaf_to_mask_cp:
-                value = self._get_leaf(line, leaf)
-                res = recognizer.analyze(value, entities=list(self._PII_ENTITIES))
-                analyzer_results[value] = res
+            if recognizer:
+                for leaf in leaf_to_mask_cp:
+                    value = self._get_leaf(line, leaf)
+                    res = recognizer.analyze(value, entities=list(self._PII_ENTITIES))
+                    analyzer_results[value] = res
 
-        for leaf in leaf_to_mask:
-            value = self._get_leaf(line, leaf)
-            masked = self.anonymizer.anonymize(
-                value,
-                analyzer_results=analyzer_results.get(value, []),
-                operators=self.operators,
-            ).text
-            line = self._set_leaf(line, leaf, masked)
+        if analyzer_results:
+            for leaf in leaf_to_mask:
+                value = self._get_leaf(line, leaf)
+                masked = self.anonymizer.anonymize(
+                    value,
+                    analyzer_results=analyzer_results.get(value, []),
+                    operators=self.operators,
+                ).text
+                line = self._set_leaf(line, leaf, masked)
 
         return line
