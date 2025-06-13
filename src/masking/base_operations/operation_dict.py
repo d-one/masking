@@ -92,7 +92,7 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
         self._handle_masking_paths(line, leaf_to_mask, **kwargs)
 
         # Convert line back to JSON string if it was a dict
-        if isinstance(line, dict):
+        if not isinstance(line, str):
             line = json.dumps(line, ensure_ascii=False)
 
         return line
