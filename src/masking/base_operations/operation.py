@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 
 import pandas as pd
-import polars as pl
 from pyspark.sql import DataFrame
 
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
-AnyDataFrame = pd.DataFrame | DataFrame | pl.DataFrame
+AnyDataFrame = pd.DataFrame | DataFrame
 
 
 class Operation(ABC):
@@ -97,20 +96,6 @@ class Operation(ABC):
                 )
 
                 return dict(zip(clear_values, masked_values, strict=False))
-            except Exception as e:
-                msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
-                raise TypeError(msg) from e
-
-        if isinstance(concordance_table, pl.DataFrame):
-            # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
-            try:
-                return dict(
-                    zip(
-                        concordance_table["clear_values"].to_list(),
-                        concordance_table["masked_values"].to_list(),
-                        strict=False,
-                    )
-                )
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e
