@@ -44,16 +44,13 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 pandas = "^2.2.2"
-argparse = "^1.4.0"
 presidio-analyzer = "^2.2.356"
 pyspark = "^3.5.1"
 pyarrow = "^17.0.0"
 faker = "^26.0.0"
-numpy = "2.0.0"
 spacy = "^3.8.0"
 dateparser = "^1.2.0"
 presidio-anonymizer = "^2.2.356"
-polars = "^1.27.1"
 openpyxl = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
@@ -62,3 +59,4 @@ pre-commit = "^3.7.1"
 en_core_web_trf = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl"}
 de_core_news_lg = {url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_lg-3.8.0/de_core_news_lg-3.8.0-py3-none-any.whl"}
 pytest = "^8.3.5"
+argparse = "^1.4.0"
