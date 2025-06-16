@@ -2,7 +2,7 @@ import warnings
 
 import spacy
 from presidio_analyzer import AnalyzerEngine, RecognizerRegistry
-from presidio_analyzer.nlp_engine import SpacyNlpEngine
+from presidio_analyzer.nlp_engine import NerModelConfiguration, SpacyNlpEngine
 
 # Ignore the specific FutureWarnings from torch.load
 warnings.filterwarnings(
@@ -15,7 +15,9 @@ warnings.filterwarnings(
 
 
 class MultilingualSpacyNlpEngine(SpacyNlpEngine):
-    def __init__(self, models: dict[str, str]) -> None:
+    def __init__(
+        self, models: dict[str, str], ner_model_mapping: dict | None = None
+    ) -> None:
         """Initialize the MultilingualSpacyNlpEngine class.
 
         Args:
@@ -23,12 +25,45 @@ class MultilingualSpacyNlpEngine(SpacyNlpEngine):
             models (dict[str, str]): dictionary with language and model name.
                     Model should be a list of spaCy models, with corresponding language abbreviation:
                     for example, {"de": "de_core_news_lg", "en": "en_core_web_trf"}.
+            ner_model_mapping (dict): mapping of model names to Presidio entity types.
 
         """
         super().__init__()
-        self.nlp = {
-            lang: spacy.load(model, disable=[]) for lang, model in models.items()
-        }
+        self.nlp = self._get_models(models)
+
+        if ner_model_mapping:
+            self.ner_model_configuration = NerModelConfiguration(
+                model_to_presidio_entity_mapping=ner_model_mapping
+            )
+
+    @staticmethod
+    def _get_models(models: dict) -> dict[str, spacy.language.Language]:
+        """Return the loaded spaCy models.
+
+        Args:
+        ----
+            models (dict): dictionary with language and <model>, where <model> can be a string or spaCy model.
+                          If <model> is a string, we load the spaCy model using spacy.load().
+
+        Returns:
+        -------
+            dict[str, spacy.language.Language]: dictionary with language and loaded spaCy model.
+
+        """
+        nlp_models = {}
+        for lang, model in models.items():
+            if isinstance(model, str):
+                nlp_models[lang] = spacy.load(model, disable=[])
+                continue
+
+            if isinstance(model, spacy.language.Language):
+                nlp_models[lang] = model
+                continue
+
+            msg = f"Model for language '{lang}' should be a string or a spaCy model, but got {type(model)}."
+            raise ValueError(msg)
+
+        return nlp_models
 
 
 class PresidioRegistry:
@@ -72,6 +107,7 @@ class PresidioMultilingualAnalyzer:
         self,
         registry: RecognizerRegistry | None = None,
         models: dict[str, str] | None = None,
+        ner_model_mapping: dict | None = None,
     ) -> None:
         """Initialize the PresidioMultilingualAnalyzer class.
 
@@ -81,6 +117,7 @@ class PresidioMultilingualAnalyzer:
             models (dict[str, str]): dictionary with language and model name.
                     Model should be a list of spaCy models, with corresponding language abbreviation:
                     for example, {"de": "de_core_news_lg", "en": "en_core_web_trf"}.
+            ner_model_mapping (dict): mapping of model names to Presidio entity types.
 
         """
         if not models:
@@ -92,6 +129,8 @@ class PresidioMultilingualAnalyzer:
             ).registry
 
         self.analyzer = AnalyzerEngine(
-            nlp_engine=MultilingualSpacyNlpEngine(models=models),
+            nlp_engine=MultilingualSpacyNlpEngine(
+                models=models, ner_model_mapping=ner_model_mapping
+            ),
             supported_languages=list(models.keys()),
         )

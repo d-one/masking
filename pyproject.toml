@@ -60,3 +60,4 @@ en_core_web_trf = {url = "https://github.com/explosion/spacy-models/releases/dow
 de_core_news_lg = {url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_lg-3.8.0/de_core_news_lg-3.8.0-py3-none-any.whl"}
 pytest = "^8.3.5"
 argparse = "^1.4.0"
+spacy-lookups-data = "^1.0.5"

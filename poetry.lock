@@ -2230,6 +2230,20 @@ files = [
 ]
 
 [[package]]
+name = "spacy-lookups-data"
+version = "1.0.5"
+description = "Additional lookup tables and data resources for spaCy"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "spacy_lookups_data-1.0.5-py2.py3-none-any.whl", hash = "sha256:466f21f087e4144bc93800679437ec5a17be7d0888734b1ba880b3ecb0978bc6"},
+    {file = "spacy_lookups_data-1.0.5.tar.gz", hash = "sha256:6f935c81f145bdcc84fc6115f648764285c7ff3e8ff246295046814e96dad63c"},
+]
+
+[package.dependencies]
+setuptools = "*"
+
+[[package]]
 name = "srsly"
 version = "2.4.8"
 description = "Modern high-performance serialization utilities for Python"
@@ -2722,4 +2736,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8287e88850e63347bf00dd7ea067735d4263fd9ccff292f89bfcefa14eef0c4a"
+content-hash = "d296794fcb77fefe595ec2e22043a27e224b28fe34ef8b4b9320254dc8e1dbb0"

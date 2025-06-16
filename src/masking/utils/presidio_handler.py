@@ -60,7 +60,7 @@ class PresidioHandler:
         self.analyzer = analyzer  # or PresidioMultilingualAnalyzer().analyzer
         self.anonymizer = anonymizer or AnonymizerEngine()
         self.operators = operators or {
-            entity: OperatorConfig("replace", {"new_value": "<MASKED>"})
+            entity: OperatorConfig("replace", {"new_value": f"<{entity}>"})
             for entity in self._PII_ENTITIES
         }
 
