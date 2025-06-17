@@ -9,7 +9,7 @@ The Masking Package is a Python library designed to provide various masking oper
 - Development:
     - [Local Development](docs/installation.md)
     - [Available Modules](docs/available_modules.md)
-        - [mask](docs/mask/mask.md)
+    - [Available Operations](docs/operations/operations.md)
 
 ## Installation
 
@@ -21,6 +21,8 @@ pip install masking@git+"https://github.com/d-one/masking"
 
 ## Usage
 
+In the following we provide an example of how to use the masking module to hash the entire content of an entry.
+
 ### Hashing operation
 
 Here is a basic example of how to use the package
@@ -31,12 +33,14 @@ from masking.mask.pipeline import MaskDataFramePipeline
 from masking.mask.operations.operation_hash import HashOperation
 
 # Sample DataFrame
-data = {'name': ['Alice', 'Bob', 'Charlie'], 'ssn': ['123-45-6789', '987-65-4321', '555-55-5555']}
+data = {'name': ['Alice', 'Bob', 'Charlie'],
+        'ssn': ['123-45-6789', '987-65-4321', '555-55-5555']}
 df = pd.DataFrame(data)
 
 # Configuration for masking
 config = {
-        "name": {'masking_operation': HashOperation(col_name="name", secret="my_secret")},
+        "name": {'masking_operation': HashOperation(col_name="name",
+                                                    secret="my_secret")},
         }
 
 # Create and apply the masking pipeline

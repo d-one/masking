@@ -3,10 +3,8 @@
 This page is dedicated to the documentation of the available modules in the package.
 
 The current modules are available:
-- mask
-- mask_spark
-
-Please refer to the corresponding pages for further information.
+- mask (support for Pandas)
+- mask_spark (support for Spark)
 
 ## Approach
 
