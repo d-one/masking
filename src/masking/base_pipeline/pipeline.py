@@ -297,8 +297,12 @@ class MaskDataFramePipelineBase(ABC):
             # If we reached this point it means that the masking operation is supposed to appear on a new column
 
             # 1. Make sure that the output column is not already in the dataframe
-            if output_column in data.columns:
-                msg = f"Output column '{output_column}' already exists in the dataframe. Please choose a different name."
+            if output_column in {
+                c
+                for cols in self.output_columns_mapping.values()
+                for c in cols["serving_columns"]
+            }:
+                msg = f"Output column name '{output_column}' cannot be used: this column is already used by some masking operation."
                 raise ValueError(msg)
 
             # 2. If the output column is not in the dataframe, we need to copy the input column to the output column
@@ -309,19 +313,65 @@ class MaskDataFramePipelineBase(ABC):
                     new_col_name=output_column,
                 )
 
-            # 3. Update the corresponding pipeline to use the output column
-            col_pipeline_index = input_params["col_pipeline_index"]
-            if isinstance(self.col_pipelines[col_pipeline_index], list):
-                for i in range(len(self.col_pipelines[col_pipeline_index])):
-                    self.col_pipelines[col_pipeline_index][
-                        i
-                    ].masking_operation.update_col_name(output_column)
+        return data
 
+    @staticmethod
+    @abstractmethod
+    def _rename_columns(
+        data: AnyDataFrame, column_mapping: dict[str, str]
+    ) -> AnyDataFrame:
+        """Rename columns in the dataframe.
+
+        Args:
+        ----
+            data (AnyDataFrame): input dataframe
+            column_mapping (dict[str, str]): mapping of old column names to new column names
+
+        Returns:
+        -------
+            AnyDataFrame: dataframe with renamed columns
+
+        """
+
+    def _post_process_data(self, data: AnyDataFrame) -> AnyDataFrame:
+        """Post-process the data after masking.
+
+        This method is used only if
+
+        Args:
+        ----
+            data (AnyDataFrame): masked dataframe
+
+        Returns:
+        -------
+            AnyDataFrame: post-processed dataframe
+
+        """
+        for output_column, input_params in self.output_columns_mapping.items():
+            # If output_column is not input_params["col_name"], it means that the masking operation is supposed to appear on a new column
+            if output_column == input_params["col_name"]:
                 continue
 
-            self.col_pipelines[col_pipeline_index].masking_operation.update_col_name(
-                output_column
-            )
+            # We need to rename the output column to the input column name
+            if output_column in data.columns:
+                # 1. First swap the order of the columns output_column and input_params["col_name"]
+                columns = list(data.columns)
+                i_output, i_input = (
+                    columns.index(output_column),
+                    columns.index(input_params["col_name"]),
+                )
+                columns[i_output], columns[i_input] = (
+                    columns[i_input],
+                    columns[i_output],
+                )
+
+                data = self._rename_columns(
+                    data=data[columns],
+                    column_mapping={
+                        output_column: input_params["col_name"],
+                        input_params["col_name"]: output_column,
+                    },
+                )
 
         return data
 
@@ -342,4 +392,6 @@ class MaskDataFramePipelineBase(ABC):
         )
 
         # Impose the ordering of the columns
-        return self._impose_ordering(data, columns_order)
+        data = self._impose_ordering(data, columns_order)
+
+        return self._post_process_data(data)

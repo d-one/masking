@@ -155,3 +155,28 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
 
         """
         return data.withColumn(new_col_name, col(col_name))
+
+    @staticmethod
+    def _rename_columns(data: DataFrame, column_mapping: dict[str, str]) -> DataFrame:
+        """Rename columns in the dataframe.
+
+        Args:
+        ----
+            data (DataFrame): input dataframe
+            column_mapping (dict[str, str]): mapping of old column names to new column names
+
+        Returns:
+        -------
+            DataFrame: dataframe with renamed columns
+
+        """
+        temp_names = {
+            k: generate_unique_name(seed=f"___temp_{i}___", existing_names=data.columns)
+            for i, k in enumerate(column_mapping.keys())
+        }
+        for old_name, new_name in temp_names.items():
+            data = data.withColumnRenamed(old_name, new_name)
+
+        for old_name, new_name in column_mapping.items():
+            data = data.withColumnRenamed(temp_names[old_name], new_name)
+        return data
