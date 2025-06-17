@@ -22,7 +22,6 @@ class ConcordanceTableBase(ABC):
     def __init__(
         self,
         masking_operation: Operation,
-        column: str | None = None,
         concordance_table: dict | AnyDataFrame | None = None,
     ) -> None:
         """Initialize the ConcordanceTable.
@@ -35,10 +34,6 @@ class ConcordanceTableBase(ABC):
 
         """
         self.masking_operation = masking_operation
-
-        if column is not None and column != self.masking_operation.col_name:
-            msg = f"Column name {column} does not match the masking operation column name {self.masking_operation.col_name}"
-            raise ValueError(msg)
 
         if concordance_table is None:
             concordance_table = {}

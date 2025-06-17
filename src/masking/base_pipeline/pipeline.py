@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, ClassVar
 
@@ -24,16 +25,52 @@ class MaskDataFramePipelineBase(ABC):
         workers: int = 1,
         dtype: ConcordanceTableBase = ConcordanceTableBase,
     ) -> None:
-        self.config = configuration
+        # Mapping of output columns to their input columns and serving columns
+        self.output_columns_mapping = defaultdict(
+            lambda: {"col_name": "", "serving_columns": [], "col_pipeline_index": 0}
+        )
 
         self.col_pipelines = []
-        for col_name, config in configuration.items():
+        for c, (col_name, config) in enumerate(configuration.items()):
+            self.output_columns_mapping[col_name]["col_pipeline_index"] = c
+
             if isinstance(config, dict):
                 self.col_pipelines.append(dtype(**config))
+                self.output_columns_mapping[col_name]["col_name"] = self.col_pipelines[
+                    -1
+                ].masking_operation.col_name
+                self.output_columns_mapping[col_name]["serving_columns"] = (
+                    self.col_pipelines[-1].masking_operation.serving_columns
+                )
                 continue
 
             if isinstance(config, list):
-                self.col_pipelines.append([dtype(**c) for c in config])
+                pipline_list = []
+                pipe_col_name = config[0]["masking_operation"].col_name
+                for cf in config:
+                    cf_col_name = cf["masking_operation"].col_name
+
+                    if cf_col_name != pipe_col_name:
+                        msg = f"All masking operations in a list must have the same column name. Expected {pipe_col_name}, got {cf_col_name}"
+                        raise ValueError(msg)
+
+                    if isinstance(cf, dict):
+                        pipline_list.append(dtype(**cf))
+                        continue
+
+                    msg = f"Invalid configuration for column {col_name}: {cf}"
+                    raise ValueError(msg)
+
+                self.col_pipelines.append(pipline_list)
+
+                self.output_columns_mapping[col_name]["col_name"] = pipline_list[
+                    0
+                ].masking_operation.col_name
+                self.output_columns_mapping[col_name]["serving_columns"] = list({
+                    col
+                    for p in pipline_list
+                    for col in p.masking_operation.serving_columns
+                })
                 continue
 
             msg = f"Invalid configuration for column {col_name}: {config}"
@@ -95,9 +132,20 @@ class MaskDataFramePipelineBase(ABC):
         return self._filter_data(data, pipeline[0].column_name, list(necessary_columns))
 
     @staticmethod
-    @abstractmethod
     def _impose_ordering(data: AnyDataFrame, columns_order: dict) -> AnyDataFrame:
-        """Impose the ordering of the columns."""
+        """Impose the ordering of the columns.
+
+        Args:
+        ----
+            data (pd.DataFrame): input dataframe
+            columns_order (dict): dictionary with the columns order {<col_name>:<position>}
+
+        Returns:
+        -------
+        pd.DataFrame: dataframe with the columns ordered
+
+        """
+        return data[sorted(data.columns, key=lambda x: columns_order[x])]
 
     def _run_pipeline(
         self,
@@ -208,8 +256,80 @@ class MaskDataFramePipelineBase(ABC):
 
         self._run_pipelines_parallel(data)
 
+    @staticmethod
+    @abstractmethod
+    def _copy_column(
+        data: AnyDataFrame, col_name: str, new_col_name: str
+    ) -> AnyDataFrame:
+        """Copy a column to a new column in the dataframe.
+
+        Args:
+        ----
+            data (AnyDataFrame): input dataframe
+            col_name (str): name of the column to copy
+            new_col_name (str): name of the new column
+
+        Returns:
+        -------
+            AnyDataFrame: dataframe with the new column
+
+        """
+
+    def _preprocess_data(self, data: AnyDataFrame) -> AnyDataFrame:
+        """Preprocess the data to ensure two things.
+
+        1. Each masking operation is not changing the input of other masking operations.
+        2. If the masking is supposed to appear on a new column, the input dataframe is copied.
+
+        Args:
+        ----
+            data (AnyDataFrame): input dataframe
+
+        Returns:
+        -------
+            AnyDataFrame: preprocessed dataframe
+
+        """
+        for output_column, input_params in self.output_columns_mapping.items():
+            if output_column == input_params["col_name"]:
+                continue
+
+            # If we reached this point it means that the masking operation is supposed to appear on a new column
+
+            # 1. Make sure that the output column is not already in the dataframe
+            if output_column in data.columns:
+                msg = f"Output column '{output_column}' already exists in the dataframe. Please choose a different name."
+                raise ValueError(msg)
+
+            # 2. If the output column is not in the dataframe, we need to copy the input column to the output column
+            if output_column not in data.columns:
+                data = self._copy_column(
+                    data=data,
+                    col_name=input_params["col_name"],
+                    new_col_name=output_column,
+                )
+
+            # 3. Update the corresponding pipeline to use the output column
+            col_pipeline_index = input_params["col_pipeline_index"]
+            if isinstance(self.col_pipelines[col_pipeline_index], list):
+                for i in range(len(self.col_pipelines[col_pipeline_index])):
+                    self.col_pipelines[col_pipeline_index][
+                        i
+                    ].masking_operation.update_col_name(output_column)
+
+                continue
+
+            self.col_pipelines[col_pipeline_index].masking_operation.update_col_name(
+                output_column
+            )
+
+        return data
+
     def __call__(self, data: AnyDataFrame) -> AnyDataFrame:
         """Mask the dataframe."""
+        # Find if copy is necessary
+        data = self._preprocess_data(data)
+
         # Get the ordering of the columns
         columns_order = self._get_data_columns_order(data)
 

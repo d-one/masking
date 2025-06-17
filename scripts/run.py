@@ -57,7 +57,7 @@ def measure_execution_time(config: dict) -> float:
         )
 
         df_concordance_table.to_csv(
-            path_to_save / f"{col_name}_concordance_table.csv", index=False
+            path_to_save / f"concordance_table_{col_name}.csv", index=False
         )
 
     return time.time() - start_time
@@ -69,10 +69,11 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "PLZ": [
+    "PLZ_": [
         {
             "masking_operation": FakePLZ(
-                col_name="PLZ", preserve=("district", "area", "route")
+                col_name="PLZ"
+                # preserve=("district", "area", "route")
             )
         },
         {"masking_operation": MedStatsOperation(col_name="PLZ")},

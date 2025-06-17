@@ -36,10 +36,15 @@ class Operation(ABC):
             msg = f"Invalid column name, expected a string, got {type(col_name)}"
             raise TypeError(msg)
 
-        self.col_name = col_name
+        self._col_name = col_name
         self.concordance_table = concordance_table
 
         self._cast_concordance_table()
+
+    @property
+    def col_name(self) -> str:
+        """Return the column name."""
+        return self._col_name
 
     @property
     def serving_columns(self) -> list[str]:
@@ -50,6 +55,16 @@ class Operation(ABC):
     def _needs_unique_values(self) -> bool:
         """Return if the operation needs to produce unique masked values."""
         return False
+
+    def update_col_name(self, col_name: str) -> None:
+        """Update the column name with additional values.
+
+        Args:
+        ----
+            col_name (str): new column name to be masked
+
+        """
+        self._col_name = col_name
 
     @staticmethod
     def cast_concordance_table(concordance_table: AnyDataFrame | dict | None) -> dict:

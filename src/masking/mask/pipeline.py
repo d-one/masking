@@ -107,17 +107,21 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         return data
 
     @staticmethod
-    def _impose_ordering(data: pd.DataFrame, columns_order: dict) -> pd.DataFrame:
-        """Impose the ordering of the columns.
+    def _copy_column(
+        data: pd.DataFrame, col_name: str, new_col_name: str
+    ) -> pd.DataFrame:
+        """Copy a column to a new column in the dataframe.
 
         Args:
         ----
             data (pd.DataFrame): input dataframe
-            columns_order (dict): dictionary with the columns order {<col_name>:<position>}
+            col_name (str): name of the column to copy
+            new_col_name (str): name of the new column
 
         Returns:
         -------
-        pd.DataFrame: dataframe with the columns ordered
+            pd.DataFrame: dataframe with the new column
 
         """
-        return data[sorted(data.columns, key=lambda x: columns_order[x])]
+        data[new_col_name] = data[col_name]
+        return data

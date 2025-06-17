@@ -97,7 +97,7 @@ analyzer = PresidioMultilingualAnalyzer(
 
 
 config = {
-    "PLZ": [
+    "PLZ_": [
         {"masking_operation": FakePLZ(col_name="PLZ", preserve=("district"))},
         {"masking_operation": MedStatsOperation(col_name="PLZ")},
     ],
