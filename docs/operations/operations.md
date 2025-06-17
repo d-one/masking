@@ -4,20 +4,20 @@ This page is dedicated to provide information about available operations in the 
 
 Available operations:
 - Masking:
-    - fake_name
-    - fake_plz
-    - fake_date
-    - hash
-    - yyyy_hash
-    - med_stats
+    - [fake_name](./operation_fake_name.md)
+    - [fake_plz](./operation_fake_plz.md)
+    - [fake_date](./operation_fake_date.md)
+    - [hash](./operation_hash.md)
+    - [yyyy_hash](./operation_yyyy_hash.md)
+    - [med_stats](./operation_med_stats.md)
 
 - Masking on Dictionaries:
     - presidio_dictionary
     - string_match_dictionary
 
 - Masking on Free-text:
-    - presidio
-    - string_match
+    - [presidio](./operation_presidio.md)
+    - [string_match](./operation_string_match.md)
 
 ## Operation Class
 
