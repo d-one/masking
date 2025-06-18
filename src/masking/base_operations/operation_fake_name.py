@@ -10,12 +10,13 @@ class FakeNameBase(FakerOperation):
 
     _SEEN_INPUTS: ClassVar[set[str]] = set()
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         col_name: str,
         locale: str = "de_CH",
         gender: str | None = None,
         name_type: str = "full",
+        reuse_existing: bool = True,  # noqa: FBT001, FBT002
         **kwargs: dict,
     ) -> None:
         """Initialize the HashOperation class.
@@ -26,6 +27,7 @@ class FakeNameBase(FakerOperation):
             locale (str, optional): Country initials such as 'de_CH'.
             gender: the gender of the generation. values must be in {'male','female','m','f',None}.
             name_type: the type of name to be generated. values must be in {'full','first','last'}.
+            reuse_existing (bool): whether to reuse existing names or generate new ones
             **kwargs (dict): keyword arguments
 
         """
@@ -45,6 +47,11 @@ class FakeNameBase(FakerOperation):
         valid_name_types = {"full", "first", "last"}
         if self.name_type not in valid_name_types:
             msg = f"Name type variable should be in the following valid values: {valid_name_types}. Default is 'full'."
+            raise ValueError(msg)
+
+        self.reuse_existing = reuse_existing
+        if self.reuse_existing not in {True, False}:
+            msg = "Reuse existing must be a boolean value."
             raise ValueError(msg)
 
     def _mask_line_generate(self) -> str:
@@ -92,6 +99,9 @@ class FakeNameBase(FakerOperation):
             str: masked line
 
         """
+        if not self.reuse_existing:
+            return self._mask_line_generate()
+
         # Add the line to the seen inputs
         self._SEEN_INPUTS.add(line)
 
