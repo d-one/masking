@@ -5,6 +5,15 @@ Replaces entries with realistic, locale-aware synthetic names.
 ## Purpose
 
 This operation replaces name values in a column with plausible, locale-aware synthetic names using Faker-based logic. It supports customization of locale, gender, name type, and reuse behavior to meet different anonymization requirements.
+By default names are taken from the two datasets:
+
+Lastnames:
+`https://www.bfs.admin.ch/bfs/en/home/statistics/population/births-deaths/names-switzerland.assetdetail.32208773.html
+`
+
+Firstnames:
+`https://www.bfs.admin.ch/bfs/en/home/statistics/population/births-deaths/names-switzerland.assetdetail.32208757.html
+`
 
 ---
 
