@@ -46,10 +46,12 @@ class StringMatchDictOperationBase(
             )
 
             if recognizer:
-                for leaf in leaf_to_mask_cp:
-                    value = self._get_leaf(line, leaf)
-                    res = recognizer.analyze(value, entities=list(self._PII_ENTITIES))
-                    analyzer_results[value] = res
+                analyzer_results = {
+                    self._get_leaf(line, leaf): recognizer.analyze(
+                        self._get_leaf(line, leaf), entities=list(self._PII_ENTITIES)
+                    )
+                    for leaf in leaf_to_mask_cp
+                }
 
         if analyzer_results:
             for leaf in leaf_to_mask:
