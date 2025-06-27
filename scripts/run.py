@@ -72,8 +72,7 @@ config = {
     "PLZ_": [
         {
             "masking_operation": FakePLZ(
-                col_name="PLZ"
-                # preserve=("district", "area", "route")
+                col_name="PLZ", preserve=("district", "area", "route")
             )
         },
         {"masking_operation": MedStatsOperation(col_name="PLZ")},

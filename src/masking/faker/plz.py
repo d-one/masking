@@ -46,7 +46,10 @@ class FakePLZProvider(FakeProvider):
 
         """
         self.generator: Generator = self.get_generator(locale)
-        self.files: pd.DataFrame = self._download()
+
+        # self.files: pd.DataFrame = self._download()           noqa: ERA001
+        file_path = Path(__file__).parent / "sources" / "AMTOVZ_CSV_LV95.csv"
+        self.files: pd.DataFrame = pd.read_csv(file_path, sep=";", usecols=["PLZ"])
 
         if preserve is not None:
             if isinstance(preserve, str):
