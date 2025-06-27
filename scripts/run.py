@@ -86,6 +86,7 @@ config = {
                     "masked_values": ["SP"],
                 }),
                 name_type="last",
+                reuse_existing=True,
             )
         },
         {
@@ -99,13 +100,27 @@ config = {
             )
         },
     ],
-    "Vorname": {
-        "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
-        "concordance_table": DataFrame({
-            "clear_values": ["Darius"],
-            "masked_values": ["DA"],
-        }),
-    },
+    "Vorname": [
+        {
+            "masking_operation": FakeNameOperation(
+                col_name="Vorname",
+                concordance_table=DataFrame({
+                    "clear_values": ["Spiess"],
+                    "masked_values": ["SP"],
+                }),
+                name_type="first",
+                gender="nb",
+                reuse_existing=False,
+            )
+        },
+        {
+            "masking_operation": HashOperation(col_name="Vorname", secret="my_secret"),
+            "concordance_table": DataFrame({
+                "clear_values": ["Darius"],
+                "masked_values": ["DA"],
+            }),
+        },
+    ],
     "Beschrieb": [
         {
             "masking_operation": StringMatchOperation(
