@@ -4,6 +4,15 @@ This page provides an overview of the available operations in the masking module
 
 ---
 
+## 🔐 Minimization
+
+Use when deterministic, irreversible masking is required.
+
+- [`null`](./operation_null.md):
+  Replace any entry with a null value
+
+---
+
 ## 🔐 Cryptographic Hashing
 
 Use when deterministic, irreversible masking is required.

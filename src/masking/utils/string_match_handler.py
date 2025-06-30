@@ -25,9 +25,9 @@ class StringMatchHandler:
     def _get_pii_values(self, line: dict) -> list[str]:
         return [
             # pii_value
-            line.get(col)
+            pii_value
             for col in self.pii_cols
-            # if (pii_value := line.get(col)) not in self.allow_list
+            if (pii_value := str(line.get(col))) not in self.allow_list
         ]
 
     def _get_pattern_recognizer(self, pii_values: list) -> PatternRecognizer | None:
@@ -53,6 +53,7 @@ class StringMatchHandler:
                     continue
 
                 patterns.append(
+                    # Create a pattern for the PII entity
                     Pattern(
                         self._PII_ENTITIES, regex=rf"(?i)\b{re.escape(v)}\b", score=0.8
                     )

@@ -59,7 +59,6 @@ class FakeNameProvider(FakeProvider):
         https://www.bfs.admin.ch/bfs/en/home/statistics/population/births-deaths/names-switzerland.assetdetail.32208773.html
         """
         file_path = Path(__file__).parent / "sources" / "lastnames2024.feather"
-
         return pd.read_feather(file_path)
 
     def get_last_name(self) -> str:
