@@ -89,7 +89,7 @@ class MultiNestedDictHandler:
     # ------ SKIP ------
 
     def _has_match_callable(
-        self, key: str, parent: str = "", mode: str = "allow"
+        self, key: str, parent: str | None = None, mode: str = "allow"
     ) -> bool:
         """Check if the key has a match in the keys_list.
 
@@ -106,20 +106,30 @@ class MultiNestedDictHandler:
         """
         if mode == "allow":
             return any(
-                check_key(self.path_separator.join([parent, key]) if parent else key)
+                check_key(
+                    self.path_separator.join([parent, key])
+                    if parent is not None
+                    else key
+                )
                 for check_key in self.allow_keys_callable
             )
 
         if mode == "deny":
             return any(
-                check_key(self.path_separator.join([parent, key]) if parent else key)
+                check_key(
+                    self.path_separator.join([parent, key])
+                    if parent is not None
+                    else key
+                )
                 for check_key in self.deny_keys_callable
             )
 
         msg = f"Mode {mode} is not supported: use 'allow' or 'deny'."
         raise ValueError(msg)
 
-    def _has_match_str(self, key: str, parent: str = "", mode: str = "allow") -> bool:
+    def _has_match_str(
+        self, key: str, parent: str | None = None, mode: str = "allow"
+    ) -> bool:
         """Check if the key has a match in the keys_list.
 
         The following rules are apply to keys in the keys_list:
@@ -143,7 +153,9 @@ class MultiNestedDictHandler:
             bool: True if the key is in the keys_list, False otherwise
 
         """
-        key_path = self.path_separator.join([parent, key]) if parent else key
+        key_path = (
+            self.path_separator.join([parent, key]) if parent is not None else key
+        )
         key_path_parts = key_path.split(self.path_separator)
         keys_list = self.allow_keys if mode == "allow" else self.deny_keys
 
@@ -193,7 +205,7 @@ class MultiNestedDictHandler:
 
         return False
 
-    def _is_skippable(self, key: str, parent: str = "") -> bool:
+    def _is_skippable(self, key: str, parent: str | None = None) -> bool:
         """Check if the line is skippable.
 
         Args:
@@ -206,12 +218,16 @@ class MultiNestedDictHandler:
             bool: True if the key is in the allow_keys list, False otherwise
 
         """
+        p = parent
+        if (p is not None) and (not self.case_sensitive):
+            p = p.lower().strip()
+
         return any([
-            self._has_match_callable(key, parent, mode="allow"),
-            self._has_match_str(key, parent, mode="allow"),
+            self._has_match_callable(key, p, mode="allow"),
+            self._has_match_str(key, p, mode="allow"),
         ])
 
-    def _is_denied(self, key: str, parent: str = "") -> bool:
+    def _is_denied(self, key: str, parent: str | None = None) -> bool:
         """Check if the line is denied.
 
         Args:
@@ -224,9 +240,13 @@ class MultiNestedDictHandler:
             bool: True if the key is in the deny_keys list, False otherwise
 
         """
+        p = parent
+        if (p is not None) and (not self.case_sensitive):
+            p = p.lower().strip()
+
         return any([
-            self._has_match_callable(key, parent, mode="deny"),
-            self._has_match_str(key, parent, mode="deny"),
+            self._has_match_callable(key, p, mode="deny"),
+            self._has_match_str(key, p, mode="deny"),
         ])
 
     # ------ PATH ------
@@ -406,7 +426,7 @@ class MultiNestedDictHandler:
         return data
 
     def _find_leaf_path(
-        self, data: str | dict | list, parent: str = ""
+        self, data: str | dict | list | None, parent: str | None = None
     ) -> Generator[str, None, None]:
         """Find the leaf path in the nested dictionary.
 
@@ -422,21 +442,19 @@ class MultiNestedDictHandler:
         """
         if isinstance(data, dict):
             for key, value in data.items():
-                key_path = f"{parent}{self.path_separator}{key}" if parent else key
+                key_path = (
+                    f"{parent}{self.path_separator}{key}" if parent is not None else key
+                )
 
                 if self._is_skippable(
                     key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent.lower().strip()
-                    if not self.case_sensitive
-                    else parent.strip(),
+                    parent,
                 ):
                     continue
 
                 if self._is_denied(
                     key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent.lower().strip()
-                    if not self.case_sensitive
-                    else parent.strip(),
+                    parent,
                 ):
                     yield self._deny_path(key_path)
                     continue
@@ -449,7 +467,7 @@ class MultiNestedDictHandler:
             for index, value in enumerate(data):
                 key_path = (
                     f"{parent}{self.path_separator}{self._list_index_to_path(index)}"
-                    if parent
+                    if parent is not None
                     else self._list_index_to_path(index)
                 )
                 yield from self._find_leaf_path(data=value, parent=key_path)
@@ -467,7 +485,7 @@ class MultiNestedDictHandler:
         raise TypeError(msg)
 
     def _find_leaf_path_and_value(
-        self, data: str | dict | list | None, parent: str = ""
+        self, data: str | dict | list | None, parent: str | None = None
     ) -> Generator[tuple[str, str], None, None]:
         """Find the leaf path and value in the nested dictionary.
 
@@ -483,21 +501,19 @@ class MultiNestedDictHandler:
         """
         if isinstance(data, dict):
             for key, value in data.items():
-                key_path = f"{parent}{self.path_separator}{key}" if parent else key
+                key_path = (
+                    f"{parent}{self.path_separator}{key}" if parent is not None else key
+                )
 
                 if self._is_skippable(
                     key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent.lower().strip()
-                    if not self.case_sensitive
-                    else parent.strip(),
+                    parent,
                 ):
                     continue
 
                 if self._is_denied(
                     key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent.lower().strip()
-                    if not self.case_sensitive
-                    else parent.strip(),
+                    parent,
                 ):
                     yield (self._deny_path(key_path), value)
                     continue
@@ -510,7 +526,7 @@ class MultiNestedDictHandler:
             for index, value in enumerate(data):
                 key_path = (
                     f"{parent}{self.path_separator}{self._list_index_to_path(index)}"
-                    if parent
+                    if parent is not None
                     else self._list_index_to_path(index)
                 )
                 yield from self._find_leaf_path_and_value(data=value, parent=key_path)
@@ -528,7 +544,7 @@ class MultiNestedDictHandler:
         raise TypeError(msg)
 
     def _find_leaf_path_and_value_batch(
-        self, data: list[str | dict | list], parent: str = ""
+        self, data: list[str | dict | list], parent: str | None = None
     ) -> Generator[tuple[str, str], None, None]:
         """Find the leaf path and value in the nested dictionary.
 
@@ -546,7 +562,7 @@ class MultiNestedDictHandler:
             yield from self._find_leaf_path_and_value(data=d, parent=parent)
 
     def _find_leaf_path_batch(
-        self, data: list[str | dict | list], parent: str = ""
+        self, data: list[str | dict | list], parent: str | None = None
     ) -> Generator[str, None, None]:
         """Find the leaf path in the nested dictionary.
 
