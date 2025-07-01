@@ -318,7 +318,9 @@ class MultiNestedDictHandler:
             return int(self._get_list_index(key))
         return key
 
-    def _get_leaf(self, data: dict | list | str, path: str | list) -> str | dict | list:
+    def _get_leaf(
+        self, data: dict | list | str | None, path: str | list | None
+    ) -> str | dict | list:
         """Get the value from the nested dictionary.
 
         Args:
@@ -331,7 +333,7 @@ class MultiNestedDictHandler:
             str|list: The value of the path
 
         """
-        if isinstance(data, str):
+        if isinstance(data, str) or data is None:
             return data
 
         if isinstance(path, str):

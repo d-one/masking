@@ -2500,18 +2500,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Report,Report,Report,di
         ""employee"": ""Dr. med. Franz Peter""
     }
 }",1996-11-29,1,57,0,25,0,189000.0,1.3,132,männlich,1,205,0
-227,Lee,Liubov,Hauptstrasse 46,5615,Frick,,"{
-    ""title"": ""Bericht 1"",
-    ""content"": {
-        ""patient"": {
-            ""name"": ""Liubov"",
-            ""geburtsdatum"": ""1965-03-20"",
-            ""surname"": ""Lee""
-        },
-        ""diagnosis"": ""Diagnose noch nicht bekannt"",
-        ""Hausarzt"": ""Dr. med. Hava Blum""
-    }
-}",1965-03-20,1,2794,0,35,1,141000.0,1.0,140,weiblich,0,206,0
+227,Lee,Liubov,Hauptstrasse 46,5615,Frick,,,1965-03-20,1,2794,0,35,1,141000.0,1.0,140,weiblich,0,206,0
 228,Levy,Mohammad,Oberdorfstrasse 222,5644,Beinwil am See,,"{
     ""title"": ""Bericht 3"",
     ""content"": {
