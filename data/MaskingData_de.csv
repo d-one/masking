@@ -1,4 +1,4 @@
-Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Report,Report,Report,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,sex,smoking,time,DEATH_EVENT
+Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kreatine_phosphokinase,diabetes,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,sex,smoking,time,DEATH_EVENT
 0,Müller,Darius,Talstrasse 5,5326,Unterentfelden,"Müller Darius könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, zum Beispiel an einer Myokarditis oder an einer Kardiomyopathie. (Zuständiger Arzt/Ärztin: Dr. med. Janic Wegmann)","{"""":{""TextTitle"":""Bericht""}, ""Report"":{
     ""title"": ""Bericht 3"",
     ""content"": {
@@ -505,27 +505,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Report,Report,Report,di
         ""Hausarzt"": ""Sasa Maurer""
     }
 }",2013-06-27,0,582,1,38,0,310000.0,1.9,135,weiblich,1,35,1
-46,Linder,Xin,Rathausgasse 1,5522,Auenstein,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Linder Xin den kardiogenen Schock zu verhindern.  (Zuständiger Arzt/Ärztin: Dr. med. Angelica Hotz)","{
-    ""title"": ""Bericht 2"",
-    ""content"": {
-        ""patient"": {
-            ""name"": ""Xin"",
-            ""geburtsdatum"": ""1940-03-18"",
-            ""surname"": ""Linder""
-        },
-        ""laboratory"": {
-            ""blood_test"": {
-                ""cholesterol"": ""ok"",
-                ""glucose"": ""ok""
-            },
-            ""urine_test"": {
-                ""protein"": ""ok"",
-                ""glucose"": ""not ok""
-            }
-        },
-        ""employee"": ""Dr. med. Fritz Merz""
-    }
-}",1940-03-18,0,1380,0,25,1,271000.0,0.9,130,weiblich,0,38,1
+46,Linder,Xin,Rathausgasse 1,5522,Auenstein,"Die Therapie mit Sauerstoff, Nitroglycerin, Betablockern, ACE-Hemmern und Gefäßdilatatoren war möglicherweise nicht ausreichend, um bei Linder Xin den kardiogenen Schock zu verhindern.  (Zuständiger Arzt/Ärztin: Dr. med. Angelica Hotz)","{"""": ""Rathausgasse 1	5522	Auenstein"", ""Bericht"": {""Header"": {""Berichtstitel"": {""TextTitle"": ""VERORDNUNG ZUR ERN\u00c4HRUNGSBERATUNG""}}}, ""PatName"": ""Linder Xin"", ""SigVis1"": {""DisplayName"": ""KSB""}, ""Krankheit"": {""AdipositasErwachsene"": {""Cb"": ""1""}}, ""PatGebDat"": ""1940-03-18"", ""PatPlzOrt"": ""5522 Auenstein"", ""PatStrasse"": ""Rathausgasse 1"", ""PatVorname"": ""Xin (f)"", ""PatTelPrivat"": ""079 411 84 29"", ""PatVersicherer"": ""Assura"", ""PatVersUnfallNr"": ""807234400524302440245876"", ""InfoErnaehrungsberatung"": {""Diagnose"": {""Text"": ""Migraine accompagnee, Adipositas Grad I (BMI 30.0 kg), Vd. a. arterielle Hypertonie""}, ""Bemerkung"": {""Text"": ""Partnerin m\u00f6chte dabei sein, da diese kocht""}, ""Medikament"": {""Text"": ""ASS 100mg""}, ""SprachePatient"": {""Text"": ""DE""}}}",1940-03-18,0,1380,0,25,1,271000.0,0.9,130,weiblich,0,38,1
 47,Koller,Siegfried,Schulgasse 2,5624,Leuggern,"Koller Siegfried könnte auch an einer anderen Erkrankung gelitten haben, die zum Herzversagen führte, z. B. an einer Myokarditis oder an einer Kardiomyopathie. (Zuständiger Arzt/Ärztin: Dr. med. Arlette Koch)","{
     ""title"": ""Bericht 2"",
     ""content"": {

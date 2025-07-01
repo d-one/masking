@@ -1,4 +1,3 @@
-import json
 from collections import defaultdict
 from itertools import tee
 
@@ -24,16 +23,9 @@ class MaskDictOperation(PandasOperation, MaskDictOperationBase):
 
         """
         gen_values_to_mask = (
-            (
-                self._get_leaf(
-                    line if isinstance(line, dict) else json.loads(line), leaf
-                ),
-                line,
-            )
+            (self._get_leaf(self._parse_line(line), leaf), line)
             for line in (data if isinstance(data, Series) else data[self.col_name])
-            for leaf in self._find_leaf_path(
-                line if isinstance(line, dict) else json.loads(line)
-            )
+            for leaf in self._find_leaf_path(self._parse_line(line))
             if not self._is_denied_path(leaf)
         )
 

@@ -1,5 +1,3 @@
-import json
-
 from pandas import DataFrame, Series
 
 from masking.base_operations.operation_string_match_dict import (
@@ -24,9 +22,7 @@ class StringMatchDictOperation(PandasOperation, StringMatchDictOperationBase):
 
         """
         paths = {
-            line: self._get_undenied_and_denied_paths(
-                line if isinstance(line, dict) else json.loads(line, strict=False)
-            )
+            line: self._get_undenied_and_denied_paths(self._parse_line(line))
             for line in (data if isinstance(data, Series) else data[self.col_name])
         }
 

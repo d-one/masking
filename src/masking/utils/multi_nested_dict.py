@@ -1,3 +1,4 @@
+import json
 from collections import deque
 from collections.abc import Callable, Generator
 
@@ -85,6 +86,54 @@ class MultiNestedDictHandler:
 
         """
         return strip_key(strip_key(deny, self.deny_tag["end"]), self.deny_tag["start"])
+
+    @staticmethod
+    def _parse_line(line: str | dict | list | None) -> dict | list | str:
+        """Parse a line into a dictionary.
+
+        Args:
+        ----
+            line (str | dict): input line as a string or dictionary
+
+        Returns:
+        -------
+            dict | list | str: parsed line as a dictionary or list, or original string if parsing fails
+
+        """
+        if line is None:
+            return ""
+
+        if isinstance(line, dict | list):
+            return line
+
+        try:
+            return json.loads(line, strict=False)
+        except json.JSONDecodeError:
+            pass
+
+        return line
+
+    @staticmethod
+    def _dump_line(line: dict | list | str) -> str:
+        """Dump a line into a string.
+
+        Args:
+        ----
+            line (dict | list | str): input line as a dictionary or list
+
+        Returns:
+        -------
+            str: dumped line as a string
+
+        """
+        if isinstance(line, dict | list):
+            return json.dumps(line, ensure_ascii=False)
+
+        if isinstance(line, str):
+            return line
+
+        msg = f"Unsupported type {type(line)} for dumping."
+        raise TypeError(msg)
 
     # ------ SKIP ------
 
@@ -333,7 +382,7 @@ class MultiNestedDictHandler:
             str|list: The value of the path
 
         """
-        if isinstance(data, str) or data is None:
+        if isinstance(data, str):  # or data is None:
             return data
 
         if isinstance(path, str):
@@ -404,10 +453,6 @@ class MultiNestedDictHandler:
             value (str): The value to set
 
         """
-        if not path:
-            self.data = value
-            return None
-
         if isinstance(path, str):
             path = path.split(self.path_separator)
 

@@ -47,10 +47,9 @@ class StringMatchDictOperationBase(
 
             if recognizer:
                 analyzer_results = {
-                    self._get_leaf(line, leaf): recognizer.analyze(
-                        self._get_leaf(line, leaf), entities=list(self._PII_ENTITIES)
-                    )
+                    v: recognizer.analyze(v, entities=list(self._PII_ENTITIES))
                     for leaf in leaf_to_mask_cp
+                    if (v := self._get_leaf(line, leaf))
                 }
 
         if analyzer_results:

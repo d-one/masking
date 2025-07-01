@@ -1,4 +1,3 @@
-import json
 from abc import abstractmethod
 
 from masking.base_operations.operation import Operation
@@ -26,9 +25,10 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
         for leaf in leaf_to_deny:
             value = self._get_leaf(line, leaf)
             masked = self.masking_function(
-                value
-                if isinstance(value, str)
-                else json.dumps(value, ensure_ascii=False)
+                # value
+                # if isinstance(value, str)
+                # else json.dumps(value, ensure_ascii=False)
+                self._dump_line(value)
             )
             line = self._set_leaf(line, leaf, masked)
         return line
@@ -74,12 +74,8 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
 
         """
         # Convert line to dict if it is a string
-        if isinstance(line, str):
-            try:
-                line = json.loads(line)
-            except json.JSONDecodeError:
-                msg = "Failed to parse line, treat it as a string."
-                print(msg)  # noqa: T201
+        if not isinstance(line, (dict | list)):
+            line = self._parse_line(line)
 
         # Get undenied and denied paths if not provided
         if leaf_to_deny is None and leaf_to_mask is None:
@@ -93,6 +89,6 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
 
         # Convert line back to JSON string if it was a dict
         if not isinstance(line, str):
-            line = json.dumps(line, ensure_ascii=False)
+            line = self._dump_line(line)
 
         return line
