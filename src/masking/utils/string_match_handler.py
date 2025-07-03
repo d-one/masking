@@ -25,9 +25,9 @@ class StringMatchHandler:
     def _get_pii_values(self, line: dict) -> list[str]:
         return [
             # pii_value
-            pii_value
+            str(pii_value.strip())
             for col in self.pii_cols
-            if (pii_value := str(line.get(col)).strip()) not in self.allow_list
+            if (pii_value := line.get(col)) not in self.allow_list
         ]
 
     def _get_pattern_recognizer(self, pii_values: list) -> PatternRecognizer | None:
