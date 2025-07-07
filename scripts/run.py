@@ -144,7 +144,7 @@ config = {
             "masking_operation": StringMatchDictOperation(
                 col_name="Report",
                 masking_function=lambda x: "<MASKED>",
-                pii_cols=["Vorname", "Name", "Strasse"],
+                pii_cols=["Vorname", "Name", "Strasse", "Geburtsdatum"],
                 # path_separator=".",
                 # deny_keys=["*.patient"],
             )

@@ -4,7 +4,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""content"": {
         ""patient"": {
             ""name"": ""Darius"",
-            ""geburtsdatum"": ""1979-04-24"",
+            ""geburtsdatum"": ""24.04.0197"",
             ""surname"": ""Müller""
         },
         ""prozedere"": ""Prozedere noch nicht bekannt"",
@@ -28,7 +28,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""content"": {
         ""patient"": {
             ""name"": ""Ayan"",
-            ""geburtsdatum"": ""1976-03-09"",
+            ""geburtsdatum"": ""09.03.1976"",
             ""surname"": ""Spiess""
         },
         ""prozedere"": ""Prozedere noch nicht bekannt"",
@@ -40,7 +40,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""content"": {
         ""patient"": {
             ""name"": ""Nicolas"",
-            ""geburtsdatum"": ""1975-07-14"",
+            ""geburtsdatum"": ""07/14/1975"",
             ""surname"": ""Caviezel""
         },
         ""laboratory"": {

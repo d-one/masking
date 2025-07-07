@@ -2,6 +2,7 @@ import datetime
 import re
 from typing import ClassVar
 
+from dateparser import parse
 from presidio_analyzer import Pattern, PatternRecognizer
 
 
@@ -30,6 +31,61 @@ class StringMatchHandler:
             if (pii_value := line.get(col)) not in self.allow_list
         ]
 
+    def _get_pattern_date(self, line: str | datetime.datetime) -> str:
+        """Get the date pattern from a line.
+
+        Args:
+        ----
+            line (str | datetime.datetime): The line to extract the date from
+
+        Returns:
+        -------
+            str: The date pattern
+
+        """
+        patterns = []
+
+        try:
+            # Parse the line as a date
+            date = parse(line)
+        except Exception:
+            return patterns
+
+        # Create patterns for different date formats
+        patterns.extend([
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%d-%m-%Y'))}",
+                score=0.8,
+            ),
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%Y-%m-%d'))}",
+                score=0.8,
+            ),
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%d.%m.%Y'))}",
+                score=0.8,
+            ),
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%Y/%m/%d'))}",
+                score=0.8,
+            ),
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%d/%m/%Y'))}",
+                score=0.8,
+            ),
+            Pattern(
+                self._PII_ENTITIES,
+                regex=rf"(?i){re.escape(date.strftime('%m/%d/%Y'))}",
+                score=0.8,
+            ),
+        ])
+        return patterns
+
     def _get_pattern_recognizer(self, pii_values: list) -> PatternRecognizer | None:
         """Get the pattern recognizer.
 
@@ -47,34 +103,20 @@ class StringMatchHandler:
             if not v:
                 continue
 
-            if isinstance(v, str):
-                patterns.append(
-                    # Create a pattern for the PII entity
-                    Pattern(
-                        self._PII_ENTITIES, regex=rf"(?i)\b{re.escape(v)}\b", score=0.8
-                    )
-                )
-                continue
+            # Check if the value is a date and create patterns for it
+            try:
+                ps = self._get_pattern_date(v)
+                if ps:
+                    patterns.extend(ps)
+                    continue
+            except Exception:  # noqa: S110
+                pass
 
-            if isinstance(v, datetime.datetime):
-                patterns.extend([
-                    Pattern(
-                        self._PII_ENTITIES,
-                        regex=rf"(?i){re.escape(v.strftime('%Y-%m-%d'))}",
-                        score=0.8,
-                    ),
-                    Pattern(
-                        self._PII_ENTITIES,
-                        regex=rf"(?i){re.escape(v.strftime('%Y.%m.%d'))}",
-                        score=0.8,
-                    ),
-                    Pattern(
-                        self._PII_ENTITIES,
-                        regex=rf"(?i){re.escape(v.strftime('%Y/%m/%d'))}",
-                        score=0.8,
-                    ),
-                ])
-                continue
+            # Create patterns for string values
+            patterns.append(
+                # Create a pattern for the PII entity
+                Pattern(self._PII_ENTITIES, regex=rf"(?i)\b{re.escape(v)}\b", score=0.8)
+            )
 
         if not patterns:
             return None
