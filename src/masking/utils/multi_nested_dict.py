@@ -127,7 +127,7 @@ class MultiNestedDictHandler:
 
         """
         if isinstance(line, dict | list):
-            return json.dumps(line, ensure_ascii=False)
+            return json.dumps(line, ensure_ascii=False, indent=4)
 
         if isinstance(line, str):
             return line

@@ -13,9 +13,18 @@ class StringMatchHandler:
     # Define a pattern template for matching PII values
     # Explanation:
     # •	(?i): case-insensitive, (?x): allow comments and whitespace
-    _PATTERN_TEMPLATE: ClassVar[str] = (
-        r"""(?i)(\b{value}\b|(?<=\n|\t){value}(?=\n|\t)|(?<=\W){value}(?=\W))"""
-    )
+    # •	\b{value}\b: matches the value as a whole word
+    # •	(?<=\n|\t){value}(?=\n|\t): matches the value at the start of a line or after a tab
+    # •	(?<=\W){value}(?=\W): matches the value surrounded by non-word characters
+    _PATTERN_TEMPLATE: ClassVar[str] = r"""(?ix)
+                (
+                    \b{value}\b
+                    |
+                    (?<=\n|\t){value}(?=\n|\t)
+                    |
+                    (?<=\W){value}(?=\W)
+                )
+                """
 
     def __init__(self, pii_cols: list[str] | None = None, **kwargs: dict) -> None:
         """Initialize the Presidio Handler.
