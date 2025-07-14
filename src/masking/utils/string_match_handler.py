@@ -10,6 +10,22 @@ class StringMatchHandler:
     # Entities to be detected as PII
     _PII_ENTITIES: ClassVar[set[str]] = {"PATIENT_DATA"}
 
+    # Define a pattern template for matching PII values
+    # Explanation:
+    # •	(?i) → case-insensitive
+    # •	(?:...) → non-capturing group to wrap the OR condition
+    # •	\b{v}\b → match if v is a standalone word
+    # •	| → OR
+    # •	(?<=\n|\t) → only match v if preceded by a newline or tab
+    # •	{v} → the value
+    # •	(?=\n|\t) → only match v if followed by newline or tab
+    #
+    # Example:
+    #   - value = "John Doe"
+    #   - matches: "John Doe", "\nJohn Doe", "John Doe\n", "\tJohn Doe", "John Doe\t"
+    #   - not matches: "John Doe is here", "This is John Doe", "John Doe's book"
+    _PATTERN_TEMPLATE: ClassVar[str] = r"(?i)(\b{value}\b|(?<=\n|\t){value}(?=\n|\t))"
+
     def __init__(self, pii_cols: list[str] | None = None, **kwargs: dict) -> None:
         """Initialize the Presidio Handler.
 
@@ -55,32 +71,44 @@ class StringMatchHandler:
         patterns.extend([
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%d-%m-%Y'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%d-%m-%Y"))
+                ),
                 score=0.8,
             ),
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%Y-%m-%d'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%Y-%m-%d"))
+                ),
                 score=0.8,
             ),
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%d.%m.%Y'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%d.%m.%Y"))
+                ),
                 score=0.8,
             ),
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%Y/%m/%d'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%Y/%m/%d"))
+                ),
                 score=0.8,
             ),
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%d/%m/%Y'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%d/%m/%Y"))
+                ),
                 score=0.8,
             ),
             Pattern(
                 self._PII_ENTITIES,
-                regex=rf"(?i){re.escape(date.strftime('%m/%d/%Y'))}",
+                regex=self._PATTERN_TEMPLATE.format(
+                    value=re.escape(date.strftime("%m/%d/%Y"))
+                ),
                 score=0.8,
             ),
         ])
@@ -115,7 +143,11 @@ class StringMatchHandler:
             # Create patterns for string values
             patterns.append(
                 # Create a pattern for the PII entity
-                Pattern(self._PII_ENTITIES, regex=rf"(?i)\b{re.escape(v)}\b", score=0.8)
+                Pattern(
+                    self._PII_ENTITIES,
+                    regex=self._PATTERN_TEMPLATE.format(value=re.escape(v)),
+                    score=0.8,
+                )
             )
 
         if not patterns:

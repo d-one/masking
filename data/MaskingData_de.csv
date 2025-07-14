@@ -3,7 +3,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""title"": ""Bericht 3"",
     ""content"": {
         ""patient"": {
-            ""name"": ""Darius"",
+            ""name"": ""Darius\n"",
             ""geburtsdatum"": ""24.04.0197"",
             ""surname"": ""Müller""
         },
@@ -27,7 +27,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""title"": ""Bericht 3"",
     ""content"": {
         ""patient"": {
-            ""name"": ""Ayan"",
+            ""name"": ""Ayan\n"",
             ""geburtsdatum"": ""09.03.1976"",
             ""surname"": ""Spiess""
         },
@@ -39,7 +39,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""title"": ""Bericht 2"",
     ""content"": {
         ""patient"": {
-            ""name"": ""Nicolas"",
+            ""name"": ""\nNicolas\n"",
             ""geburtsdatum"": ""07/14/1975"",
             ""surname"": ""Caviezel""
         },
