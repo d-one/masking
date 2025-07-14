@@ -12,19 +12,10 @@ class StringMatchHandler:
 
     # Define a pattern template for matching PII values
     # Explanation:
-    # •	(?i) → case-insensitive
-    # •	(?:...) → non-capturing group to wrap the OR condition
-    # •	\b{v}\b → match if v is a standalone word
-    # •	| → OR
-    # •	(?<=\n|\t) → only match v if preceded by a newline or tab
-    # •	{v} → the value
-    # •	(?=\n|\t) → only match v if followed by newline or tab
-    #
-    # Example:
-    #   - value = "John Doe"
-    #   - matches: "John Doe", "\nJohn Doe", "John Doe\n", "\tJohn Doe", "John Doe\t"
-    #   - not matches: "John Doe is here", "This is John Doe", "John Doe's book"
-    _PATTERN_TEMPLATE: ClassVar[str] = r"(?i)(\b{value}\b|(?<=\n|\t){value}(?=\n|\t))"
+    # •	(?i): case-insensitive, (?x): allow comments and whitespace
+    _PATTERN_TEMPLATE: ClassVar[str] = (
+        r"""(?i)(\b{value}\b|(?<=\n|\t){value}(?=\n|\t)|(?<=\W){value}(?=\W))"""
+    )
 
     def __init__(self, pii_cols: list[str] | None = None, **kwargs: dict) -> None:
         """Initialize the Presidio Handler.

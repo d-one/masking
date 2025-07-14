@@ -15,7 +15,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""title"": ""Bericht 1"",
     ""content"": {
         ""patient"": {
-            ""name"": ""Luís"",
+            ""name"": ""Luís."",
             ""geburtsdatum"": ""2021-08-05"",
             ""surname"": ""Wüest""
         },
@@ -60,7 +60,7 @@ Unnamed: 0,Name,Vorname,Strasse,PLZ,Ort,Beschrieb,Report,Geburtsdatum,anaemia,kr
     ""title"": ""Bericht 2"",
     ""content"": {
         ""patient"": {
-            ""name"": ""Mert"",
+            ""name"": ""Name-Mert"",
             ""geburtsdatum"": ""1934-02-24"",
             ""surname"": ""Wälti""
         },
