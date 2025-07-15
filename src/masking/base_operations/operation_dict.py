@@ -24,12 +24,7 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
         """
         for leaf in leaf_to_deny:
             value = self._get_leaf(line, leaf)
-            masked = self.masking_function(
-                # value
-                # if isinstance(value, str)
-                # else json.dumps(value, ensure_ascii=False)
-                self._dump_line(value)
-            )
+            masked = self.masking_function(self._dump_line(value))
             line = self._set_leaf(line, leaf, masked)
         return line
 

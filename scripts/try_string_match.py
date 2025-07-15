@@ -3,32 +3,31 @@ import re
 from presidio_analyzer import Pattern, PatternRecognizer
 from presidio_anonymizer import AnonymizerEngine, OperatorConfig
 
-value = re.escape("123 45")
-
 test_strings = [
-    "ID: 123 45.",
-    "ID:123 45",
-    "ID-123 45",
-    "\t123 45\n",
-    "value=123 45, next one",
-    "abc123 45",  # shouldn't match
-    "123 456",  # shouldn't match
-    "<MASKED> Vaska, 04.07.1999 <MASKED>, CH-123 45 Neuenhof, PID: 2127468",
+    ("123 45", "ID: 123 45."),
+    ("123 45", "ID:123 45"),
+    ("123 45", "ID-123 45"),
+    ("123 45", "\t123 45\n"),
+    ("123 45", "value=123 45, next one"),
+    ("123 45", "abc123 45"),  # shouldn't match
+    ("123 45", "123 456"),  # shouldn't match
+    ("123 45", "<MASKED> Vaska, 04.07.1999 <MASKED>, CH-123 45 Neuenhof, PID: 2127468"),
+    ("Marco", "<MASKED> Marco, ."),
 ]
+template = r"""(?ix)
+            (
+                \b{value}\b
+                |
+                (?<=\n|\t){value}(?=\n|\t)
+                |
+                (?<=\W){value}(?=\W)
+            )
+        """
 
-for test_string in test_strings:
+for v, test_string in test_strings:
+    value = re.escape(v)
     presidio_pattern = Pattern(
-        {"TestPattern"},
-        regex=rf"""(?ix)
-                (
-                    \b{value}\b
-                    |
-                    (?<=\n|\t){value}(?=\n|\t)
-                    |
-                    (?<=\W){value}(?=\W)
-                )
-                """,
-        score=0.85,
+        {"TestPattern"}, regex=template.format(value=value), score=0.85
     )
     recognizer = PatternRecognizer(
         supported_entity="TestEntity", patterns=[presidio_pattern]

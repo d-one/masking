@@ -40,11 +40,22 @@ class StringMatchHandler:
         self.pii_cols = pii_cols or []
 
     def _get_pii_values(self, line: dict) -> list[str]:
+        """Get the PII values from a line.
+
+        Args:
+        ----
+            line (dict): The line to extract the PII values from
+
+        Returns:
+        -------
+            list[str]: The PII values
+
+        """
         return [
-            # pii_value
-            str(pii_value).strip()
+            pii_value
             for col in self.pii_cols
-            if (pii_value := line.get(col)) not in self.allow_list
+            if (pii_value := str(line.get(col)).strip())
+            and (pii_value not in self.allow_list)
         ]
 
     def _get_pattern_date(self, line: str | datetime.datetime) -> str:
@@ -131,15 +142,6 @@ class StringMatchHandler:
             if not v:
                 continue
 
-            # Check if the value is a date and create patterns for it
-            try:
-                ps = self._get_pattern_date(v)
-                if ps:
-                    patterns.extend(ps)
-                    continue
-            except Exception:  # noqa: S110
-                pass
-
             # Create patterns for string values
             patterns.append(
                 # Create a pattern for the PII entity
@@ -149,6 +151,14 @@ class StringMatchHandler:
                     score=0.8,
                 )
             )
+
+            # Check if the value is a date and create patterns for it
+            try:
+                ps = self._get_pattern_date(v)
+                if ps:
+                    patterns.extend(ps)
+            except Exception:  # noqa: S110
+                pass
 
         if not patterns:
             return None
