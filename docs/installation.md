@@ -1,6 +1,6 @@
 # Project Installation Guide
 
-This guide will help you set up and install the project dependencies using the Makefile. The Makefile will ensure that `pip` and `poetry` are installed, and then use `poetry` to install the project dependencies.
+This guide will help you set up and install the project dependencies using the Makefile. The Makefile will ensure that `uv` is installed, and then use `uv` to install the project dependencies.
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ Before you begin, ensure you have the following installed on your machine:
     ```
 
 2. **Run the Makefile**:
-    The Makefile contains commands to check for `pip` and `poetry`, and install them if they are not already installed. It then installs the project dependencies using `poetry`.
+    The Makefile contains commands to check for `uv` and install it if not already installed. It then installs the project dependencies using `uv`.
 
     To run the Makefile, use the following command:
     ```sh
@@ -36,7 +36,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Additional Information
 
-- Package management is done through [Poetry](./poetry.md).
+- Package management is done through [uv](https://docs.astral.sh/uv/).
 
 ## Troubleshooting
 

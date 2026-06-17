@@ -19,18 +19,11 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
-  - repo: https://github.com/python-poetry/poetry
-    rev: 1.8.2
-    hooks:
-      - id: poetry-check
-        args: [--lock]
-      - id: poetry-lock
-        args: [--no-update]
   - repo: local
     hooks:
-      - id: poetry-build
-        name: Poetry Build
-        entry: poetry build
+      - id: uv-lock-check
+        name: uv lock check
+        entry: uv lock --check
         language: system
-        types: [python]
+        files: pyproject\.toml$
         pass_filenames: false
