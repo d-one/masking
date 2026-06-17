@@ -22,7 +22,7 @@ select = ["ALL"]
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["T201", "ANN2", "ERA001", "INP001", "S106", "ARG005"]
-"tests/*" = ["S101", "SLF0", "PLC0415"]
+"tests/*" = ["S101", "SLF0", "PLC0415", "ANN", "PLR6301", "PLR2004", "FBT003", "PLC1901"]
 
 ############################### UV ################################
 

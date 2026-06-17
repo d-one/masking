@@ -6,6 +6,7 @@ from masking.utils.string_handler import strip_key
 
 
 class MultiNestedDictHandler:
+    _LEAF_TYPE: type | tuple[type, ...] = (str, int, float, bool)
     path_separator: str
     list_index: dict[str, str]
     deny_tag: dict[str, str]
@@ -382,7 +383,7 @@ class MultiNestedDictHandler:
             str|list: The value of the path
 
         """
-        if isinstance(data, str):  # or data is None:
+        if isinstance(data, self._LEAF_TYPE):
             return data
 
         if isinstance(path, str):
@@ -520,7 +521,7 @@ class MultiNestedDictHandler:
                 yield from self._find_leaf_path(data=value, parent=key_path)
             return
 
-        if isinstance(data, str):
+        if isinstance(data, self._LEAF_TYPE):
             yield parent
             return
 
@@ -579,7 +580,7 @@ class MultiNestedDictHandler:
                 yield from self._find_leaf_path_and_value(data=value, parent=key_path)
             return
 
-        if isinstance(data, str):
+        if isinstance(data, self._LEAF_TYPE):
             yield (parent, data)
             return
 
