@@ -7,9 +7,9 @@ The Masking Package is a Python library designed to provide various masking oper
 ## Table of Content
 
 - Development:
-    - [Local Development](docs/installation.md)
-    - [Available Modules](docs/available_modules.md)
-    - [Available Operations](docs/operations/operations.md)
+  - [Local Development](docs/installation.md)
+  - [Available Modules](docs/available_modules.md)
+  - [Available Operations](docs/operations/operations.md)
 
 ## Installation
 
@@ -55,11 +55,13 @@ print(masked_df)
 The module makes use of Presidio, a [framework introduced by Microsoft](https://microsoft.github.io/presidio/), to enable entity recognition. This latter leverages [Spacy](https://spacy.io/) as a NLP framework to do entity recognition.
 
 Before using the masking module, make sure to have downloaded the necessary spacy model: open up a terminal in your project and execute the following line of code
+
 ```bash
 python -m spacy download en_core_web_trf
 ```
 
 You can make sure to have installed the spacy model correctly by running the following code:
+
 ```python
 import spacy
 

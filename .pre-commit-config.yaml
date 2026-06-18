@@ -19,6 +19,18 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.21
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-tables
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.42.0
+    hooks:
+      - id: markdownlint
+        args: [--config, .markdownlint.yaml, --fix]
   - repo: local
     hooks:
       - id: uv-lock-check
@@ -26,4 +38,10 @@ repos:
         entry: uv lock --check
         language: system
         files: pyproject\.toml$
+        pass_filenames: false
+      - id: uv-build
+        name: uv build
+        entry: uv build
+        language: system
+        files: (pyproject\.toml|src/.*)$
         pass_filenames: false

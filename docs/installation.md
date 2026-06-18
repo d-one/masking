@@ -11,28 +11,31 @@ Before you begin, ensure you have the following installed on your machine:
 ## Steps
 
 1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/d-one/masking.git
-    cd masking
-    ```
 
-2. **Run the Makefile**:
-    The Makefile contains commands to check for `uv` and install it if not already installed. It then installs the project dependencies using `uv`.
+   ```sh
+   git clone https://github.com/d-one/masking.git
+   cd masking
+   ```
 
-    To run the Makefile, use the following command:
-    ```sh
-    make install
-    ```
+1. **Run the Makefile**:
+   The Makefile contains commands to check for `uv` and install it if not already installed. It then installs the project dependencies using `uv`.
 
-3. **Verify the installation**:
-    After running the `make` command, verify that the virtual environment has been created and the dependencies are installed.
+   To run the Makefile, use the following command:
 
-    By running
-    ```bash
-    ls -a .
-    ```
+   ```sh
+   make install
+   ```
 
-    You should see a `.venv` directory in the project root.
+1. **Verify the installation**:
+   After running the `make` command, verify that the virtual environment has been created and the dependencies are installed.
+
+   By running
+
+   ```bash
+   ls -a .
+   ```
+
+   You should see a `.venv` directory in the project root.
 
 ## Additional Information
 
@@ -47,6 +50,6 @@ If you encounter any issues during the installation, please check the following:
 
 For further assistance, feel free to open an issue in the repository or contact the project maintainers.
 
----
+______________________________________________________________________
 
 By following these steps, you should be able to set up your development environment and start working on the project. Happy coding!

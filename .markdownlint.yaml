@@ -1,0 +1,24 @@
+# markdownlint configuration
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+default: true
+
+# Allow long lines (common in docs with URLs and code)
+MD013: false
+
+# Allow inline HTML (needed for some formatting)
+MD033: false
+
+# Allow duplicate headings in different sections
+MD024:
+  siblings_only: true
+
+# Allow trailing punctuation in headings (e.g., "Parameters:" )
+MD026: false
+
+# Allow multiple blank lines (sometimes used for visual separation)
+MD012: false
+
+# Allow hard tabs in code blocks
+MD010:
+  code_blocks: false
