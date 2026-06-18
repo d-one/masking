@@ -47,6 +47,7 @@ dependencies = [
     "dateparser>=1.2.0",
     "presidio-anonymizer>=2.2.356",
     "openpyxl>=3.1.5",
+    "polars>=1.41.2",
 ]
 
 [dependency-groups]
@@ -58,4 +59,5 @@ dev = [
     "pytest>=8.3.5",
     "argparse>=1.4.0",
     "spacy-lookups-data>=1.0.5",
+    "click>=8.4.1",
 ]

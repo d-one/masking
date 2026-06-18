@@ -3,19 +3,22 @@ import shutil
 import time
 from pathlib import Path
 
-from masking.mask.operations.operation_fake_date import FakeDate
-from masking.mask.operations.operation_fake_name import FakeNameOperation
-from masking.mask.operations.operation_fake_plz import FakePLZ
-from masking.mask.operations.operation_hash import HashOperation
-from masking.mask.operations.operation_med_stats import MedStatsOperation
-from masking.mask.operations.operation_presidio import MaskPresidio
-from masking.mask.operations.operation_presidio_dict import MaskDictOperation
-from masking.mask.operations.operation_string_match import StringMatchOperation
-from masking.mask.operations.operation_string_match_dict import StringMatchDictOperation
-from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation
-from masking.mask.pipeline import MaskDataFramePipeline
+import polars as pl
+from masking.mask_polars.operations.operation_fake_date import FakeDate
+from masking.mask_polars.operations.operation_fake_name import FakeNameOperation
+from masking.mask_polars.operations.operation_fake_plz import FakePLZ
+from masking.mask_polars.operations.operation_hash import HashOperation
+from masking.mask_polars.operations.operation_med_stats import MedStatsOperation
+from masking.mask_polars.operations.operation_presidio import MaskPresidio
+from masking.mask_polars.operations.operation_presidio_dict import MaskDictOperation
+from masking.mask_polars.operations.operation_string_match import StringMatchOperation
+from masking.mask_polars.operations.operation_string_match_dict import (
+    StringMatchDictOperation,
+)
+from masking.mask_polars.operations.operation_yyyy_hash import YYYYHashOperation
+from masking.mask_polars.pipeline import MaskDataFramePipeline
 from masking.utils.entity_detection import PresidioMultilingualAnalyzer
-from pandas import DataFrame, read_csv
+from pandas import DataFrame
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="Mask data in a CSV file.")
@@ -32,7 +35,7 @@ if not path.exists():
 
 def measure_execution_time(config: dict) -> float:
     pipeline = MaskDataFramePipeline(config, workers=min(4, len(config)))
-    data = read_csv(path)
+    data = pl.read_csv(path)
 
     print(data)
 
@@ -44,20 +47,17 @@ def measure_execution_time(config: dict) -> float:
         shutil.rmtree(path_to_save)
     path_to_save.mkdir(parents=True, exist_ok=True)
 
-    data.to_csv(path_to_save / "MaskedData.csv", index=False)
+    data.write_csv(path_to_save / "MaskedData.csv")
 
     # Print Masked Data und Concordance Tables
     for col_name, concordance_table in pipeline.concordance_tables.items():
-        df_concordance_table = DataFrame(
-            {
-                "clear_values": list(concordance_table.keys()),
-                "masked_values": list(concordance_table.values()),
-            },
-            index=None,
-        )
+        df_concordance_table = pl.DataFrame({
+            "clear_values": [str(k) for k in concordance_table],
+            "masked_values": [str(v) for v in concordance_table.values()],
+        })
 
-        df_concordance_table.to_csv(
-            path_to_save / f"concordance_table_{col_name}.csv", index=False
+        df_concordance_table.write_csv(
+            path_to_save / f"concordance_table_{col_name}.csv"
         )
 
     return time.time() - start_time
