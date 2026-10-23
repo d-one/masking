@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import TYPE_CHECKING, ClassVar
 
 from faker.generator import Generator
@@ -20,6 +20,7 @@ class FakeDateProvider(FakeProvider):
 
     def __init__(self, preserve: str | tuple[str] | None = None) -> None:
         self.generator: Generator = self.get_generator()
+        self._current_year = str(datetime.now(tz=UTC).year)
 
         self._PRESERVED = set()
 
@@ -66,7 +67,7 @@ class FakeDateProvider(FakeProvider):
             "month_start": "01",
             "month_end": "12",
             "year_start": "1800",
-            "year_end": str(datetime.now(tz=UTC).year),
+            "year_end": self._current_year,
         }
 
         # Update date_range with preserved values
@@ -149,6 +150,12 @@ class FakeDateProvider(FakeProvider):
         start_date = f"{dates_ranges['year_start'].zfill(4)}-{dates_ranges['month_start'].zfill(2)}-{dates_ranges['day_start'].zfill(2)}"
         end_date = f"{dates_ranges['year_end'].zfill(4)}-{dates_ranges['month_end'].zfill(2)}-{dates_ranges['day_end'].zfill(2)}"
 
-        return self.generator.date_time_between_dates(
-            datetime.fromisoformat(start_date), datetime.fromisoformat(end_date)
-        ).date()
+        start, end = date.fromisoformat(start_date), date.fromisoformat(end_date)
+
+        # Same distribution as generator.date_time_between_dates(start, end).date(),
+        # i.e. uniform over [start, end), without its local-timezone conversions
+        # (slow in forked processes such as Spark python workers on macOS).
+        days = (end - start).days
+        if days <= 0:
+            return start
+        return start + timedelta(days=self.generator.random.randrange(days))
