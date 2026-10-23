@@ -14,10 +14,10 @@ class MaskDataFramePipelineBase(ABC):
     """
 
     config: dict[str, Any]
-    col_pipelines: list[ConcordanceTableBase]
+    col_pipelines: list[ConcordanceTableBase | list[ConcordanceTableBase]]
     workers: ClassVar[int] = 1
 
-    concordance_tables: ClassVar[dict[str, dict]] = {}  # unique values in the columns
+    concordance_tables: dict[str, dict]  # clear -> masked values for each column
 
     def __init__(
         self,
@@ -25,6 +25,8 @@ class MaskDataFramePipelineBase(ABC):
         workers: int = 1,
         dtype: ConcordanceTableBase = ConcordanceTableBase,
     ) -> None:
+        self.concordance_tables = {}
+
         # Mapping of output columns to their input columns and serving columns
         self.output_columns_mapping = defaultdict(
             lambda: {"col_name": "", "serving_columns": [], "col_pipeline_index": 0}
@@ -45,21 +47,23 @@ class MaskDataFramePipelineBase(ABC):
                 continue
 
             if isinstance(config, list):
-                pipline_list = []
-                pipe_col_name = config[0]["masking_operation"].col_name
-                for cf in config:
-                    cf_col_name = cf["masking_operation"].col_name
+                if not config:
+                    msg = f"Invalid configuration for column {col_name}: empty list of masking operations"
+                    raise ValueError(msg)
 
+                pipline_list = []
+                for cf in config:
+                    if not isinstance(cf, dict):
+                        msg = f"Invalid configuration for column {col_name}: {cf}"
+                        raise ValueError(msg)  # noqa: TRY004
+
+                    pipline_list.append(dtype(**cf))
+
+                    pipe_col_name = pipline_list[0].masking_operation.col_name
+                    cf_col_name = pipline_list[-1].masking_operation.col_name
                     if cf_col_name != pipe_col_name:
                         msg = f"All masking operations in a list must have the same column name. Expected {pipe_col_name}, got {cf_col_name}"
                         raise ValueError(msg)
-
-                    if isinstance(cf, dict):
-                        pipline_list.append(dtype(**cf))
-                        continue
-
-                    msg = f"Invalid configuration for column {col_name}: {cf}"
-                    raise ValueError(msg)
 
                 self.col_pipelines.append(pipline_list)
 
@@ -81,7 +85,10 @@ class MaskDataFramePipelineBase(ABC):
     def clear_concordance_tables(self) -> None:
         """Clear the concordance tables."""
         for pipeline in self.col_pipelines:
-            pipeline.clear_concordance_table()
+            for pipe in pipeline if isinstance(pipeline, list) else [pipeline]:
+                pipe.clear_concordance_table()
+
+        self.concordance_tables = {}
 
     @staticmethod
     def _get_data_columns_order(data: AnyDataFrame) -> dict:
@@ -96,6 +103,22 @@ class MaskDataFramePipelineBase(ABC):
         concordance_tables: dict[str, dict[str, str]],
     ) -> AnyDataFrame:
         """Substitute the masked values in the original dataframe using the concordance table."""
+
+    @staticmethod
+    @abstractmethod
+    def _get_unique_values(data: AnyDataFrame, col_name: str) -> list:
+        """Return the distinct non-null values of a column.
+
+        Args:
+        ----
+            data: input dataframe
+            col_name (str): column name
+
+        Returns:
+        -------
+            list: distinct non-null values
+
+        """
 
     @staticmethod
     @abstractmethod
@@ -154,6 +177,12 @@ class MaskDataFramePipelineBase(ABC):
     ) -> tuple:
         """Run the pipeline for a column.
 
+        For a list of operations, the masked values of each operation are the input
+        of the next one, and each operation's concordance table is keyed by its own
+        input values. The returned concordance table is the composition of all the
+        mappings for the clear values of the column, merged with the compositions
+        of previous runs.
+
         Args:
         ----
             pipeline (ConcordanceTableBase): pipeline object
@@ -161,44 +190,38 @@ class MaskDataFramePipelineBase(ABC):
 
         Returns:
         -------
-            tuple: concordance table
+            dict: concordance table
 
         """
         if not isinstance(pipeline, list):
             return pipeline(col_data)
 
-        output_concordance_table = {}
+        col_name = pipeline[0].column_name
+        current_values = {
+            v: v for v in self._get_unique_values(col_data, col_name=col_name)
+        }
+
         for pipe in pipeline:
-            # Generate the new concordance table
             new_table = pipe(col_data)
 
-            # Substitute the masked values in the original dataframe
+            # The masked values become the input of the next operation
             col_data = self._substitute_masked_values(
                 col_data, [pipe], {pipe.column_name: new_table}
             )
 
-            # Merge the new concordance table with the previous one
-            new_concordance_values = {
-                k: v
-                for k, v in new_table.items()
-                if k not in output_concordance_table.values()
-            }
-            old_concordance_values = {
-                k: v for k, v in new_table.items() if k not in new_concordance_values
+            current_values = {
+                clear: new_table.get(value, value)
+                for clear, value in current_values.items()
             }
 
-            if old_concordance_values:
-                output_concordance_table = {
-                    k: old_concordance_values.get(v, v)
-                    for k, v in output_concordance_table.items()
-                }
-
-            output_concordance_table = {
-                **output_concordance_table,
-                **new_concordance_values,
-            }
-
-        return output_concordance_table
+        return {
+            **self.concordance_tables.get(col_name, {}),
+            **{
+                clear: masked
+                for clear, masked in current_values.items()
+                if str(clear) != str(masked)
+            },
+        }
 
     def _run_pipelines_serial(self, data: AnyDataFrame) -> None:
         """Run the pipelines for each column serially.

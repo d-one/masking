@@ -24,3 +24,15 @@ Existing modules follow a structured approach to extract, mask, and substitute s
    Replace the original values in the dataset with their corresponding masked values using the concordance table.
 
 The aforementioned apporach is applied column-wise in a pipeline.
+
+### Chaining operations
+
+A column can be configured with a list of operations, which are applied in order:
+
+```python
+config = {"name": [{"masking_operation": op1}, {"masking_operation": op2}]}
+```
+
+- The masked values of each operation are the input of the next one.
+- The concordance table of each operation (including a prescribed `concordance_table`) is keyed by that operation's own input values. For `op2`, these are the masked values produced by `op1`; entries for values `op2` never receives are ignored.
+- The resulting concordance table of the column is the composition of all the mappings: each clear value `x` maps to `op2(op1(x))`.

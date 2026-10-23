@@ -49,6 +49,22 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         super().__init__(configuration, workers, dtype=ConcordanceTable)
 
     @staticmethod
+    def _get_unique_values(data: pd.DataFrame, col_name: str) -> list:
+        """Return the distinct non-null values of a column.
+
+        Args:
+        ----
+            data: input dataframe
+            col_name (str): column name
+
+        Returns:
+        -------
+            list: distinct non-null values
+
+        """
+        return data[col_name].dropna().unique().tolist()
+
+    @staticmethod
     def _filter_data(
         data: pd.DataFrame, col_name: str, necessary_columns: list[str]
     ) -> pd.DataFrame:

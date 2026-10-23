@@ -35,6 +35,12 @@ class ConcordanceTableBase(ABC):
         """
         self.masking_operation = masking_operation
 
+        # Snapshot of the operation's own table, restored when clearing
+        operation_table = getattr(masking_operation, "concordance_table", None)
+        self._initial_operation_table = (
+            dict(operation_table) if isinstance(operation_table, dict) else {}
+        )
+
         if concordance_table is None:
             concordance_table = {}
         self.concordance_table = concordance_table
@@ -89,8 +95,13 @@ class ConcordanceTableBase(ABC):
                 raise ValueError(msg) from e
 
     def clear_concordance_table(self) -> None:
-        """Clear the concordance table."""
+        """Clear the concordance table.
+
+        The masking operation's table is restored to its state at initialization,
+        dropping the values handed over by previous calls.
+        """
         self.concordance_table = {}
+        self.masking_operation.concordance_table = dict(self._initial_operation_table)
 
     @abstractmethod
     def _build_concordance_table(self, data: AnyDataFrame) -> AnyDataFrame:

@@ -662,3 +662,304 @@ class TestRoundtrip:
         for path, _ in result:
             handler._set_leaf(data, path, "MASKED")
         assert all(v == "MASKED" for v in data.values())
+
+
+# ---------------------------------------------------------------------------
+# key normalisation in __init__
+# ---------------------------------------------------------------------------
+
+
+class TestKeyNormalisation:
+    def test_allow_keys_strip_separator_and_whitespace(self):
+        h = MultiNestedDictHandler(allow_keys=[f"{SEP}a{SEP}", "  B "])
+        assert h.allow_keys == ["a", "b"]
+
+    def test_deny_keys_lowercased_when_case_insensitive(self):
+        h = MultiNestedDictHandler(deny_keys=["Secret"])
+        assert h.deny_keys == ["secret"]
+
+    def test_deny_keys_preserved_when_case_sensitive(self):
+        h = MultiNestedDictHandler(deny_keys=[" Secret "], case_sensitive=True)
+        assert h.deny_keys == ["Secret"]
+
+    def test_mixed_str_and_callable_keys_are_split(self):
+        fn = lambda _: True  # noqa: E731
+        h = MultiNestedDictHandler(allow_keys=["a", fn], deny_keys=[fn, "b"])
+        assert h.allow_keys == ["a"]
+        assert h.allow_keys_callable == [fn]
+        assert h.deny_keys == ["b"]
+        assert h.deny_keys_callable == [fn]
+
+    def test_non_str_non_callable_keys_ignored(self):
+        h = MultiNestedDictHandler(allow_keys=[1, None], deny_keys=[2.0])
+        assert h.allow_keys == []
+        assert h.allow_keys_callable == []
+        assert h.deny_keys == []
+        assert h.deny_keys_callable == []
+
+    def test_custom_list_index_and_deny_tag(self):
+        h = MultiNestedDictHandler(
+            list_index={"start": "(", "end": ")"}, deny_tag={"start": "<<", "end": ">>"}
+        )
+        assert h._list_index_to_path(2) == "(2)"
+        assert h._is_list_index("(2)") is True
+        assert h._is_list_index("[2]") is False
+        assert h._deny_path("a") == "<<a>>"
+        assert h._is_denied_path("<<a>>") is True
+        assert h._undeny_path("<<a>>") == "a"
+
+
+# ---------------------------------------------------------------------------
+# _is_skippable / _is_denied
+# ---------------------------------------------------------------------------
+
+
+class TestIsSkippableIsDenied:
+    def test_is_skippable_string_key(self):
+        h = MultiNestedDictHandler(allow_keys=["a"])
+        assert h._is_skippable("a") is True
+        assert h._is_skippable("b") is False
+
+    def test_is_skippable_callable_key(self):
+        h = MultiNestedDictHandler(allow_keys=[lambda k: k.endswith("_id")])
+        assert h._is_skippable("user_id") is True
+        assert h._is_skippable("user") is False
+
+    def test_is_skippable_lowercases_parent_when_case_insensitive(self):
+        h = MultiNestedDictHandler(allow_keys=[f"parent{SEP}child"])
+        assert h._is_skippable("child", parent=" PARENT ") is True
+
+    def test_is_skippable_keeps_parent_case_when_case_sensitive(self):
+        h = MultiNestedDictHandler(
+            allow_keys=[f"Parent{SEP}child"], case_sensitive=True
+        )
+        assert h._is_skippable("child", parent="Parent") is True
+        assert h._is_skippable("child", parent="parent") is False
+
+    def test_is_denied_string_key(self):
+        h = MultiNestedDictHandler(deny_keys=["secret"])
+        assert h._is_denied("secret") is True
+        assert h._is_denied("public") is False
+
+    def test_is_denied_callable_key(self):
+        h = MultiNestedDictHandler(deny_keys=[lambda k: "pw" in k])
+        assert h._is_denied("user_pw") is True
+        assert h._is_denied("user") is False
+
+    def test_is_denied_with_parent(self):
+        h = MultiNestedDictHandler(deny_keys=[f"a{SEP}b"])
+        assert h._is_denied("b", parent="A") is True
+        assert h._is_denied("b", parent="c") is False
+
+    def test_allow_keys_do_not_deny_and_vice_versa(self):
+        h = MultiNestedDictHandler(allow_keys=["a"], deny_keys=["b"])
+        assert h._is_denied("a") is False
+        assert h._is_skippable("b") is False
+
+    def test_allow_takes_precedence_over_deny(self):
+        h = MultiNestedDictHandler(allow_keys=["a"], deny_keys=["a"])
+        assert list(h._find_leaf_path({"a": "v"})) == []
+        assert list(h._find_leaf_path_and_value({"a": "v"})) == []
+
+
+# ---------------------------------------------------------------------------
+# _has_match_str: additional cases
+# ---------------------------------------------------------------------------
+
+
+class TestHasMatchStrExtra:
+    def test_deny_mode_uses_deny_keys(self):
+        h = MultiNestedDictHandler(allow_keys=["a"], deny_keys=["b"])
+        assert h._has_match_str("b", mode="deny") is True
+        assert h._has_match_str("a", mode="deny") is False
+
+    def test_exact_match_with_parent(self):
+        h = MultiNestedDictHandler(allow_keys=[f"a{SEP}b"])
+        assert h._has_match_str("b", parent="a") is True
+        assert h._has_match_str("b", parent="x") is False
+
+    def test_star_prefix_does_not_match_other_suffix(self):
+        h = MultiNestedDictHandler(allow_keys=[f"*{SEP}key"])
+        assert h._has_match_str("other", parent="anything") is False
+
+    def test_star_prefix_multi_part_suffix(self):
+        h = MultiNestedDictHandler(allow_keys=[f"*{SEP}b{SEP}c"])
+        assert h._has_match_str("c", parent=f"x{SEP}b") is True
+        assert h._has_match_str("c", parent=f"x{SEP}y") is False
+
+    def test_star_suffix_does_not_match_other_prefix(self):
+        h = MultiNestedDictHandler(allow_keys=[f"root{SEP}*"])
+        assert h._has_match_str("other") is False
+
+    def test_leading_bracket_wildcard(self):
+        h = MultiNestedDictHandler(allow_keys=[f"[*]{SEP}name"])
+        assert h._has_match_str("name", parent="[0]") is True
+        assert h._has_match_str("name", parent="[7]") is True
+        assert h._has_match_str("age", parent="[0]") is False
+
+    def test_leading_bracket_wildcard_via_find_leaf(self):
+        h = MultiNestedDictHandler(allow_keys=[f"[*]{SEP}name"])
+        data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 31}]
+        assert list(h._find_leaf_path(data)) == [f"[0]{SEP}age", f"[1]{SEP}age"]
+
+    def test_no_keys_never_matches(self, handler):
+        assert handler._has_match_str("a") is False
+        assert handler._has_match_str("a", mode="deny") is False
+
+    @pytest.mark.xfail(
+        strict=True,
+        reason="Bug: '[*]' wildcards not at the start of the key never match, as "
+        "the key must start with the current key path to be considered.",
+    )
+    def test_inner_bracket_wildcard_skips_key(self):
+        h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]{SEP}name"])
+        data = {"items": [{"name": "Alice", "age": 30}]}
+        assert list(h._find_leaf_path(data)) == [f"items{SEP}[0]{SEP}age"]
+
+
+# ---------------------------------------------------------------------------
+# _has_match_callable: additional cases
+# ---------------------------------------------------------------------------
+
+
+class TestHasMatchCallableExtra:
+    def test_no_callables(self, handler):
+        assert handler._has_match_callable("a", mode="allow") is False
+        assert handler._has_match_callable("a", mode="deny") is False
+
+    def test_any_callable_matching_is_enough(self):
+        h = MultiNestedDictHandler(allow_keys=[lambda _: False, lambda _: True])
+        assert h._has_match_callable("a") is True
+
+    def test_deny_with_parent(self):
+        received = []
+        h = MultiNestedDictHandler(deny_keys=[received.append])
+        h._has_match_callable("child", parent="parent", mode="deny")
+        assert received == [f"parent{SEP}child"]
+
+
+# ---------------------------------------------------------------------------
+# _parse_line / _dump_line: additional cases
+# ---------------------------------------------------------------------------
+
+
+class TestParseDumpExtra:
+    def test_parse_json_list_string(self):
+        assert MultiNestedDictHandler._parse_line("[1, 2]") == [1, 2]
+
+    def test_parse_allows_control_characters(self):
+        assert MultiNestedDictHandler._parse_line('{"a": "x\ny"}') == {"a": "x\ny"}
+
+    def test_parse_invalid_json_returns_input(self):
+        assert MultiNestedDictHandler._parse_line('{"a": ') == '{"a": '
+
+    def test_parse_json_scalar_string(self):
+        assert MultiNestedDictHandler._parse_line("42") == 42
+
+    def test_dump_keeps_non_ascii(self):
+        assert (
+            MultiNestedDictHandler._dump_line({"city": "Zürich"})
+            == '{"city": "Zürich"}'
+        )
+
+    @pytest.mark.parametrize("value", [None, 1.5, True, object()])
+    def test_dump_unsupported_types_raise(self, value):
+        with pytest.raises(TypeError, match="Unsupported type"):
+            MultiNestedDictHandler._dump_line(value)
+
+    def test_parse_dump_roundtrip(self):
+        data = {"a": [1, {"b": None}], "c": "ü"}
+        dumped = MultiNestedDictHandler._dump_line(data)
+        assert MultiNestedDictHandler._parse_line(dumped) == data
+
+
+# ---------------------------------------------------------------------------
+# _get_leaf / _set_leaf: error paths
+# ---------------------------------------------------------------------------
+
+
+class TestGetSetLeafErrors:
+    def test_get_leaf_list_index_out_of_range(self, handler):
+        with pytest.raises(KeyError, match="not found"):
+            handler._get_leaf({"a": ["x"]}, f"a{SEP}[5]")
+
+    def test_get_leaf_through_leaf_raises(self, handler):
+        with pytest.raises(KeyError):
+            handler._get_leaf({"a": None}, f"a{SEP}b")
+
+    def test_get_leaf_top_level_list(self, handler):
+        assert handler._get_leaf(["x", {"a": "y"}], f"[1]{SEP}a") == "y"
+
+    def test_set_leaf_list_index_out_of_range(self, handler):
+        with pytest.raises(KeyError, match="not found"):
+            handler._set_leaf({"a": ["x"]}, f"a{SEP}[5]", "v")
+
+    def test_set_leaf_on_string_raises(self, handler):
+        with pytest.raises(KeyError):
+            handler._set_leaf({"a": "text"}, f"a{SEP}b", "v")
+
+    def test_set_leaf_top_level_list(self, handler):
+        data = ["x", "y"]
+        assert handler._set_leaf(data, "[1]", "Y") == ["x", "Y"]
+
+
+# ---------------------------------------------------------------------------
+# deny handling in generators
+# ---------------------------------------------------------------------------
+
+
+class TestDenyGenerators:
+    def test_find_leaf_path_and_value_denied_yields_subtree(self):
+        h = MultiNestedDictHandler(deny_keys=["a"])
+        assert list(h._find_leaf_path_and_value({"a": {"x": 1}, "b": 2})) == [
+            ("deny<a>", {"x": 1}),
+            ("b", 2),
+        ]
+
+    def test_find_leaf_path_and_value_skips_allowed(self):
+        h = MultiNestedDictHandler(allow_keys=["a"])
+        assert list(h._find_leaf_path_and_value({"a": 1, "b": 2})) == [("b", 2)]
+
+    def test_find_leaf_path_and_value_unsupported_type(self, handler):
+        with pytest.raises(TypeError, match="not supported"):
+            list(handler._find_leaf_path_and_value({"a": object()}))
+
+    def test_denied_nested_inside_list(self):
+        h = MultiNestedDictHandler(deny_keys=[f"*{SEP}secret"])
+        data = {"items": [{"secret": "s", "name": "n"}]}
+        mask_gen, deny_gen = h._get_undenied_and_denied_paths(data)
+        assert list(mask_gen) == [f"items{SEP}[0]{SEP}name"]
+        assert list(deny_gen) == [f"items{SEP}[0]{SEP}secret"]
+
+    def test_generators_are_consumed_once(self, handler):
+        mask_gen, _ = handler._get_undenied_and_denied_paths({"a": 1})
+        assert list(mask_gen) == ["a"]
+        assert list(mask_gen) == []
+
+    def test_case_insensitive_key_matching_in_data(self):
+        h = MultiNestedDictHandler(deny_keys=["secret"])
+        _, deny_gen = h._get_undenied_and_denied_paths({" SECRET ": "v"})
+        assert list(deny_gen) == [" SECRET "]
+
+
+# ---------------------------------------------------------------------------
+# batch with parent
+# ---------------------------------------------------------------------------
+
+
+class TestBatchExtra:
+    def test_find_leaf_path_batch_with_parent(self, handler):
+        assert list(handler._find_leaf_path_batch([{"a": 1}, "x"], parent="p")) == [
+            f"p{SEP}a",
+            "p",
+        ]
+
+    def test_find_leaf_path_and_value_batch_with_parent(self, handler):
+        result = list(
+            handler._find_leaf_path_and_value_batch([{"a": 1}, None], parent="p")
+        )
+        assert result == [(f"p{SEP}a", 1), ("p", "")]
+
+    def test_empty_batch(self, handler):
+        assert list(handler._find_leaf_path_batch([])) == []
+        assert list(handler._find_leaf_path_and_value_batch([])) == []

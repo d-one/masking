@@ -1,4 +1,5 @@
 import hashlib
+import hmac
 
 import pytest
 from masking.utils.hash import hash_string
@@ -210,3 +211,49 @@ def test_hash_string(inputs_output: tuple) -> None:
 
     assert isinstance(output, str), "Output should be a string"
     assert output == expected_output, "Output should be the expected hash"
+
+
+def test_hash_string_none_returns_none() -> None:
+    assert hash_string(None, "secret") is None
+
+
+@pytest.mark.parametrize("data", [123, 1.5, b"line", ["line"], {"a": "b"}])
+def test_hash_string_non_string_raises(data) -> None:
+    with pytest.raises(AssertionError, match="Make sure the type is str"):
+        hash_string(data, "secret")
+
+
+def test_hash_string_defaults_to_hmac_sha256_utf8() -> None:
+    expected = hmac.new(b"secret", msg=b"line", digestmod=hashlib.sha256).hexdigest()
+    assert hash_string("line", "secret") == expected
+    assert len(hash_string("line", "secret")) == 64
+
+
+def test_hash_string_is_deterministic() -> None:
+    assert hash_string("line", "secret") == hash_string("line", "secret")
+
+
+def test_hash_string_depends_on_secret_and_data() -> None:
+    base = hash_string("line", "secret")
+    assert hash_string("line", "other") != base
+    assert hash_string("line2", "secret") != base
+
+
+def test_hash_string_empty_inputs() -> None:
+    expected = hmac.new(b"", msg=b"", digestmod=hashlib.sha256).hexdigest()
+    assert hash_string("", "") == expected
+
+
+def test_hash_string_non_ascii_with_encoding() -> None:
+    expected = hmac.new(
+        "sécret".encode("latin-1"),
+        msg="Zürich".encode("latin-1"),
+        digestmod=hashlib.sha256,
+    ).hexdigest()
+    assert hash_string("Zürich", "sécret", text_encoding="latin-1") == expected
+    assert hash_string("Zürich", "sécret", text_encoding="utf-8") != expected
+
+
+def test_hash_string_unencodable_raises() -> None:
+    with pytest.raises(UnicodeEncodeError):
+        hash_string("€", "secret", text_encoding="ascii")
