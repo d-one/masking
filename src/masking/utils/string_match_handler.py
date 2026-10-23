@@ -2,8 +2,9 @@ import datetime
 import re
 from typing import ClassVar
 
-from dateparser import parse
 from presidio_analyzer import Pattern, PatternRecognizer
+
+from masking.utils.date_parsing import parse_date
 
 
 class StringMatchHandler:
@@ -74,7 +75,7 @@ class StringMatchHandler:
 
         try:
             # Parse the line as a date
-            date = parse(line)
+            date = parse_date(line)
         except Exception:
             return patterns
 

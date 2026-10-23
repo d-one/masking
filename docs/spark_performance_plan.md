@@ -50,6 +50,7 @@ Key takeaway: the operations already use Arrow. The dominant costs are the Pytho
 | ----- | ---------------------------------------------------------- | --------------------- | --------------------------------- | ------ |
 | 0     | Baseline, benchmark script, Spark test harness             | Spark                 | Required for all later phases     | Low    |
 | 1     | Faster uniqueness check (set of masked values)             | all                   | Very high for fake ops            | Low    |
+| 1b    | Per-row hotspots: fake-name sampling, `dateparser`         | all                   | Very high for fake/date ops       | Low    |
 | 2     | Replace row-wise `apply(axis=1)` / `iter_rows`             | pandas, Spark, Polars | ~1.7× in masking step             | Low    |
 | 3     | Substitution: `useArrow=True` → broadcast join             | Spark                 | 25%+, scales with table size      | Medium |
 | 4     | Arrow-based concordance collection; drop useless `cache()` | Spark                 | Medium; fixes latent ordering bug | Low    |
@@ -100,6 +101,24 @@ ______________________________________________________________________
    - performance check: 50k unique values in under 1s for a trivial `_mask_line`. Mark it `@pytest.mark.slow` if a marker is introduced.
 
 **Acceptance criteria**: all existing tests pass; Phase 0 equivalence tests unchanged; fake-op benchmark improves by orders of magnitude for ≥50k distinct values.
+
+**Result**: 50k unique values: 14.44s → 0.06s. `FakeNameBase._SEEN_INPUTS` also switched to an O(1) `RandomSet` (it used `random.choice(list(set))`).
+
+______________________________________________________________________
+
+## Phase 1b — Per-row hotspots (found by profiling)
+
+Profiling the per-partition code showed costs that dominate before the uniqueness check matters:
+
+- `FakeNameProvider` called `DataFrame.sample(n=1, random_state=randint(0, 1000))` for every name (~7 ms/call). It also capped the output to 1001 distinct last/first names.
+- `dateparser.parse` (used by `FakeDate`, `YYYYHashOperation`, `StringMatchOperation`) costs 1–6 ms/call because it tries every locale.
+
+### Tasks
+
+1. `FakeNameProvider`: pre-compute pandas arrays of names once and pick with `generator.random.randrange`. Keep pandas arrays (not lists) because they unpickle ~25× faster, which happens for every Spark task. Exclude the source DataFrames from pickling and reload them lazily.
+1. `masking.utils.date_parsing.parse_date`: ISO strings are parsed with `datetime.fromisoformat` (verified identical to `dateparser`), everything else goes through an LRU-cached `dateparser.parse`.
+
+**Result** (pandas op, 10k distinct values): fake_name 77.1s → 1.35s, fake_date 13.7s → 1.56s, string_match with repeating names 52.6s → 5.05s.
 
 ______________________________________________________________________
 

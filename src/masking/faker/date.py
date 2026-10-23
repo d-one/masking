@@ -1,8 +1,9 @@
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, ClassVar
 
-from dateparser import parse
 from faker.generator import Generator
+
+from masking.utils.date_parsing import parse_date
 
 from .faker import FakeProvider
 
@@ -45,7 +46,7 @@ class FakeDateProvider(FakeProvider):
             datetime:
 
         """
-        return parse(date_str)
+        return parse_date(date_str)
 
     def get_preserved_ranges(self, real_date: datetime) -> dict[str, str]:
         """Get the preserved ranges for the real date.

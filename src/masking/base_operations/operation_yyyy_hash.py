@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from dateparser import parse
-
 from masking.base_operations.operation_hash import HashOperationBase
+from masking.utils.date_parsing import parse_date
 
 
 class YYYYHashOperationBase(HashOperationBase):
@@ -30,7 +29,7 @@ class YYYYHashOperationBase(HashOperationBase):
 
         # Extract the year from the date
         try:
-            line_date = parse(line)
+            line_date = parse_date(line)
             year = line_date.year
         except Exception as e:
             msg = f"Could not parse date from line: {line}. Error: {e}"

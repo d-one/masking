@@ -25,6 +25,7 @@ class FakeNameProvider(FakeProvider):
 
         self.firstnames = self._load_firstnames()
         self.lastnames = self._load_lastnames()
+        self._build_name_lists()
 
         self._from_file = from_file or True
 
@@ -40,6 +41,43 @@ class FakeNameProvider(FakeProvider):
         if value:
             self.firstnames = self._load_firstnames()
             self.lastnames = self._load_lastnames()
+            self._build_name_lists()
+
+    def _build_name_lists(self) -> None:
+        """Pre-compute the arrays of names to sample from.
+
+        Pandas arrays are kept instead of python lists: they are much faster to
+        (un)pickle, which happens for every Spark task.
+        """
+        male = self.firstnames["male_count"].notna()
+        female = self.firstnames["female_count"].notna()
+        names = self.firstnames["first_name"]
+
+        self._lastname_list = self.lastnames["LASTNAME"].array
+        self._firstname_list = names.array
+        self._male_firstname_list = names[male & ~female].array
+        self._female_firstname_list = names[~male & female].array
+        self._nonbinary_firstname_list = names[male & female].array
+
+    def _choice(self, names: pd.api.extensions.ExtensionArray) -> str:
+        return names[self.generator.random.randrange(len(names))]
+
+    def __getstate__(self) -> dict:
+        # The source DataFrames are not needed once the name lists are built:
+        # dropping them keeps the pickled payload (e.g. Spark tasks) small.
+        state = self.__dict__.copy()
+        state.pop("firstnames", None)
+        state.pop("lastnames", None)
+        return state
+
+    def __getattr__(self, name: str) -> pd.DataFrame:
+        if name == "firstnames":
+            self.firstnames = self._load_firstnames()
+            return self.firstnames
+        if name == "lastnames":
+            self.lastnames = self._load_lastnames()
+            return self.lastnames
+        raise AttributeError(name)
 
     @staticmethod
     def _load_firstnames() -> pd.DataFrame:
@@ -71,9 +109,7 @@ class FakeNameProvider(FakeProvider):
         """
         if self.from_file:
             # Generate a random last name from the loaded DataFrame
-            return self.lastnames.sample(
-                n=1, random_state=self.generator.random.randint(0, 1000)
-            ).iloc[0]["LASTNAME"]
+            return self._choice(self._lastname_list)
 
         return self.generator.last_name()
 
@@ -87,9 +123,7 @@ class FakeNameProvider(FakeProvider):
         """
         if self.from_file:
             # Generate a random first name from the loaded DataFrame
-            return self.firstnames.sample(
-                n=1, random_state=self.generator.random.randint(0, 1000)
-            ).iloc[0]["first_name"]
+            return self._choice(self._firstname_list)
 
         return self.generator.first_name()
 
@@ -103,13 +137,7 @@ class FakeNameProvider(FakeProvider):
         """
         if self.from_file:
             # Generate a random first name from the loaded DataFrame
-            male_firstnames = self.firstnames[
-                (self.firstnames["male_count"].notna())
-                & (self.firstnames["female_count"].isna())
-            ]
-            return male_firstnames.sample(
-                n=1, random_state=self.generator.random.randint(0, len(male_firstnames))
-            ).iloc[0]["first_name"]
+            return self._choice(self._male_firstname_list)
 
         return self.generator.first_name_male()
 
@@ -123,14 +151,7 @@ class FakeNameProvider(FakeProvider):
         """
         if self.from_file:
             # Generate a random first name from the loaded DataFrame
-            female_firstnames = self.firstnames[
-                (self.firstnames["male_count"].isna())
-                & (self.firstnames["female_count"].notna())
-            ]
-            return female_firstnames.sample(
-                n=1,
-                random_state=self.generator.random.randint(0, len(female_firstnames)),
-            ).iloc[0]["first_name"]
+            return self._choice(self._female_firstname_list)
 
         return self.generator.first_name_female()
 
@@ -143,13 +164,7 @@ class FakeNameProvider(FakeProvider):
 
         """
         if self.from_file:
-            nb_firstnames = self.firstnames[
-                (self.firstnames["female_count"].notna())
-                & (self.firstnames["male_count"].notna())
-            ]
-            return nb_firstnames.sample(
-                n=1, random_state=self.generator.random.randint(0, len(nb_firstnames))
-            ).iloc[0]["first_name"]
+            return self._choice(self._nonbinary_firstname_list)
 
         return self.generator.first_name_nonbinary()
 
