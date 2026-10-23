@@ -18,7 +18,8 @@ class Operation(ABC):
     MAX_RETRY = 1000
 
     # Set of the masked values in the concordance table, for O(1) uniqueness checks.
-    # It is rebuilt whenever the concordance table is replaced or changed externally.
+    # It is rebuilt when the table is cast, updated, replaced or changes size; code
+    # overwriting existing entries in place must set _masked_values to None.
     _masked_values: set | None = None
     _masked_values_source: dict | None = None
     _masked_values_size: int = -1
@@ -128,6 +129,7 @@ class Operation(ABC):
     def _cast_concordance_table(self) -> None:
         """Cast the concordance table to a dictionary."""
         self.concordance_table = self.cast_concordance_table(self.concordance_table)
+        self._masked_values = None
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.
@@ -151,6 +153,7 @@ class Operation(ABC):
 
         self._cast_concordance_table()
         self.concordance_table.update(concordance_table)
+        self._masked_values = None
 
     def _get_masked_values(self) -> set:
         """Return the set of masked values of the concordance table.

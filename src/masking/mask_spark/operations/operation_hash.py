@@ -1,3 +1,4 @@
+import hashlib
 from collections.abc import Callable
 
 from pyspark.sql import Column, DataFrame
@@ -7,14 +8,16 @@ from pyspark.sql.types import StringType
 from masking.mask.operations.operation_hash import HashOperation as HashOperationPandas
 from masking.mask_spark.operations.operation import SparkOperation
 
-# Spark functions equivalent to hashlib's hexdigest of the UTF-8 encoded string
-_NATIVE_HASHES: dict[str, Callable[[Column], Column]] = {
-    "md5": F.md5,
-    "sha1": F.sha1,
-    "sha224": lambda c: F.sha2(c, 224),
-    "sha256": lambda c: F.sha2(c, 256),
-    "sha384": lambda c: F.sha2(c, 384),
-    "sha512": lambda c: F.sha2(c, 512),
+# Spark functions equivalent to hashlib's hexdigest of the UTF-8 encoded string.
+# Keyed by the hashlib constructors themselves: custom callables (e.g. wrapping a
+# constructor to add a pepper) must keep using python.
+_NATIVE_HASHES: dict[Callable, Callable[[Column], Column]] = {
+    hashlib.md5: F.md5,
+    hashlib.sha1: F.sha1,
+    hashlib.sha224: lambda c: F.sha2(c, 224),
+    hashlib.sha256: lambda c: F.sha2(c, 256),
+    hashlib.sha384: lambda c: F.sha2(c, 384),
+    hashlib.sha512: lambda c: F.sha2(c, 512),
 }
 
 
@@ -42,10 +45,5 @@ class HashOperation(SparkOperation, HashOperationPandas):
         if not isinstance(data.schema[self.col_name].dataType, StringType):
             return None
 
-        try:
-            name = self.hash_function().name
-        except Exception:
-            return None
-
-        native = _NATIVE_HASHES.get(name)
+        native = _NATIVE_HASHES.get(self.hash_function)
         return None if native is None else native(F.col(self.col_name))

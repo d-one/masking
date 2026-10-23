@@ -29,9 +29,20 @@ def test_native_hash_matches_hashlib(spark: SparkSession, algorithm: str) -> Non
         ({"secret": "s"}, "c string", ["abc"]),
         ({"concordance_table": {"abc": "X"}}, "c string", ["abc", "def"]),
         ({"hash_function": hashlib.sha3_256}, "c string", ["abc"]),
+        (
+            {"hash_function": lambda data=b"": hashlib.sha256(b"pepper" + data)},
+            "c string",
+            ["abc"],
+        ),
         ({}, "c int", [1, 2]),
     ],
-    ids=["secret", "concordance_table", "unsupported_algorithm", "int_column"],
+    ids=[
+        "secret",
+        "concordance_table",
+        "unsupported_algorithm",
+        "custom_callable",
+        "int_column",
+    ],
 )
 def test_python_fallback(
     spark: SparkSession, kwargs: dict, schema: str, values: list

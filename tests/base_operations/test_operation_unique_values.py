@@ -87,3 +87,13 @@ def test_random_set() -> None:
     while len(s):
         s.remove(s.choice())
     assert not s
+
+
+def test_overwritten_entry_is_respected() -> None:
+    op = _UniqueOp(["a", "target", "b"])
+    assert op._check_mask_line("x") == "a"
+
+    # Same table length, different masked value
+    op.update_concordance_table({"x": "target"})
+    op._values = itertools.cycle(["target", "a"])
+    assert op._check_mask_line("y") == "a"
