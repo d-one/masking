@@ -3,12 +3,13 @@ from typing import ClassVar
 
 from masking.base_operations.operation_fake import FakerOperation
 from masking.faker.name import FakeNameProvider
+from masking.utils.random_set import RandomSet
 
 
 class FakeNameBase(FakerOperation):
     """Mask a column with fake name data."""
 
-    _SEEN_INPUTS: ClassVar[set[str]] = set()
+    _SEEN_INPUTS: ClassVar[RandomSet] = RandomSet()
 
     def __init__(  # noqa: PLR0913
         self,
@@ -111,6 +112,6 @@ class FakeNameBase(FakerOperation):
         if to_generate or not self._SEEN_INPUTS:
             return self._mask_line_generate()
 
-        masked = random.choice(list(self._SEEN_INPUTS))  # noqa: S311
+        masked = self._SEEN_INPUTS.choice()
         self._SEEN_INPUTS.remove(masked)
         return masked

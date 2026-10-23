@@ -15,6 +15,12 @@ class Operation(ABC):
 
     MAX_RETRY = 1000
 
+    # Set of the masked values in the concordance table, for O(1) uniqueness checks.
+    # It is rebuilt whenever the concordance table is replaced or changed externally.
+    _masked_values: set | None = None
+    _masked_values_source: dict | None = None
+    _masked_values_size: int = -1
+
     def __init__(
         self,
         col_name: str,
@@ -155,6 +161,25 @@ class Operation(ABC):
         self._cast_concordance_table()
         self.concordance_table.update(concordance_table)
 
+    def _get_masked_values(self) -> set:
+        """Return the set of masked values of the concordance table.
+
+        Returns
+        -------
+            set: masked values
+
+        """
+        table = self.concordance_table
+        if (
+            self._masked_values is None
+            or self._masked_values_source is not table
+            or self._masked_values_size != len(table)
+        ):
+            self._masked_values = set(table.values())
+            self._masked_values_source = table
+            self._masked_values_size = len(table)
+        return self._masked_values
+
     @abstractmethod
     def _mask_line(self, line: str) -> str:
         """Mask a single line.
@@ -195,14 +220,17 @@ class Operation(ABC):
         if line in self.concordance_table:
             return self.concordance_table[line]
 
+        masked_values = self._get_masked_values()
         masked = self._mask_line(
             line=line, additional_values=additional_values, **kwargs
         )
         for _ in range(self.MAX_RETRY):
-            if masked not in self.concordance_table.values():
+            if masked not in masked_values:
                 # Update the concordance table with the new value, if unique masked values are required
                 if self._needs_unique_values:
                     self.concordance_table[line] = masked
+                    masked_values.add(masked)
+                    self._masked_values_size = len(self.concordance_table)
                 return masked
 
             masked = self._mask_line(
