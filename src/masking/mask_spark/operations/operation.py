@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 
 import pandas as pd
-from pyspark.sql import DataFrame
+from pyspark.sql import Column, DataFrame
 from pyspark.sql.types import StringType, StructField, StructType
 
 from masking.base_operations.operation import Operation
@@ -15,6 +15,23 @@ class SparkOperation(Operation):
     ) -> pd.Series | pd.DataFrame:
         return super(SparkOperation, self)._mask_data(data)  # noqa: UP008
 
+    def _native_mask_expression(self, data: DataFrame) -> Column | None:  # noqa: ARG002, PLR6301
+        """Return a native Spark expression equivalent to the masking, if any.
+
+        Operations that can be expressed with Spark functions override this method
+        to avoid running python code on the executors.
+
+        Args:
+        ----
+            data (DataFrame): input dataframe
+
+        Returns:
+        -------
+            Column | None: masked column expression, None to mask with python
+
+        """
+        return None
+
     def _mask_data(self, data: DataFrame) -> DataFrame:
         """Mask the data.
 
@@ -27,6 +44,9 @@ class SparkOperation(Operation):
             DataFrame: dataframe with masked column
 
         """
+        native = self._native_mask_expression(data)
+        if native is not None:
+            return data.withColumn(self.col_name, native)
 
         # Map every partition of the dataframe to the _mask_data_pandas_ function
         def mask_data_partition(
