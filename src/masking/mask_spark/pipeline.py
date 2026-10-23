@@ -6,6 +6,7 @@ from pyspark.sql.types import StringType
 
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
 from masking.base_pipeline.pipeline import MaskDataFramePipelineBase
+from masking.utils.spark_utils import spark_df_to_dict
 from masking.utils.string_handler import generate_unique_name
 
 
@@ -23,37 +24,24 @@ class ConcordanceTable(ConcordanceTableBase):
 
         """
         try:
-            data = (
-                self.masking_operation(
-                    data.select(*[
-                        col(self.column_name).alias("clear_values"),
-                        col(self.column_name),
-                        *[
-                            col(c)
-                            for c in self.serving_columns
-                            if c != self.column_name
-                        ],
-                    ])
-                )
-                .withColumnRenamed(self.column_name, "masked_values")
-                .cache()
-            )
+            masked = self.masking_operation(
+                data.select(*[
+                    col(self.column_name).alias("clear_values"),
+                    col(self.column_name),
+                    *[col(c) for c in self.serving_columns if c != self.column_name],
+                ])
+            ).withColumnRenamed(self.column_name, "masked_values")
 
-            return (
-                data.filter(
+            return spark_df_to_dict(
+                masked.filter(
                     col("clear_values").cast("string")
                     != col("masked_values").cast("string")
                 )
-                .select("clear_values", "masked_values")
-                .rdd.collectAsMap()
             )
 
         except Exception as e:
             msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
             raise ValueError(msg) from e
-
-        finally:
-            data.unpersist()
 
 
 class MaskDataFramePipeline(MaskDataFramePipelineBase):

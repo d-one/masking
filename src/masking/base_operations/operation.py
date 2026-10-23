@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from pyspark.sql import DataFrame
 
+from masking.utils.spark_utils import spark_df_to_dict
+
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
 AnyDataFrame = pd.DataFrame | DataFrame
 
@@ -105,18 +107,7 @@ class Operation(ABC):
         if isinstance(concordance_table, DataFrame):
             # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
             try:
-                clear_values = (
-                    concordance_table.select("clear_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-                masked_values = (
-                    concordance_table.select("masked_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-
-                return dict(zip(clear_values, masked_values, strict=False))
+                return spark_df_to_dict(concordance_table)
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e

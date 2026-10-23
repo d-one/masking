@@ -1,6 +1,6 @@
 """Equivalence tests between the pandas and the Spark pipelines."""
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from types import SimpleNamespace
 
 import pandas as pd
@@ -169,11 +169,22 @@ def test_spark_fake_invariants(
     _assert_fake_invariants(clear_data[column], out[column], unique=False)
 
 
+@pytest.fixture()
+def _no_partition_coalescing(spark: SparkSession) -> Iterator[None]:
+    """Keep all shuffle partitions, so that masking runs on many partitions."""
+    key = "spark.sql.adaptive.coalescePartitions.enabled"
+    previous = spark.conf.get(key)
+    spark.conf.set(key, "false")
+    yield
+    spark.conf.set(key, previous)
+
+
 @pytest.mark.xfail(
     strict=True,
     reason="Fake values are only unique per Spark partition (fixed in Phase 6)",
 )
 @pytest.mark.parametrize("config_name", list(FAKE_CONFIGS))
+@pytest.mark.usefixtures("_no_partition_coalescing")
 def test_spark_fake_unique(
     spark: SparkSession, clear_data: pd.DataFrame, config_name: str
 ) -> None:
@@ -186,6 +197,7 @@ def test_spark_fake_unique(
     strict=True,
     reason="Fake values are only unique per Spark partition (fixed in Phase 6)",
 )
+@pytest.mark.usefixtures("_no_partition_coalescing")
 def test_spark_fake_unique_across_partitions(
     spark: SparkSession, dense_dates: pd.DataFrame
 ) -> None:
