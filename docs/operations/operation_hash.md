@@ -39,6 +39,7 @@ ______________________________________________________________________
 - Applies a cryptographic hash function to the input (default is SHA256).
 - If a `secret` is provided, uses it to compute a deterministic keyed hash via `hash_string`.
 - If no `secret` is provided, computes a plain hash of the input.
+- On Spark, the hash is computed with native Spark functions (`md5`, `sha1`, `sha2`) instead of python when no `secret` and no `concordance_table` are given, the column is a string column and the hash function is one of `md5`, `sha1`, `sha224`, `sha256`, `sha384`, `sha512`. The result is identical.
 
 ______________________________________________________________________
 

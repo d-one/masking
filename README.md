@@ -10,6 +10,7 @@ The Masking Package is a Python library designed to provide various masking oper
   - [Local Development](docs/installation.md)
   - [Available Modules](docs/available_modules.md)
   - [Available Operations](docs/operations/operations.md)
+  - [Running on Spark](docs/spark.md)
 
 ## Installation
 

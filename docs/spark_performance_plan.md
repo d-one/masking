@@ -2,6 +2,44 @@
 
 Plan for speeding up the Spark masking pipeline (and, where the code is shared, the pandas and Polars pipelines).
 
+## Status and results
+
+All phases are implemented. Measurements on a laptop (`local[8]`), see [spark.md](spark.md#benchmark) for the benchmark script.
+
+**End to end, 2000 rows / 1000 distinct values, default Spark configuration (total seconds per operation):**
+
+| Operation     | Before | After |
+| ------------- | -----: | ----: |
+| hash_secret   |   3.45 |  0.51 |
+| hash_nosecret |   3.59 |  0.44 |
+| yyyy_hash     |   3.84 |  0.45 |
+| fake_name     |   4.84 |  0.52 |
+| fake_date     |   3.86 |  0.43 |
+| string_match  |   6.30 |  1.24 |
+
+**Per phase:**
+
+| Phase | Change                                     | Measured effect                                                                                     |
+| ----- | ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 1     | Set-based uniqueness check                 | 50k unique values: 14.44s → 0.06s                                                                   |
+| 1b    | Fake-name sampling, `dateparser` fast path | pandas op, 10k values: fake_name 77.1s → 1.35s, fake_date 13.7s → 1.56s, string_match 52.6s → 5.05s |
+| 1b    | Fake dates without timezone round trips    | Spark fake_date batch (~600 rows): 1.6s → 0.017s                                                    |
+| 2     | No row-wise `apply(axis=1)`                | pandas hash, 20k rows: 2.69s → 0.075s                                                               |
+| 3a    | `useArrow=True` substitution UDF           | 1M rows: 0.44s → 0.40s (superseded by 3b)                                                           |
+| 3b    | Broadcast-join substitution                | 1M rows: 1k table 0.36s → 0.24s, 1M table 3.84s → 1.58s (200k table: 0.64s → 0.76s in local mode)   |
+| 4     | No `cache()`, Arrow collection             | build with default config: 4.0s → 0.37s; collecting 200k values: 1.76s → 1.49s                      |
+| 5     | Native hashing                             | hash without secret, 1M rows / 200k distinct: build 1.02s → 0.84s                                   |
+| 6     | Unique fake values across partitions       | correctness fix, no measurable overhead                                                             |
+| 7     | Configuration and docs                     | `maxRecordsPerBatch` 10000 vs 50000: no measurable difference                                       |
+
+**Deviations from the plan:**
+
+- Phase 1b was added after profiling: per-row costs in `FakeNameProvider` (`DataFrame.sample` per call, also capping the output to 1001 distinct names), `dateparser.parse` and Faker's timezone conversions dominated before the uniqueness check did. Timezone conversions are especially slow in forked processes on macOS (PySpark workers).
+- Phase 2 left Polars unchanged: `iter_rows` was already 12–45× faster than pandas' `apply(axis=1)`.
+- Phase 3a's Arrow UDF converts integer batches containing nulls to floats (`'2'` → `'2.0'`). The UDF fallback of Phase 3b therefore uses a plain UDF.
+- Phase 4: the `cache()` in `_build_concordance_table` prevented AQE from coalescing the 200 shuffle partitions after `distinct()`, which was the largest fixed cost for small and medium data.
+- Phase 7: the library does not set any Spark configuration; [spark.md](spark.md) documents the settings that matter.
+
 ## Context
 
 ### Current execution flow (Spark)
