@@ -1,13 +1,122 @@
+from datetime import date
 from typing import Any
 
+import pyarrow as pa
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, udf, when
-from pyspark.sql.types import StringType
+from pyspark.sql.functions import broadcast, coalesce, col, udf, when
+from pyspark.sql.types import (
+    ByteType,
+    DataType,
+    DateType,
+    IntegerType,
+    LongType,
+    ShortType,
+    StringType,
+)
 
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
 from masking.base_pipeline.pipeline import MaskDataFramePipelineBase
 from masking.utils.spark_utils import spark_df_to_dict
 from masking.utils.string_handler import generate_unique_name
+
+# Column types whose Spark cast to string equals python's str() of the collected
+# value, so that a join reproduces dict.get(x, str(x)) exactly.
+_JOIN_KEY_TYPES: dict[type[DataType], tuple[type, pa.DataType]] = {
+    StringType: (str, pa.string()),
+    ByteType: (int, pa.int8()),
+    ShortType: (int, pa.int16()),
+    IntegerType: (int, pa.int32()),
+    LongType: (int, pa.int64()),
+    DateType: (date, pa.date32()),
+}
+
+# Above this size the lookup table is joined with a shuffle instead of broadcast
+BROADCAST_MAX_ROWS = 5_000_000
+
+
+def build_lookup_table(
+    data: DataFrame, c_name: str, table: dict, key_name: str, value_name: str
+) -> DataFrame | None:
+    """Create a Spark DataFrame from the concordance table.
+
+    Args:
+    ----
+        data (DataFrame): input dataframe
+        c_name (str): column to substitute
+        table (dict): concordance table {clear_value: masked_value}
+        key_name (str): name of the key column of the lookup table
+        value_name (str): name of the value column of the lookup table
+
+    Returns:
+    -------
+        DataFrame | None: lookup table, None if the table cannot be joined with the
+            column without changing the result (unsupported column type or keys of
+            a different type).
+
+    """
+    spec = _JOIN_KEY_TYPES.get(type(data.schema[c_name].dataType))
+    if spec is None:
+        return None
+
+    key_type, arrow_type = spec
+    if not all(type(k) is key_type for k in table):
+        return None
+
+    try:
+        arrow_table = pa.table({
+            key_name: pa.array(list(table), arrow_type),
+            value_name: pa.array(list(table.values()), pa.string()),
+        })
+    except (pa.ArrowException, TypeError, OverflowError):
+        return None
+
+    return data.sparkSession.createDataFrame(arrow_table)
+
+
+def substitute_column(data: DataFrame, c_name: str, table: dict) -> DataFrame:
+    """Replace the values of a column with the masked values of the concordance table.
+
+    Values not in the table are cast to string. The substitution is done with a
+    (broadcast) join, falling back to a python UDF when a join could give a
+    different result.
+
+    Args:
+    ----
+        data (DataFrame): input dataframe
+        c_name (str): column to substitute
+        table (dict): concordance table {clear_value: masked_value}
+
+    Returns:
+    -------
+        DataFrame: dataframe with the substituted column
+
+    """
+    key_name = generate_unique_name(f"{c_name}_clear", data.columns)
+    value_name = generate_unique_name(f"{c_name}_masked", [*data.columns, key_name])
+
+    lookup = build_lookup_table(data, c_name, table, key_name, value_name)
+    if lookup is None:
+        # Arrow UDFs go through pandas, which turns integers into floats when a
+        # batch contains nulls: keep the plain UDF to get the original values.
+        masked = udf(lambda x: table.get(x, str(x)), StringType(), useArrow=False)(
+            col(c_name)
+        )
+        return data.withColumn(c_name, when(col(c_name).isNotNull(), masked))
+
+    if len(table) <= BROADCAST_MAX_ROWS:
+        lookup = broadcast(lookup)
+
+    return (
+        data.join(lookup, col(c_name) == col(key_name), "left")
+        .withColumn(
+            c_name,
+            when(
+                col(c_name).isNotNull(),
+                coalesce(col(value_name), col(c_name).cast("string")),
+            ),
+        )
+        .drop(key_name, value_name)
+    )
 
 
 class ConcordanceTable(ConcordanceTableBase):
@@ -126,27 +235,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 else pipeline[0].column_name
             )
             if concordance_tables[c_name]:
-                new_col_name = generate_unique_name(
-                    seed=f"{c_name}_masked", existing_names=data.columns
-                )
-
-                data = (
-                    data.withColumn(
-                        new_col_name,
-                        when(
-                            col(c_name).isNotNull(),
-                            udf(
-                                lambda x, tab=concordance_tables[c_name]: tab.get(
-                                    x, str(x)
-                                ),
-                                StringType(),
-                                useArrow=True,
-                            )(col(c_name)),
-                        ).otherwise(None),
-                    )
-                    .drop(c_name)
-                    .withColumnRenamed(new_col_name, c_name)
-                )
+                data = substitute_column(data, c_name, concordance_tables[c_name])
 
         return data
 
