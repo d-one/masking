@@ -141,7 +141,7 @@ class ConcordanceTable(ConcordanceTableBase):
                 ])
             ).withColumnRenamed(self.column_name, "masked_values")
 
-            return spark_df_to_dict(
+            new_values = spark_df_to_dict(
                 masked.filter(
                     col("clear_values").cast("string")
                     != col("masked_values").cast("string")
@@ -151,6 +151,48 @@ class ConcordanceTable(ConcordanceTableBase):
         except Exception as e:
             msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
             raise ValueError(msg) from e
+
+        if self.masking_operation._needs_unique_values:  # noqa: SLF001
+            return self._resolve_collisions(new_values)
+        return new_values
+
+    def _resolve_collisions(self, new_values: dict) -> dict:
+        """Make the masked values unique across Spark partitions.
+
+        Each Spark task masks its partition with its own copy of the operation, so
+        uniqueness is only guaranteed within a partition. Values colliding with
+        other partitions (or with the existing concordance table) are masked again
+        on the driver.
+
+        Args:
+        ----
+            new_values (dict): masked values collected from all partitions
+
+        Returns:
+        -------
+            dict: masked values, unique across all partitions
+
+        """
+        operation = self.masking_operation
+        accepted = set(operation.concordance_table.values())
+
+        resolved, colliding = {}, []
+        for clear, masked in new_values.items():
+            if masked in accepted:
+                colliding.append(clear)
+            else:
+                accepted.add(masked)
+                resolved[clear] = masked
+
+        if not colliding:
+            return resolved
+
+        # Values already in the concordance table get their existing masked value.
+        # Operations requiring unique values only use the masked column.
+        operation.concordance_table.update(resolved)
+        for clear in colliding:
+            resolved[clear] = operation._check_mask_line(clear, additional_values={})  # noqa: SLF001
+        return resolved
 
 
 class MaskDataFramePipeline(MaskDataFramePipelineBase):

@@ -179,10 +179,6 @@ def _no_partition_coalescing(spark: SparkSession) -> Iterator[None]:
     spark.conf.set(key, previous)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Fake values are only unique per Spark partition (fixed in Phase 6)",
-)
 @pytest.mark.parametrize("config_name", list(FAKE_CONFIGS))
 @pytest.mark.usefixtures("_no_partition_coalescing")
 def test_spark_fake_unique(
@@ -193,10 +189,6 @@ def test_spark_fake_unique(
     _assert_fake_invariants(clear_data[column], out[column])
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Fake values are only unique per Spark partition (fixed in Phase 6)",
-)
 @pytest.mark.usefixtures("_no_partition_coalescing")
 def test_spark_fake_unique_across_partitions(
     spark: SparkSession, dense_dates: pd.DataFrame
@@ -224,3 +216,24 @@ def test_pandas_fake_name_unique(clear_data: pd.DataFrame) -> None:
     config = {"name": {"masking_operation": FakeNamePd(col_name="name")}}
     out, _ = _run_pandas(clear_data, config)
     _assert_fake_invariants(clear_data["name"], out["name"])
+
+
+@pytest.mark.usefixtures("_no_partition_coalescing")
+def test_spark_fake_unique_with_existing_table(
+    spark: SparkSession, dense_dates: pd.DataFrame
+) -> None:
+    first, second = dense_dates["date"].iloc[0], dense_dates["date"].iloc[1]
+    config = {
+        "date": {
+            "masking_operation": FakeDate(
+                col_name="date",
+                preserve=("year", "month"),
+                concordance_table={first: second},
+            )
+        }
+    }
+    out, tables = _run_spark(spark, dense_dates, config, partitions=8)
+
+    assert tables["date"][first] == second
+    assert (out["date"] == second).sum() == 1
+    _assert_fake_invariants(dense_dates["date"], out["date"])
