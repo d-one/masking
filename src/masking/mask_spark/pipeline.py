@@ -152,6 +152,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                                     x, str(x)
                                 ),
                                 StringType(),
+                                useArrow=True,
                             )(col(c_name)),
                         ).otherwise(None),
                     )
