@@ -99,11 +99,11 @@ class TestFromFile:
         provider.from_file = True
         assert len(provider._firstname_list) > 0
 
-    @pytest.mark.xfail(
-        strict=True, reason="Bug: `from_file or True` ignores from_file=False."
-    )
-    def test_from_file_false_in_constructor(self):
-        assert FakeNameProvider(from_file=False).from_file is False
+    def test_from_file_false_in_constructor(self, monkeypatch):
+        provider = FakeNameProvider(from_file=False)
+        monkeypatch.setattr(provider.generator, "last_name", lambda: "GEN_LAST")
+        assert provider.from_file is False
+        assert provider.get_last_name() == "GEN_LAST"
 
 
 class TestPickle:

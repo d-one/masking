@@ -27,7 +27,7 @@ class FakeNameProvider(FakeProvider):
         self.lastnames = self._load_lastnames()
         self._build_name_lists()
 
-        self._from_file = from_file or True
+        self._from_file = True if from_file is None else from_file
 
     @property
     def from_file(self) -> bool:
