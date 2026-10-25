@@ -73,9 +73,6 @@ class TestCall:
             assert value.startswith("80")
             assert value in known_plz
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: _PRESERVED (set of names) is compared with _ADMISSIBLE (dict).",
-    )
-    def test_preserving_everything_returns_input(self):
-        assert FakePLZProvider(ALL)("0000") == "0000"
+    @pytest.mark.parametrize("plz", ["0000", 8001])
+    def test_preserving_everything_returns_input(self, plz):
+        assert FakePLZProvider(ALL)(plz) == str(plz)

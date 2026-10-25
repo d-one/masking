@@ -174,7 +174,7 @@ class FakePLZProvider(FakeProvider):
 
         plz_dict = self.parse_plz(plz)
 
-        if self._PRESERVED == self._ADMISSIBLE:
+        if set(self._ADMISSIBLE.values()) == self._PRESERVED:
             return plz
 
         # Find ranges of admissible values
