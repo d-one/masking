@@ -20,7 +20,7 @@ def v_input_name_and_line(
 def operation_class() -> type:
     class ConcreteOperation(Operation):
         @staticmethod
-        def _mask_line(line: str) -> str:
+        def _mask_line(line: str, **kwargs: dict) -> str:  # noqa: ARG004
             return "masked_" + line
 
         @staticmethod

@@ -163,7 +163,7 @@ def test_check_mask_line_without_concordance_table(
     """Test if the _check_mask_line method returns the correct input for the operation.
 
     If the line is None, the method should return None.
-    If the input is a pd.Series, the method should return the value of the column with the same name as the column name.
+    If the input is a pd.Series (a row), the caller passes the value of the column with the same name as the column name.
 
     Args:
     ----
@@ -182,7 +182,7 @@ def test_check_mask_line_without_concordance_table(
     if isinstance(line, pd.Series):
         expected_line = line[name]
 
-    assert op._check_mask_line(line) == op._mask_line(expected_line)
+    assert op._check_mask_line(expected_line) == op._mask_line(expected_line)
 
 
 def test_check_mask_line_with_concordance_table(
@@ -229,9 +229,12 @@ def test_check_mask_line_with_concordance_table(
         expected_line in vi_input_concordance_table
         and vi_input_concordance_table is not None
     ):
-        assert op._check_mask_line(line) == vi_input_concordance_table[expected_line]
+        assert (
+            op._check_mask_line(expected_line)
+            == vi_input_concordance_table[expected_line]
+        )
         return
 
-    assert op._check_mask_line(line) == create_concrete_operation(name)._mask_line(
-        expected_line
-    )
+    assert op._check_mask_line(expected_line) == create_concrete_operation(
+        name
+    )._mask_line(expected_line)
