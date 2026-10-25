@@ -268,6 +268,9 @@ class MultiNestedDictHandler:
             bool: True if the key is in the allow_keys list, False otherwise
 
         """
+        if not (self.allow_keys or self.allow_keys_callable):
+            return False
+
         p = parent
         if (p is not None) and (not self.case_sensitive):
             p = p.lower().strip()
@@ -290,6 +293,9 @@ class MultiNestedDictHandler:
             bool: True if the key is in the deny_keys list, False otherwise
 
         """
+        if not (self.deny_keys or self.deny_keys_callable):
+            return False
+
         p = parent
         if (p is not None) and (not self.case_sensitive):
             p = p.lower().strip()
