@@ -1,3 +1,4 @@
+import pickle  # noqa: S403
 from unittest.mock import patch
 
 import pytest
@@ -34,14 +35,17 @@ def test_non_unique_values_allowed(op):
     assert op._needs_unique_values is False
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Bug: the lookup table is cached on the instance, so every instance re-reads the file.",
-)
-def test_lookup_table_is_loaded_once():
+def test_lookup_table_is_loaded_once(monkeypatch):
+    monkeypatch.setattr(MedStatsOperationBase, "_MEDSTATS_LOOKUP_TABLE", None)
     with patch.object(
         MedStatsOperationBase, "_get_medstats_lookup_table", return_value={"1": "A"}
     ) as load:
-        MedStatsOperation(col_name="a")
-        MedStatsOperation(col_name="b")
+        first = MedStatsOperation(col_name="a")
+        second = MedStatsOperation(col_name="b")
     assert load.call_count == 1
+    assert first._mask_line("1") == second._mask_line("1") == "A"
+
+
+def test_lookup_table_survives_pickling(op):
+    clone = pickle.loads(pickle.dumps(op))  # noqa: S301
+    assert clone._mask_line("1000") == "VD02"
