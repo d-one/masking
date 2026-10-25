@@ -36,13 +36,11 @@ class FakeNameBase(FakerOperation):
             col_name=col_name, provider=FakeNameProvider(locale=locale), **kwargs
         )
 
-        self.gender = gender
+        self.gender = gender.lower().strip() if isinstance(gender, str) else gender
         valid_genders = {"male", "female", "m", "f", "nonbinary", "nb", None}
         if self.gender not in valid_genders:
             msg = f"Gender variable should be in the following valid values: {valid_genders}. Default is {None}"
             raise ValueError(msg)
-        if self.gender is not None:
-            self.gender = self.gender.lower().strip()
 
         self.name_type = name_type.lower().strip()
         valid_name_types = {"full", "first", "last"}

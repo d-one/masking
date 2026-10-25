@@ -48,7 +48,7 @@ class TestInit:
         assert op.name_type == "full"
         assert op.reuse_existing is True
 
-    @pytest.mark.parametrize("gender", ["x", "M ", "unknown"])
+    @pytest.mark.parametrize("gender", ["x", "m f", "unknown", 1])
     def test_invalid_gender_raises(self, gender):
         with pytest.raises(ValueError, match="Gender"):
             FakeName(col_name="n", gender=gender)
@@ -65,12 +65,11 @@ class TestInit:
         with pytest.raises(ValueError, match="Reuse existing"):
             FakeName(col_name="n", reuse_existing="yes")
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: gender is validated before being lower-cased and stripped.",
+    @pytest.mark.parametrize(
+        ("gender", "expected"), [("Male", "male"), (" F ", "f"), ("NB", "nb")]
     )
-    def test_gender_is_normalized(self):
-        assert FakeName(col_name="n", gender="Male").gender == "male"
+    def test_gender_is_normalized(self, gender, expected):
+        assert FakeName(col_name="n", gender=gender).gender == expected
 
 
 class TestGeneration:
