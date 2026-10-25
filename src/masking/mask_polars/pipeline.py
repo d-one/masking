@@ -111,12 +111,10 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             )
             if concordance_tables[c_name]:
                 tab = concordance_tables[c_name]
+                # Look up the original values: keys keep the column's type
                 data = data.with_columns(
-                    pl.col(c_name)
-                    .cast(pl.Utf8)
-                    .map_elements(
-                        lambda x, t=tab: t.get(x, x) if x is not None else x,
-                        return_dtype=pl.Utf8,
+                    pl.col(c_name).map_elements(
+                        lambda x, t=tab: t.get(x, str(x)), return_dtype=pl.Utf8
                     )
                 )
 

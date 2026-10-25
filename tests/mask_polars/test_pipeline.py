@@ -44,10 +44,10 @@ class TestStaticMethods:
         assert out["a"].to_list() == ["X", "y", None]
         assert out["b"].to_list() == ["x", "x", "x"]
 
-    def test_substitute_casts_to_string(self):
+    def test_substitute_keys_keep_column_type(self):
         data = pl.DataFrame({"a": [1, 2, None]})
         out = MaskDataFramePipeline._substitute_masked_values(
-            data, [table("a")], {"a": {"1": "one"}}
+            data, [table("a")], {"a": {1: "one"}}
         )
         assert out["a"].dtype == pl.Utf8
         assert out["a"].to_list() == ["one", "2", None]
@@ -107,13 +107,10 @@ class TestPipeline:
         out = pipeline(pl.DataFrame({"a": ["x", "y"]}))
         assert out["a"].to_list() == ["X", sha256("y")]
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: the column is cast to string before the lookup, so integer keys never match.",
-    )
     def test_integer_column(self):
         pipeline = MaskDataFramePipeline({
             "p": {"masking_operation": MedStatsOperation(col_name="p")}
         })
         out = pipeline(pl.DataFrame({"p": [1000, 0, None]}))
         assert out["p"].to_list() == ["VD02", "0", None]
+        assert pipeline.concordance_tables == {"p": {1000: "VD02"}}
