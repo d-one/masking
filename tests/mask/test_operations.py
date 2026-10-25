@@ -175,15 +175,13 @@ class TestPresidioOperations:
             {"c": "mail <EMAIL_ADDRESS>", "n": "hi"}
         ]
 
-    @pytest.mark.xfail(
-        strict=True, reason="Bug: series input is indexed by the column name."
-    )
     def test_mask_dict_series(self, blank_analyzer):
         line = json.dumps({"c": f"mail {EMAIL}"})
         out = MaskDictOperation(col_name="j", analyzer=blank_analyzer)(
-            pd.Series([line])
+            pd.Series([line], index=[3])
         )
         assert [json.loads(v) for v in out] == [{"c": "mail <EMAIL_ADDRESS>"}]
+        assert out.index.tolist() == [3]
 
 
 class TestStringMatchOperations:
