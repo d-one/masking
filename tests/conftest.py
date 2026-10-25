@@ -1,6 +1,7 @@
 import pytest
 import spacy
 from masking.utils.entity_detection import PresidioMultilingualAnalyzer
+from presidio_analyzer import Pattern, PatternRecognizer
 
 
 # Lightweight blank spaCy pipelines: no model download or NER component required.
@@ -13,6 +14,30 @@ def blank_models() -> dict[str, spacy.language.Language]:
 @pytest.fixture(scope="session")
 def blank_analyzer(blank_models):
     return PresidioMultilingualAnalyzer(models=blank_models).analyzer
+
+
+# Analyzer detecting CODE_WORD ("zebra") only in its last supported language.
+@pytest.fixture(scope="session")
+def last_language_analyzer(blank_models):
+    analyzer = PresidioMultilingualAnalyzer(models=blank_models).analyzer
+    *others, last = analyzer.supported_languages
+    for language in others:
+        # Presidio requires a recognizer for each requested entity and language
+        analyzer.registry.add_recognizer(
+            PatternRecognizer(
+                supported_entity="CODE_WORD",
+                supported_language=language,
+                patterns=[Pattern("never", r"(?!)", 1.0)],
+            )
+        )
+    analyzer.registry.add_recognizer(
+        PatternRecognizer(
+            supported_entity="CODE_WORD",
+            supported_language=last,
+            patterns=[Pattern("code", r"\bzebra\b", 1.0)],
+        )
+    )
+    return analyzer
 
 
 @pytest.fixture(

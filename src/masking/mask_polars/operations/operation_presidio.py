@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import polars as pl
 
 from masking.base_operations.operation_presidio import MaskPresidioBase
@@ -22,13 +20,7 @@ class MaskPresidio(MaskPresidioBase, PolarsOperation):
 
         """
         series = data if isinstance(data, pl.Series) else data[self.col_name]
-
-        entities = defaultdict(set)
-        for lang in self.analyzer.supported_languages:
-            for line, doc in self.analyzer.nlp_engine.process_batch(
-                series.to_list(), language=lang
-            ):
-                entities[line].update(self._get_language_entities(line, lang, doc))
+        entities = self._get_entities_batch(series.to_list())
 
         return series.map_elements(
             lambda line: self._check_mask_line(line, entities=entities[line]),

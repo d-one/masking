@@ -57,3 +57,53 @@ def test_given_entities_skip_detection(make):
         entities=entities,
     )
     assert out == {"note": "<PERSON>", "other": "hello world"}
+
+
+def test_given_entities_may_omit_values():
+    op = MaskDictOperation(col_name="j", analyzer=None)
+    entities = {"hello": [RecognizerResult("PERSON", start=0, end=5, score=1.0)]}
+    out = mask(op, {"note": "hello", "other": "bye"}, entities=entities)
+    assert out == {"note": "<PERSON>", "other": "bye"}
+
+
+def test_entities_of_every_language_are_masked(last_language_analyzer):
+    op = MaskDictOperation(
+        col_name="j", analyzer=last_language_analyzer, pii_entities=["CODE_WORD"]
+    )
+    assert mask(op, {"a": "a zebra", "b": ["zebra", "cat"]}) == {
+        "a": "a <CODE_WORD>",
+        "b": ["<CODE_WORD>", "cat"],
+    }
+
+
+def test_non_string_leaves_are_kept(make):
+    line = {"n": 1, "f": 1.5, "b": True, "none": None, "e": EMAIL}
+    assert mask(make(), line) == {**line, "e": "<EMAIL_ADDRESS>"}
+
+
+class TestEntitiesOfLines:
+    def test_values_of_all_lines_are_collected(self, make):
+        lines = [json.dumps({"a": "x", "b": ["y"]}), {"c": {"d": "z"}}, ["w", 1]]
+        assert list(make()._iter_values_to_mask(lines)) == ["x", "y", "z", "w", 1]
+
+    def test_denied_and_missing_lines_are_skipped(self, make):
+        op = make(deny_keys=["secret"])
+        lines = [json.dumps({"a": "x", "secret": "s"}), None, float("nan")]
+        assert list(op._iter_values_to_mask(lines)) == ["x"]
+
+    def test_one_batch_per_language(self, make, monkeypatch):
+        op = make()
+        batches = []
+        process_batch = op.analyzer.nlp_engine.process_batch
+
+        def record(texts, language, **kwargs):
+            texts = list(texts)
+            batches.append(texts)
+            return process_batch(texts, language, **kwargs)
+
+        monkeypatch.setattr(op.analyzer.nlp_engine, "process_batch", record)
+        lines = [json.dumps({"a": EMAIL, "b": "ok"}), json.dumps({"c": EMAIL})]
+        entities = op._get_entities_of_lines(lines)
+
+        assert batches == [[EMAIL, "ok"]] * len(op.analyzer.supported_languages)
+        assert {r.entity_type for r in entities[EMAIL]} == {"EMAIL_ADDRESS"}

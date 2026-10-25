@@ -159,3 +159,18 @@ class TestPresidio:
         assert [json.loads(v) for v in column(out, "j")] == [
             {"c": "mail <EMAIL_ADDRESS>", "n": "hi"}
         ]
+
+    def test_mask_dict_every_language(
+        self, spark: SparkSession, last_language_analyzer
+    ):
+        data = spark.createDataFrame(
+            [(1, json.dumps({"a": "zebra", "n": 1})), (2, json.dumps(["cat"]))],
+            "id int, j string",
+        ).repartition(2)
+        op = MaskDictOperation(
+            col_name="j", analyzer=last_language_analyzer, pii_entities=["CODE_WORD"]
+        )
+        assert [json.loads(v) for v in column(op(data), "j")] == [
+            {"a": "<CODE_WORD>", "n": 1},
+            ["cat"],
+        ]

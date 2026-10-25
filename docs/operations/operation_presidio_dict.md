@@ -39,6 +39,9 @@ ______________________________________________________________________
 - **`deny_keys`** (`list[str]`, optional):
   Paths within the dictionary to mask directly without NLP analysis.
 
+- **`batch_size`** (`int`, optional):
+  Number of texts processed together by the spaCy models. Defaults to `32`. Batching is much faster than processing one text at a time, especially with transformer models.
+
 - **`**kwargs`** (`dict`):
   Additional keyword arguments passed to the base classes.
 
@@ -48,9 +51,9 @@ ______________________________________________________________________
 
 1. Parses each cell value as a JSON dictionary.
 1. Identifies leaf nodes and classifies them as "mask" or "deny" paths.
-1. For **mask paths**: runs all leaf values through Presidio's NLP batch processing across all supported languages, collecting detected entities.
+1. For **mask paths**: collects the leaf values of all the cells, and runs each distinct value once through every supported language model, in batches of `batch_size`.
 1. For **deny paths**: applies the `masking_function` directly.
-1. Anonymizes detected entities using Presidio's anonymizer with the configured operators.
+1. Anonymizes detected entities using Presidio's anonymizer with the configured operators. Numbers, booleans and `null` leaves are kept unchanged.
 1. Serializes the result back to a JSON string.
 
 ______________________________________________________________________

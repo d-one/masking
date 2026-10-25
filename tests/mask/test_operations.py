@@ -183,6 +183,24 @@ class TestPresidioOperations:
         assert [json.loads(v) for v in out] == [{"c": "mail <EMAIL_ADDRESS>"}]
         assert out.index.tolist() == [3]
 
+    def test_mask_presidio_every_language(self, last_language_analyzer):
+        op = MaskPresidio(
+            col_name="t", analyzer=last_language_analyzer, pii_entities=["CODE_WORD"]
+        )
+        out = op(pd.DataFrame({"t": ["a zebra", "a cat", "a zebra"]}))
+        assert out.tolist() == ["a <CODE_WORD>", "a cat", "a <CODE_WORD>"]
+
+    def test_mask_dict_every_language(self, last_language_analyzer):
+        op = MaskDictOperation(
+            col_name="j", analyzer=last_language_analyzer, pii_entities=["CODE_WORD"]
+        )
+        lines = [json.dumps({"a": "zebra", "n": 1}), json.dumps(["cat", "zebra"])]
+        out = op(pd.DataFrame({"j": lines}))
+        assert [json.loads(v) for v in out] == [
+            {"a": "<CODE_WORD>", "n": 1},
+            ["cat", "<CODE_WORD>"],
+        ]
+
 
 class TestStringMatchOperations:
     def test_string_match_uses_serving_columns(self):

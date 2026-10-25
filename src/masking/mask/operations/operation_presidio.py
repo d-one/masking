@@ -1,6 +1,3 @@
-from collections import defaultdict
-
-import pandas as pd
 from pandas import DataFrame, Series
 
 from masking.base_operations.operation_presidio import MaskPresidioBase
@@ -22,19 +19,8 @@ class MaskPresidio(MaskPresidioBase, PandasOperation):
             pd.DataFrame or pd.Series: dataframe or series with masked column
 
         """
-        entities = defaultdict(set)
-        for lang in self.analyzer.supported_languages:
-            for line, doc in self.analyzer.nlp_engine.process_batch(
-                data if isinstance(data, pd.Series) else data[self.col_name],
-                language=lang,
-            ):
-                entities[line].update(self._get_language_entities(line, lang, doc))
-
-        if isinstance(data, pd.Series):
-            return data.map(
-                lambda line: self._check_mask_line(line, entities=entities[line])
-            )
-
-        return data[self.col_name].apply(
+        series = data if isinstance(data, Series) else data[self.col_name]
+        entities = self._get_entities_batch(series)
+        return series.map(
             lambda line: self._check_mask_line(line, entities=entities[line])
         )

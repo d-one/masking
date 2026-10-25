@@ -37,6 +37,9 @@ ______________________________________________________________________
 - **`operators`** (`dict[str, OperatorConfig]`, optional):\
   Fine-grained control over how each entity type is anonymized. Defaults to replacing each entity with `<ENTITY_TYPE>` (e.g., `<PERSON>`).
 
+- **`batch_size`** (`int`, optional):\
+  Number of texts processed together by the spaCy models. Defaults to `32`. Batching is much faster than processing one text at a time, especially with transformer models.
+
 - **`**kwargs`** (`dict`):\
   Additional keyword arguments passed to the base classes.
 
@@ -44,7 +47,7 @@ ______________________________________________________________________
 
 ## Behavior
 
-- Runs the Presidio analyzer on each cell value to detect PII entities.
+- Runs each distinct cell value once through every supported language model, in batches of `batch_size`, to detect PII entities.
 - Applies the configured anonymization operator to each detected entity.
 - If `masking_function` is provided, all entities are masked using that function (via a `custom` operator).
 - If no entities are detected, the original text is returned unchanged.
