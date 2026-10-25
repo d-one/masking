@@ -1,4 +1,5 @@
-from datetime import UTC, date, datetime, timedelta
+import calendar
+from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING, ClassVar
 
 from faker.generator import Generator
@@ -15,6 +16,7 @@ class FakeDateProvider(FakeProvider):
     """Generates fake dates."""
 
     _DATE_MAX_ITERATIONS: int = 10
+    _RANGES_MAX_ITERATIONS: int = 1000
     _PRESERVED: ClassVar[set[str]] = set()
     _ADMISSIBLE: ClassVar[set[str]] = {"day", "month", "year"}
 
@@ -146,16 +148,24 @@ class FakeDateProvider(FakeProvider):
         -------
             datetime: date generated from the given year.
 
+        Raises:
+        ------
+            ValueError: if no valid date exists within the ranges.
+
         """
-        start_date = f"{dates_ranges['year_start'].zfill(4)}-{dates_ranges['month_start'].zfill(2)}-{dates_ranges['day_start'].zfill(2)}"
-        end_date = f"{dates_ranges['year_end'].zfill(4)}-{dates_ranges['month_end'].zfill(2)}-{dates_ranges['day_end'].zfill(2)}"
+        years, months, days = (
+            (int(dates_ranges[f"{part}_start"]), int(dates_ranges[f"{part}_end"]))
+            for part in ("year", "month", "day")
+        )
 
-        start, end = date.fromisoformat(start_date), date.fromisoformat(end_date)
+        # Each part is drawn within its own (inclusive) range, so that preserved
+        # parts are kept even when the parts above them change.
+        randint = self.generator.random.randint
+        for _ in range(self._RANGES_MAX_ITERATIONS):
+            year, month = randint(*years), randint(*months)
+            last_day = calendar.monthrange(year, month)[1]
+            if days[0] <= last_day:
+                return date(year, month, randint(days[0], min(days[1], last_day)))
 
-        # Same distribution as generator.date_time_between_dates(start, end).date(),
-        # i.e. uniform over [start, end), without its local-timezone conversions
-        # (slow in forked processes such as Spark python workers on macOS).
-        days = (end - start).days
-        if days <= 0:
-            return start
-        return start + timedelta(days=self.generator.random.randrange(days))
+        msg = f"Could not generate a valid date within the ranges {dates_ranges}."
+        raise ValueError(msg)

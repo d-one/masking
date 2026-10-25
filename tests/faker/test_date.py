@@ -80,15 +80,34 @@ class TestDateFromRanges:
         "year_end": "2000",
     }
 
-    def test_within_half_open_range(self):
+    def test_within_inclusive_range(self):
         provider = FakeDateProvider()
-        dates = {provider.get_date_from_ranges(self.RANGES) for _ in range(200)}
-        assert dates <= {date(2000, 3, d) for d in range(1, 10)}
-        assert len(dates) > 1
+        dates = {provider.get_date_from_ranges(self.RANGES) for _ in range(300)}
+        assert dates == {date(2000, 3, d) for d in range(1, 11)}
 
-    def test_empty_range_returns_start(self):
+    def test_single_day_range(self):
         ranges = {**self.RANGES, "day_end": "1"}
         assert FakeDateProvider().get_date_from_ranges(ranges) == date(2000, 3, 1)
+
+    def test_days_are_capped_by_month_length(self):
+        ranges = {**self.RANGES, "month_start": "2", "month_end": "2", "day_end": "31"}
+        provider = FakeDateProvider()
+        assert max(provider.get_date_from_ranges(ranges) for _ in range(300)) == (
+            date(2000, 2, 29)
+        )
+
+    def test_preserved_day_only_in_months_where_it_exists(self):
+        ranges = {**self.RANGES, "month_start": "1", "month_end": "12"}
+        ranges.update(day_start="31", day_end="31")
+        provider = FakeDateProvider()
+        months = {provider.get_date_from_ranges(ranges).month for _ in range(300)}
+        assert months == {1, 3, 5, 7, 8, 10, 12}
+
+    def test_impossible_ranges_raise(self):
+        ranges = {**self.RANGES, "month_start": "2", "month_end": "2"}
+        ranges.update(day_start="30", day_end="30")
+        with pytest.raises(ValueError, match="Could not generate a valid date"):
+            FakeDateProvider().get_date_from_ranges(ranges)
 
 
 class TestCall:
@@ -110,16 +129,30 @@ class TestCall:
             assert (fake.year, fake.month) == (1990, 4)
             assert fake.day != 15
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: dates are drawn uniformly between start and end, so a preserved day is not kept unless the month is preserved too.",
+    @pytest.mark.parametrize(
+        ("preserve", "kept"),
+        [
+            (("year", "day"), ("year", "day")),
+            ("day", ("day",)),
+            ("month", ("month",)),
+            (("month", "day"), ("month", "day")),
+        ],
     )
-    def test_preserved_day_is_kept(self):
-        provider = FakeDateProvider(("year", "day"))
+    def test_preserved_parts_are_kept(self, preserve, kept):
+        provider = FakeDateProvider(preserve)
+        real = date(1990, 4, 15)
+        changed = {"year", "month", "day"} - set(kept)
         for _ in range(REPEAT):
-            fake = date.fromisoformat(provider("1990-04-15"))
-            assert (fake.year, fake.day) == (1990, 15)
-            assert fake.month != 4
+            fake = date.fromisoformat(provider(real.isoformat()))
+            assert all(getattr(fake, k) == getattr(real, k) for k in kept)
+            assert all(getattr(fake, k) != getattr(real, k) for k in changed)
+
+    def test_preserved_leap_day(self):
+        provider = FakeDateProvider(("month", "day"))
+        for _ in range(REPEAT):
+            fake = date.fromisoformat(provider("2000-02-29"))
+            assert (fake.month, fake.day) == (2, 29)
+            assert fake.year != 2000
 
     def test_raises_when_no_different_date_is_found(self):
         provider = FakeDateProvider()
