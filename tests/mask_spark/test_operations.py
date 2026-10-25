@@ -75,13 +75,11 @@ class TestSparkOperation:
         assert column(out, "c") == [hash_string("a", SECRET), hash_string("b", SECRET)]
         assert column(out, "other") == ["x", None]
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: nulls reach the pandas masking as NaN and are masked as 'nan'.",
-    )
-    def test_python_masking_keeps_nulls(self, spark: SparkSession):
-        data = spark.createDataFrame([(1, "1000"), (2, None)], "id int, p string")
-        assert column(MedStatsOperation(col_name="p")(data), "p") == ["VD02", None]
+    @pytest.mark.parametrize("schema", ["id int, p string", "id int, p bigint"])
+    def test_python_masking_keeps_nulls(self, spark: SparkSession, schema):
+        data = spark.createDataFrame([(1, 1000), (2, None)], schema)
+        out = HashOperation(col_name="p", secret=SECRET)(data)
+        assert column(out, "p") == [hash_string("1000", SECRET), None]
 
     def test_masked_column_becomes_string(self, spark: SparkSession):
         data = spark.createDataFrame([(1, 10), (2, 20)], "id int, c bigint")

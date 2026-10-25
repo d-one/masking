@@ -75,16 +75,16 @@ class TestPandasOperation:
         assert out.index.tolist() == [10, 11]
         assert op.calls == [("a", None), ("b", None)]
 
-    def test_none_is_not_masked(self):
+    @pytest.mark.parametrize(
+        "missing", [None, float("nan"), pd.NA, pd.NaT], ids=["none", "nan", "na", "nat"]
+    )
+    def test_missing_values_are_not_masked(self, missing):
         op = Recorder(col_name="c")
-        out = op(pd.Series(["a", None], dtype=object))
+        out = op(pd.Series(["a", missing], dtype=object))
         assert out.isna().tolist() == [False, True]
         assert op.calls == [("a", None)]
 
-    @pytest.mark.xfail(
-        strict=True, reason="Bug: pandas missing values (NaN) are masked as 'nan'."
-    )
-    def test_missing_values_are_not_masked(self):
+    def test_missing_values_of_string_series_are_not_masked(self):
         out = Recorder(col_name="c")(pd.Series(["a", None]))
         assert out.isna().tolist() == [False, True]
 

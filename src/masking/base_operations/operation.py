@@ -208,7 +208,7 @@ class Operation(ABC):
             str: masked line
 
         """
-        if line is None:
+        if line is None or (pd.api.types.is_scalar(line) and pd.isna(line)):
             return None
 
         if line in self.concordance_table:
