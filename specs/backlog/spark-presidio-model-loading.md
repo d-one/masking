@@ -5,7 +5,7 @@ links:
   - src/masking/utils/entity_detection.py
   - docs/spark.md
 owner: petmarco7
-status: outline
+status: in progress
 affected_components:
   - src/masking/utils/entity_detection.py
   - src/masking/base_operations/operation_presidio.py
@@ -25,7 +25,7 @@ out_of_scope:
 
 - Ticket: [#12](https://github.com/d-one/masking/issues/12)
 - Related specs: none
-- Related ADRs: none yet; the choice of loading strategy is architecture-relevant.
+- Related ADRs: [0004](../../decisions/0004-load-presidio-models-on-executors.md)
 
 ## Problem
 
@@ -33,7 +33,7 @@ Spark pickles each operation into every task. For `MaskPresidio` and the dict an
 
 ## Proposed Behavior
 
-The pickled operation carries the model names, not the loaded models. Each executor process loads the models once, on first use, and reuses them for every later task. [NEEDS CLARIFICATION: Can every target cluster install the spaCy models on executors (cluster library or init script), or must the models still ship with the job, for example as a broadcast archive?]
+The pickled operation carries the model names, not the loaded models. Each executor process loads the models once, on first use, and reuses them for every later task. The target clusters install the spaCy models on every executor (decided in #12); models passed as loaded `spacy.Language` objects still ship with the job.
 
 ## Acceptance Criteria
 

@@ -22,10 +22,16 @@ For every configured column the pipeline:
 
 ## Limits
 
-| Limit                                          | Effect                                                                                                                                                                                                  |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Concordance tables are collected to the driver | The distinct values of each masked column, with their masked values, must fit in driver memory.                                                                                                         |
-| Each task unpickles its masking operation      | Operations that hold a Presidio analyzer ship the spaCy models with every task (about 1 GB with `en_core_web_trf` and `de_core_news_lg`). Tracked in [#12](https://github.com/d-one/masking/issues/12). |
+| Limit                                          | Effect                                                                                          |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Concordance tables are collected to the driver | The distinct values of each masked column, with their masked values, must fit in driver memory. |
+
+## Presidio models on executors
+
+Operations that hold a Presidio analyzer (`MaskPresidio`, `MaskDictOperation`) are pickled into every Spark task. spaCy models given **by name** (e.g. `models={"de": "de_core_news_lg"}`, or the defaults of `PresidioMultilingualAnalyzer`) are pickled as their name, and each executor process loads each model once, on first use, and reuses it for later tasks.
+
+- **Requirement:** every executor must have the same spaCy models installed as the driver, e.g. as a cluster library or with an init script.
+- Models passed as loaded `spacy.Language` objects are pickled with the operation and shipped with every task (about 1 GB with `en_core_web_trf` and `de_core_news_lg`); pass names instead.
 
 ## Spark configuration
 
