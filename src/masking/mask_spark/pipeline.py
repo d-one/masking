@@ -3,7 +3,7 @@ from typing import Any
 
 import pyarrow as pa
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import broadcast, coalesce, col, udf, when
+from pyspark.sql.functions import broadcast, coalesce, col, lit, udf, when
 from pyspark.sql.types import (
     ByteType,
     DataType,
@@ -282,6 +282,30 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 data = substitute_column(data, c_name, concordance_tables[c_name])
 
         return data
+
+    @staticmethod
+    def _null_values(data: DataFrame, col_name: str, values: set | None) -> DataFrame:
+        """Replace values of a column with null.
+
+        Args:
+        ----
+            data (DataFrame): input dataframe
+            col_name (str): column name
+            values (set | None): values to replace, or None to replace every value
+
+        Returns:
+        -------
+            DataFrame: dataframe with the values replaced by null
+
+        """
+        if values is None:
+            return data.withColumn(
+                col_name, lit(None).cast(data.schema[col_name].dataType)
+            )
+        return data.withColumn(
+            col_name,
+            when(col(col_name).isin(list(values)), lit(None)).otherwise(col(col_name)),
+        )
 
     @staticmethod
     def _copy_column(data: DataFrame, col_name: str, new_col_name: str) -> DataFrame:

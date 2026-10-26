@@ -113,6 +113,35 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         return data.dropna(subset=[col_name]).drop_duplicates(keep="first")
 
     @staticmethod
+    def _null_values(
+        data: pd.DataFrame, col_name: str, values: set | None
+    ) -> pd.DataFrame:
+        """Replace values of a column with null.
+
+        Args:
+        ----
+            data (pd.DataFrame): input dataframe
+            col_name (str): column name
+            values (set | None): values to replace, or None to replace every value
+
+        Returns:
+        -------
+            pd.DataFrame: dataframe with the values replaced by None
+
+        """
+        # Kept values stay as in the other backends: integers stay integers
+        column = _as_nullable_integers(data[col_name]).astype(object)
+        data[col_name] = pd.Series(
+            [
+                None if values is None or pd.isna(x) or x in values else x
+                for x in column
+            ],
+            index=data.index,
+            dtype=object,
+        )
+        return data
+
+    @staticmethod
     def _substitute_masked_values(
         data: pd.DataFrame,
         col_pipelines: list[ConcordanceTable],

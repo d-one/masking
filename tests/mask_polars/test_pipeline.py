@@ -64,11 +64,33 @@ class TestStaticMethods:
 
 
 class TestPipeline:
-    def test_null_operation_is_rejected(self):
-        with pytest.raises(TypeError, match="NullOperation cannot be used"):
-            MaskDataFramePipeline({
-                "c": {"masking_operation": NullOperation(col_name="c")}
-            })
+    def test_null_operation_nulls_the_column(self):
+        data = pl.DataFrame({"c": ["a", None, "b"], "o": [1, 2, 3]})
+        pipeline = MaskDataFramePipeline({
+            "c": {"masking_operation": NullOperation(col_name="c")}
+        })
+        out = pipeline(data)
+        assert out["c"].to_list() == [None, None, None]
+        assert out["o"].to_list() == [1, 2, 3]
+        assert pipeline.concordance_tables == {"c": {}}
+
+    def test_null_operation_concordance_table_is_empty(self):
+        table = ConcordanceTable(masking_operation=NullOperation(col_name="c"))
+        assert table(pl.DataFrame({"c": ["a"]})) == {}
+
+    def test_null_operation_in_new_column_keeps_input(self):
+        data = pl.DataFrame({"c": ["a", "b"]})
+        pipeline = MaskDataFramePipeline({
+            "out": {
+                "masking_operation": NullOperation(
+                    col_name="c", condition=lambda v: v == "a"
+                )
+            }
+        })
+        for _ in range(2):
+            out = pipeline(data)
+            assert out["c"].to_list() == ["a", "b"]
+            assert out["out"].to_list() == [None, "b"]
 
     def test_end_to_end(self):
         data = pl.DataFrame({"p": ["1000", "0000", None, "1000"], "o": [1, 2, 3, 4]})

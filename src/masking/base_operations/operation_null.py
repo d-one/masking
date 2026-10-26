@@ -29,6 +29,7 @@ class NullOperationBase(Operation):
             msg = f"Invalid condition, expected a Callable with input 'str' and returning 'bool', got {type(condition)}"
             raise TypeError(msg)
 
+        self.nulls_every_value = condition is None
         self.condition = condition or (
             lambda x: True  # noqa: ARG005
         )  # Default to a condition that always returns True

@@ -94,6 +94,7 @@ class StubPipeline(MaskDataFramePipelineBase):
     _get_unique_values = staticmethod(Mock())
     _filter_data = staticmethod(Mock())
     _substitute_masked_values = staticmethod(Mock())
+    _null_values = staticmethod(Mock())
     _copy_column = staticmethod(Mock())
     _rename_columns = staticmethod(Mock())
 
@@ -102,6 +103,7 @@ def mock_table(col_name: str = COL, serving: list[str] | None = None) -> Mock:
     table = Mock(spec=ConcordanceTableBase)
     table.column_name = col_name
     table.serving_columns = serving or [col_name]
+    table.nulls_values = False
     table.masking_operation = Mock()
     table.masking_operation.col_name = col_name
     table.masking_operation.serving_columns = serving or [col_name]

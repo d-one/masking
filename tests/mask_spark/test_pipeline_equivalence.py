@@ -11,6 +11,7 @@ from masking.mask.operations.operation_fake_date import FakeDate as FakeDatePd
 from masking.mask.operations.operation_fake_name import FakeNameOperation as FakeNamePd
 from masking.mask.operations.operation_hash import HashOperation as HashPd
 from masking.mask.operations.operation_med_stats import MedStatsOperation as MedStatsPd
+from masking.mask.operations.operation_null import NullOperation as NullPd
 from masking.mask.operations.operation_string_match import (
     StringMatchOperation as StringMatchPd,
 )
@@ -20,6 +21,7 @@ from masking.mask_polars.operations.operation_hash import HashOperation as HashP
 from masking.mask_polars.operations.operation_med_stats import (
     MedStatsOperation as MedStatsPl,
 )
+from masking.mask_polars.operations.operation_null import NullOperation as NullPl
 from masking.mask_polars.operations.operation_string_match import (
     StringMatchOperation as StringMatchPl,
 )
@@ -31,6 +33,7 @@ from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_fake_name import FakeNameOperation
 from masking.mask_spark.operations.operation_hash import HashOperation
 from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
+from masking.mask_spark.operations.operation_null import NullOperation
 from masking.mask_spark.operations.operation_string_match import StringMatchOperation
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline as SparkPipeline
@@ -399,3 +402,96 @@ def test_backends_repeat_calls_on_integer_columns(
     assert first == second
     assert first["pandas"] == first["polars"] == first["spark"]
     assert first["pandas"][2] is None
+
+
+def _ends_with_1(value: str) -> bool:
+    return value.endswith("1")
+
+
+# Each entry builds a configuration from (NullOperation, HashOperation) classes
+NULL_CONFIGS: dict[str, Callable] = {
+    "null_all": lambda n, _: {"name": {"masking_operation": n(col_name="name")}},
+    "null_condition": lambda n, _: {
+        "name": {"masking_operation": n(col_name="name", condition=_ends_with_1)}
+    },
+    "null_int_column": lambda n, _: {
+        "age": {"masking_operation": n(col_name="age", condition=_ends_with_1)}
+    },
+    "hash_then_null": lambda n, h: {
+        "name": [
+            {"masking_operation": h(col_name="name", secret=SECRET)},
+            {"masking_operation": n(col_name="name", condition=_ends_with_1)},
+        ]
+    },
+    "null_then_hash": lambda n, h: {
+        "name": [
+            {"masking_operation": n(col_name="name", condition=_ends_with_1)},
+            {"masking_operation": h(col_name="name", secret=SECRET)},
+        ]
+    },
+}
+
+
+@pytest.mark.parametrize("config_name", list(NULL_CONFIGS))
+def test_backends_agree_on_null_operation(
+    spark: SparkSession, clear_data: pd.DataFrame, config_name: str
+) -> None:
+    build = NULL_CONFIGS[config_name]
+    pipelines = {
+        "pandas": PandasPipeline(build(NullPd, HashPd)),
+        "polars": PolarsPipeline(build(NullPl, HashPl)),
+        "spark": SparkPipeline(build(NullOperation, HashOperation)),
+    }
+
+    def run(backend: str) -> pd.DataFrame:
+        # Build frames from Python objects: pandas turns integers with nulls into floats
+        pipeline = pipelines[backend]
+        if backend == "pandas":
+            out = pipeline(clear_data.copy())
+        elif backend == "polars":
+            out = pd.DataFrame(
+                pipeline(pl.from_pandas(clear_data)).to_dict(as_series=False),
+                dtype=object,
+            )
+        else:
+            rows = pipeline(_to_spark(spark, clear_data, 4)).collect()
+            out = pd.DataFrame(
+                [r.asDict() for r in rows], columns=clear_data.columns, dtype=object
+            )
+        out = out.sort_values("row_id").reset_index(drop=True)
+        return out.map(normalize)
+
+    outputs = {backend: run(backend) for backend in pipelines}
+    tables = {b: pipelines[b].concordance_tables for b in pipelines}
+
+    for backend in pipelines:
+        # Repeated calls agree, and no table holds a null masked value
+        pd.testing.assert_frame_equal(run(backend), outputs[backend])
+        assert all(v is not None for t in tables[backend].values() for v in t.values())
+        assert {
+            c: {str(k): v for k, v in t.items()} for c, t in tables[backend].items()
+        } == {c: {str(k): v for k, v in t.items()} for c, t in tables["pandas"].items()}
+    pd.testing.assert_frame_equal(outputs["polars"], outputs["pandas"])
+    pd.testing.assert_frame_equal(outputs["spark"], outputs["pandas"])
+
+    clear = clear_data.map(normalize)
+    masked = outputs["pandas"]
+    col = "age" if config_name == "null_int_column" else "name"
+    present = clear[col].notna()
+    if config_name == "null_all":
+        expected_null = present
+    elif config_name == "hash_then_null":
+        expected_null = clear[col].map(
+            lambda v: pd.notna(v) and _ends_with_1(hash_string(v, SECRET))
+        )
+    else:
+        expected_null = clear[col].str.endswith("1", na=False)
+    assert masked.loc[expected_null, col].isna().all()
+    kept = clear[col].notna() & ~expected_null
+    if config_name in {"null_condition", "null_int_column"}:
+        assert masked.loc[kept, col].tolist() == clear.loc[kept, col].tolist()
+    else:
+        assert masked.loc[kept, col].notna().all()
+    if config_name == "hash_then_null":
+        # The condition sees the hashes, so it nulls some names but not all
+        assert 0 < expected_null.sum() < clear[col].notna().sum()
