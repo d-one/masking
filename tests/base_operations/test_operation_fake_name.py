@@ -15,10 +15,10 @@ class FakeName(FakeNameBase):
 
 
 @pytest.fixture(autouse=True)
-def seen_inputs(monkeypatch) -> RandomSet:
-    seen = RandomSet()
-    monkeypatch.setattr(FakeNameBase, "_SEEN_INPUTS", seen)
-    return seen
+def generated_names(monkeypatch) -> RandomSet:
+    pool = RandomSet()
+    monkeypatch.setattr(FakeNameBase, "_GENERATED_NAMES", pool)
+    return pool
 
 
 @pytest.fixture()
@@ -103,34 +103,58 @@ class TestGeneration:
         assert " " in masked
         assert masked != "Clear"
 
-    def test_without_reuse_inputs_are_not_tracked(self, seen_inputs):
+    def test_without_reuse_names_are_not_pooled(self, generated_names):
         make()._mask_line("Clear")
-        assert len(seen_inputs) == 0
+        assert len(generated_names) == 0
 
 
 class TestReuseExisting:
     @pytest.mark.usefixtures("_force_reuse")
-    def test_seen_input_is_reused_and_removed(self, seen_inputs):
+    def test_generated_name_is_reused_and_removed(self, generated_names):
         op = make()
         op.reuse_existing = True
-        seen_inputs.add("Bob")
+        generated_names.add("Bob")
 
         assert op._mask_line("Anna") == "Bob"
-        assert "Bob" not in seen_inputs
+        assert "Bob" not in generated_names
 
-    def test_new_name_generated_when_drawn(self, monkeypatch, seen_inputs):
+    def test_new_name_is_pooled_but_input_is_not(self, monkeypatch, generated_names):
         monkeypatch.setattr(operation_fake_name.random, "choice", lambda _: True)
         op = make(name_type="last")
         op.reuse_existing = True
 
         assert op._mask_line("Anna") == "LAST"
-        assert "Anna" in seen_inputs
+        assert "LAST" in generated_names
+        assert "Anna" not in generated_names
 
-    def test_seen_inputs_are_shared_between_instances(self, seen_inputs):
-        assert FakeName(col_name="a")._SEEN_INPUTS is seen_inputs
-        assert FakeName(col_name="b")._SEEN_INPUTS is seen_inputs
+    def test_masked_values_never_contain_clear_values(self):
+        clear = [f"Clear{i}" for i in range(200)]
+        ops = [FakeName(col_name=c) for c in ("a", "b")]
+        masked = [op._mask_line(name) for name in clear for op in ops]
+        assert not set(masked) & set(clear)
 
-    def test_concurrent_workers_keep_pool_consistent(self, seen_inputs):
+    @pytest.mark.usefixtures("_force_reuse")
+    def test_generated_names_are_reused_across_columns(self, generated_names):
+        first, second = FakeName(col_name="a"), FakeName(col_name="b")
+        name = first._mask_line("Anna")
+        assert name in generated_names
+        assert second._mask_line("Bob") == name
+
+    def test_rejected_clear_value_is_not_pooled(self, monkeypatch, generated_names):
+        monkeypatch.setattr(operation_fake_name.random, "choice", lambda _: True)
+        op = make(name_type="last")
+        op.reuse_existing = True
+        names = iter(["Anna", "Clara"])
+        op.faker.get_last_name = lambda: next(names)
+
+        assert op._mask_line("Anna") == "Clara"
+        assert "Anna" not in generated_names
+
+    def test_pool_is_shared_between_instances(self, generated_names):
+        assert FakeName(col_name="a")._GENERATED_NAMES is generated_names
+        assert FakeName(col_name="b")._GENERATED_NAMES is generated_names
+
+    def test_concurrent_workers_keep_pool_consistent(self, generated_names):
         interval = sys.getswitchinterval()
         sys.setswitchinterval(1e-6)
         ops = [make(name_type="last") for _ in range(8)]
@@ -148,5 +172,7 @@ class TestReuseExisting:
         finally:
             sys.setswitchinterval(interval)
 
-        assert len(seen_inputs._items) == len(seen_inputs._index)
-        assert all(seen_inputs._index[x] == i for i, x in enumerate(seen_inputs._items))
+        assert len(generated_names._items) == len(generated_names._index)
+        assert all(
+            generated_names._index[x] == i for i, x in enumerate(generated_names._items)
+        )

@@ -10,8 +10,8 @@ from masking.utils.random_set import RandomSet
 class FakeNameBase(FakerOperation):
     """Mask a column with fake name data."""
 
-    _SEEN_INPUTS: ClassVar[RandomSet] = RandomSet()
-    _SEEN_INPUTS_LOCK: ClassVar[threading.Lock] = threading.Lock()
+    _GENERATED_NAMES: ClassVar[RandomSet] = RandomSet()
+    _GENERATED_NAMES_LOCK: ClassVar[threading.Lock] = threading.Lock()
 
     def __init__(  # noqa: PLR0913
         self,
@@ -104,15 +104,18 @@ class FakeNameBase(FakerOperation):
             return self._mask_line_generate()
 
         # The pool is shared by every column, which pipelines may mask in parallel threads
-        with self._SEEN_INPUTS_LOCK:
-            self._SEEN_INPUTS.add(line)
-
-            # Randomly decide whether to generate a new name or use a seen one
+        with self._GENERATED_NAMES_LOCK:
+            # Randomly decide whether to generate a new name or reuse a generated one
             to_generate = random.choice([True, False])  # noqa: S311
 
-            if not to_generate and self._SEEN_INPUTS:
-                masked = self._SEEN_INPUTS.choice()
-                self._SEEN_INPUTS.remove(masked)
+            if not to_generate and self._GENERATED_NAMES:
+                masked = self._GENERATED_NAMES.choice()
+                self._GENERATED_NAMES.remove(masked)
                 return masked
 
-        return self._mask_line_generate()
+        masked = self._mask_line_generate()
+        # A name equal to the clear input is rejected by the caller and must not be reused
+        if masked != line:
+            with self._GENERATED_NAMES_LOCK:
+                self._GENERATED_NAMES.add(masked)
+        return masked
