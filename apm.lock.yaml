@@ -2,6 +2,24 @@ lockfile_version: '1'
 apm_version: 0.33.0
 dependencies:
 - repo_url: addyosmani/agent-skills
+  name: code-review-and-quality
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/code-review-and-quality
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/code-review-and-quality
+  - .agents/skills/code-review-and-quality/SKILL.md
+  - .claude/skills/code-review-and-quality
+  - .claude/skills/code-review-and-quality/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/code-review-and-quality/SKILL.md: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+    .claude/skills/code-review-and-quality/SKILL.md: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+  content_hash: sha256:0667c7af98996c0bec4fb0eb444680bdbf1da1d6a3cfdf5dbe8cbd350d9d2752
+- repo_url: addyosmani/agent-skills
   name: documentation-and-adrs
   host: github.com
   resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
@@ -19,6 +37,24 @@ dependencies:
     .agents/skills/documentation-and-adrs/SKILL.md: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
     .claude/skills/documentation-and-adrs/SKILL.md: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
   content_hash: sha256:f1bd038e74194364c1dcdb3dd0a72194ffd3ca9d3a103c125ca1a62e801a0cc4
+- repo_url: addyosmani/agent-skills
+  name: git-workflow-and-versioning
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/git-workflow-and-versioning
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/git-workflow-and-versioning
+  - .agents/skills/git-workflow-and-versioning/SKILL.md
+  - .claude/skills/git-workflow-and-versioning
+  - .claude/skills/git-workflow-and-versioning/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/git-workflow-and-versioning/SKILL.md: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+    .claude/skills/git-workflow-and-versioning/SKILL.md: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+  content_hash: sha256:e8e0d1cc98c0a6b81d2979442ae92addae32cd5194fb5c4eac4ac5228b408770
 - repo_url: addyosmani/agent-skills
   name: spec-driven-development
   host: github.com
@@ -97,6 +133,28 @@ dependencies:
     .claude/skills/documentation-writer/SKILL.md: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
   content_hash: sha256:ee53d65b163cd7eb953a930c95841cfe398cc2c0bd24c06508bbaa07c432be35
 - repo_url: mattpocock/skills
+  name: code-review
+  host: github.com
+  resolved_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  resolved_ref: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  version: unknown
+  virtual_path: skills/engineering/code-review
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/code-review
+  - .agents/skills/code-review/SKILL.md
+  - .agents/skills/code-review/agents/openai.yaml
+  - .claude/skills/code-review
+  - .claude/skills/code-review/SKILL.md
+  - .claude/skills/code-review/agents/openai.yaml
+  deployed_file_hashes:
+    .agents/skills/code-review/SKILL.md: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+    .agents/skills/code-review/agents/openai.yaml: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+    .claude/skills/code-review/SKILL.md: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+    .claude/skills/code-review/agents/openai.yaml: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+  content_hash: sha256:bb3048304e5c783c09783326a9e8f8ba55a31e810f511a792238bb8ad45a0978
+- repo_url: mattpocock/skills
   name: grill-me
   host: github.com
   resolved_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
@@ -140,6 +198,24 @@ dependencies:
     .claude/skills/grilling/SKILL.md: sha256:befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15
     .claude/skills/grilling/agents/openai.yaml: sha256:1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b
   content_hash: sha256:90b54c72a48114f62072de27e1bef0c61d55f0959044725c593ed9fc72197755
+- repo_url: obra/superpowers
+  name: receiving-code-review
+  host: github.com
+  resolved_commit: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b
+  resolved_ref: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b
+  version: unknown
+  virtual_path: skills/receiving-code-review
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/receiving-code-review
+  - .agents/skills/receiving-code-review/SKILL.md
+  - .claude/skills/receiving-code-review
+  - .claude/skills/receiving-code-review/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/receiving-code-review/SKILL.md: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+    .claude/skills/receiving-code-review/SKILL.md: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+  content_hash: sha256:59361179fc9225173e0c145ffd9bafbf9fdbf8b43ce3dc308497a0b4f83a6063
 - repo_url: softaworks/agent-toolkit
   name: c4-architecture
   host: github.com
@@ -347,6 +423,51 @@ deployments:
   content_hash: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
 - kind: project-relative
   target: claude
+  value: .claude/skills/code-review
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review-and-quality
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review-and-quality/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+- kind: project-relative
+  target: claude
   value: .claude/skills/crafting-effective-readmes
   runtime: null
   scope: project
@@ -545,6 +666,24 @@ deployments:
   content_hash: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
 - kind: project-relative
   target: claude
+  value: .claude/skills/git-workflow-and-versioning
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-workflow-and-versioning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+- kind: project-relative
+  target: claude
   value: .claude/skills/grill-me
   runtime: null
   scope: project
@@ -615,6 +754,24 @@ deployments:
   - dietrichgebert/ponytail/skills/ponytail
   active_owner: dietrichgebert/ponytail/skills/ponytail
   content_hash: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+- kind: project-relative
+  target: claude
+  value: .claude/skills/receiving-code-review
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/receiving-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
 - kind: project-relative
   target: claude
   value: .claude/skills/spec-driven-development
@@ -768,6 +925,51 @@ deployments:
   - softaworks/agent-toolkit/skills/c4-architecture
   active_owner: softaworks/agent-toolkit/skills/c4-architecture
   content_hash: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review-and-quality
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review-and-quality/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
 - kind: project-relative
   target: copilot
   value: .agents/skills/crafting-effective-readmes
@@ -968,6 +1170,24 @@ deployments:
   content_hash: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
 - kind: project-relative
   target: copilot
+  value: .agents/skills/git-workflow-and-versioning
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/git-workflow-and-versioning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+- kind: project-relative
+  target: copilot
   value: .agents/skills/grill-me
   runtime: null
   scope: project
@@ -1038,6 +1258,24 @@ deployments:
   - dietrichgebert/ponytail/skills/ponytail
   active_owner: dietrichgebert/ponytail/skills/ponytail
   content_hash: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/receiving-code-review
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/receiving-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
 - kind: project-relative
   target: copilot
   value: .agents/skills/spec-driven-development
