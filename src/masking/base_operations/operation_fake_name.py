@@ -1,4 +1,5 @@
 import random
+import threading
 from typing import ClassVar
 
 from masking.base_operations.operation_fake import FakerOperation
@@ -10,6 +11,7 @@ class FakeNameBase(FakerOperation):
     """Mask a column with fake name data."""
 
     _SEEN_INPUTS: ClassVar[RandomSet] = RandomSet()
+    _SEEN_INPUTS_LOCK: ClassVar[threading.Lock] = threading.Lock()
 
     def __init__(  # noqa: PLR0913
         self,
@@ -101,15 +103,16 @@ class FakeNameBase(FakerOperation):
         if not self.reuse_existing:
             return self._mask_line_generate()
 
-        # Add the line to the seen inputs
-        self._SEEN_INPUTS.add(line)
+        # The pool is shared by every column, which pipelines may mask in parallel threads
+        with self._SEEN_INPUTS_LOCK:
+            self._SEEN_INPUTS.add(line)
 
-        # Randomly decide whether to generate a new name or use a seen one
-        to_generate = random.choice([True, False])  # noqa: S311
+            # Randomly decide whether to generate a new name or use a seen one
+            to_generate = random.choice([True, False])  # noqa: S311
 
-        if to_generate or not self._SEEN_INPUTS:
-            return self._mask_line_generate()
+            if not to_generate and self._SEEN_INPUTS:
+                masked = self._SEEN_INPUTS.choice()
+                self._SEEN_INPUTS.remove(masked)
+                return masked
 
-        masked = self._SEEN_INPUTS.choice()
-        self._SEEN_INPUTS.remove(masked)
-        return masked
+        return self._mask_line_generate()

@@ -1,4 +1,6 @@
 import random
+import sys
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 from masking.base_operations import operation_fake_name
@@ -127,3 +129,24 @@ class TestReuseExisting:
     def test_seen_inputs_are_shared_between_instances(self, seen_inputs):
         assert FakeName(col_name="a")._SEEN_INPUTS is seen_inputs
         assert FakeName(col_name="b")._SEEN_INPUTS is seen_inputs
+
+    def test_concurrent_workers_keep_pool_consistent(self, seen_inputs):
+        interval = sys.getswitchinterval()
+        sys.setswitchinterval(1e-6)
+        ops = [make(name_type="last") for _ in range(8)]
+        for op in ops:
+            op.reuse_existing = True
+
+        def work(worker: int) -> None:
+            for i in range(2000):
+                ops[worker]._mask_line(f"name-{(worker * 1000 + i) % 3000}")
+
+        try:
+            with ThreadPoolExecutor(max_workers=len(ops)) as executor:
+                for future in [executor.submit(work, w) for w in range(len(ops))]:
+                    future.result()
+        finally:
+            sys.setswitchinterval(interval)
+
+        assert len(seen_inputs._items) == len(seen_inputs._index)
+        assert all(seen_inputs._index[x] == i for i, x in enumerate(seen_inputs._items))
