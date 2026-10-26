@@ -1,4 +1,5 @@
 import itertools
+import pickle  # noqa: S403
 import time
 
 from masking.base_operations.operation import Operation
@@ -37,6 +38,35 @@ def test_collisions_are_retried() -> None:
     assert op._check_mask_line("x") == "a"
     assert op._check_mask_line("y") == "b"
     assert op.concordance_table == {"x": "a", "y": "b"}
+
+
+def test_invalidation_releases_the_cached_table() -> None:
+    op = _UniqueOp(["a", "b"])
+    op._check_mask_line("x")
+    assert op._masked_values_source is op.concordance_table
+
+    op.update_concordance_table({"k": "z"})
+    assert op._masked_values is None
+    assert op._masked_values_source is None
+
+    op._check_mask_line("y")
+    op.concordance_table = {}
+    op._cast_concordance_table()
+    assert op._masked_values_source is None
+
+
+def test_cache_is_not_pickled() -> None:
+    op = _CounterOp()
+    op._check_mask_line("x")
+    assert op._masked_values == {"m0"}
+
+    state = op.__getstate__()
+    assert not set(Operation._MASKED_VALUES_CACHE) & state.keys()
+
+    clone = pickle.loads(pickle.dumps(op))  # noqa: S301
+    assert clone._masked_values is None
+    assert clone.concordance_table == {"x": "m0"}
+    assert clone._get_masked_values() == {"m0"}
 
 
 def test_existing_table_values_are_avoided() -> None:

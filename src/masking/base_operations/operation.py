@@ -18,11 +18,16 @@ class Operation(ABC):
     MAX_RETRY = 1000
 
     # Set of the masked values in the concordance table, for O(1) uniqueness checks.
-    # It is rebuilt when the table is cast, updated, replaced or changes size; code
-    # overwriting existing entries in place must set _masked_values to None.
+    # It is rebuilt when the table is cast, updated, replaced or changes size; existing
+    # entries must be overwritten through update_concordance_table.
     _masked_values: set | None = None
     _masked_values_source: dict | None = None
     _masked_values_size: int = -1
+    _MASKED_VALUES_CACHE = (
+        "_masked_values",
+        "_masked_values_source",
+        "_masked_values_size",
+    )
 
     def __init__(
         self,
@@ -74,6 +79,18 @@ class Operation(ABC):
 
         """
         self._col_name = col_name
+
+    def __getstate__(self) -> dict:
+        # The cache is rebuilt lazily: do not ship it, e.g. to every Spark task
+        state = self.__dict__.copy()
+        for name in self._MASKED_VALUES_CACHE:
+            state.pop(name, None)
+        return state
+
+    def _invalidate_masked_values(self) -> None:
+        """Drop the cached masked values and the reference to their table."""
+        for name in self._MASKED_VALUES_CACHE:
+            self.__dict__.pop(name, None)
 
     @staticmethod
     def cast_concordance_table(concordance_table: AnyDataFrame | dict | None) -> dict:
@@ -129,7 +146,7 @@ class Operation(ABC):
     def _cast_concordance_table(self) -> None:
         """Cast the concordance table to a dictionary."""
         self.concordance_table = self.cast_concordance_table(self.concordance_table)
-        self._masked_values = None
+        self._invalidate_masked_values()
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.
@@ -153,7 +170,7 @@ class Operation(ABC):
 
         self._cast_concordance_table()
         self.concordance_table.update(concordance_table)
-        self._masked_values = None
+        self._invalidate_masked_values()
 
     def _get_masked_values(self) -> set:
         """Return the set of masked values of the concordance table.
