@@ -24,7 +24,7 @@ ______________________________________________________________________
   List of dot-separated paths to keys that should be **masked** (i.e., processed by the NLP or pattern-matching engine). Only leaf values matching these paths are considered for masking.
 
 - **`deny_keys`** (`list[str]`, optional):
-  List of dot-separated paths to keys that should be **denied** — their values are replaced using the `masking_function` directly, without NLP analysis.
+  List of dot-separated paths to keys that should be **denied** — their values are replaced using the `masking_function` directly, without NLP analysis. Setting `deny_keys` without a `masking_function` raises `ValueError`.
 
 - **`path_separator`** (`str`, default `".[$]."`):
   The separator used to represent nested paths in key specifications.
@@ -39,7 +39,7 @@ ______________________________________________________________________
   Whether key matching is case-sensitive.
 
 - **`masking_function`** (`Callable[[str], str]`, optional):
-  A function applied to denied paths. Must be set by subclasses or passed via `PresidioHandler`.
+  A function applied to denied paths. Required when `deny_keys` is set; set it in a subclass or pass it via `PresidioHandler`.
 
 - **`**kwargs`** (`dict`):
   Additional keyword arguments passed to the base classes.

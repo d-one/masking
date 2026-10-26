@@ -32,6 +32,21 @@ def test_is_abstract():
         DictOperationBase(col_name="c")
 
 
+class NoFunctionDictOperation(DictOperation):
+    masking_function = None
+
+
+@pytest.mark.parametrize("deny_keys", [["a"], [lambda key: key == "a"]])
+def test_deny_keys_without_masking_function_raise(deny_keys):
+    with pytest.raises(ValueError, match="deny_keys require a masking_function"):
+        NoFunctionDictOperation(col_name="c", deny_keys=deny_keys)
+
+
+def test_no_deny_keys_need_no_masking_function():
+    out = NoFunctionDictOperation(col_name="c")._mask_line('{"a": "x"}')
+    assert json.loads(out) == {"a": "<M>"}
+
+
 def test_json_string_in_json_string_out():
     out = DictOperation(col_name="c")._mask_line('{"a": "x"}')
     assert isinstance(out, str)

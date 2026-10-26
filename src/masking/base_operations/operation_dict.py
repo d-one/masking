@@ -10,6 +10,26 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
 
     masking_function = None  # Should be set in subclasses
 
+    def __init__(self, **kwargs: dict) -> None:
+        """Initialize the operation and check that denied paths can be masked.
+
+        Args:
+        ----
+            **kwargs (dict): keyword arguments for the base classes
+
+        Raises:
+        ------
+            ValueError: if deny keys are set without a masking function
+
+        """
+        super().__init__(**kwargs)
+
+        if (
+            self.deny_keys or self.deny_keys_callable
+        ) and self.masking_function is None:
+            msg = "deny_keys require a masking_function to replace the denied values."
+            raise ValueError(msg)
+
     def _handle_denied_paths(self, line: dict, leaf_to_deny: tuple) -> dict:
         """Handle denied paths in the line.
 
