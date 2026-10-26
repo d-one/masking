@@ -819,6 +819,24 @@ class TestHasMatchStrExtra:
         assert h._has_match_str("name", parent="items") is False
         assert h._has_match_str("name", parent=f"items{SEP}x") is False
 
+    def test_bracket_wildcard_deny_matches_whole_path_parts_only(self):
+        h = MultiNestedDictHandler(deny_keys=[f"items{SEP}[*]{SEP}name"])
+        assert h._has_match_str("name", parent=f"items{SEP}[3]", mode="deny")
+        assert not h._has_match_str("surname", parent=f"items{SEP}[0]", mode="deny")
+
+    def test_terminal_bracket_wildcard_allow_skips_list_entries(self):
+        h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]"])
+        data = {"items": ["a", {"b": "c"}], "x": "d"}
+        assert list(h._find_leaf_path(data)) == ["x"]
+        assert list(h._find_leaf_path_and_value(data)) == [("x", "d")]
+
+    def test_terminal_bracket_wildcard_deny_denies_list_entries(self):
+        h = MultiNestedDictHandler(deny_keys=[f"items{SEP}[*]"])
+        data = {"items": ["a"], "x": "d"}
+        denied = h._deny_path(f"items{SEP}[0]")
+        assert list(h._find_leaf_path(data)) == [denied, "x"]
+        assert list(h._find_leaf_path_and_value(data)) == [(denied, "a"), ("x", "d")]
+
 
 # ---------------------------------------------------------------------------
 # _has_match_callable: additional cases
