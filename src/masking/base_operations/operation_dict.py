@@ -1,7 +1,7 @@
 import json
 from abc import abstractmethod
 
-from masking.base_operations.operation import Operation
+from masking.base_operations.operation import AnyDataFrame, Operation
 from masking.utils.multi_nested_dict import MultiNestedDictHandler
 
 
@@ -10,11 +10,18 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
 
     masking_function = None  # Should be set in subclasses
 
-    def __init__(self, **kwargs: dict) -> None:
+    def __init__(
+        self,
+        col_name: str,
+        concordance_table: dict | AnyDataFrame | None = None,
+        **kwargs: dict,
+    ) -> None:
         """Initialize the operation and check that denied paths can be masked.
 
         Args:
         ----
+            col_name (str): column name to be masked
+            concordance_table (dict | AnyDataFrame | None): concordance table
             **kwargs (dict): keyword arguments for the base classes
 
         Raises:
@@ -22,7 +29,7 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
             ValueError: if deny keys are set without a masking function
 
         """
-        super().__init__(**kwargs)
+        super().__init__(col_name, concordance_table, **kwargs)
 
         if (
             self.deny_keys or self.deny_keys_callable

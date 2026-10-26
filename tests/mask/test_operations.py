@@ -289,6 +289,9 @@ class TestStringMatchOperations:
         with pytest.raises(ValueError, match="deny_keys require a masking_function"):
             StringMatchDictOperation(col_name="j", deny_keys=["a"])
 
+    def test_string_match_dict_accepts_positional_col_name(self):
+        assert StringMatchDictOperation("j").col_name == "j"
+
     def test_string_match_dict_series(self):
         line = json.dumps({"n": "John"})
         out = StringMatchDictOperation(col_name="j")(pd.Series([line]))

@@ -47,6 +47,12 @@ def test_no_deny_keys_need_no_masking_function():
     assert json.loads(out) == {"a": "<M>"}
 
 
+def test_positional_arguments_are_accepted():
+    op = DictOperation("c", {"x": "X"})
+    assert op.col_name == "c"
+    assert op.concordance_table == {"x": "X"}
+
+
 def test_json_string_in_json_string_out():
     out = DictOperation(col_name="c")._mask_line('{"a": "x"}')
     assert isinstance(out, str)
