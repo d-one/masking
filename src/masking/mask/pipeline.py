@@ -6,6 +6,28 @@ from masking.base_concordance_table.concordance_table import ConcordanceTableBas
 from masking.base_pipeline.pipeline import MaskDataFramePipelineBase
 
 
+def _as_nullable_integers(column: pd.Series) -> pd.Series:
+    """Restore an integer column that pandas stored as floats because of nulls.
+
+    Args:
+    ----
+        column (pd.Series): input column
+
+    Returns:
+    -------
+        pd.Series: the column as nullable integers, or unchanged if it is not a
+            float column with nulls and only integral values
+
+    """
+    if not pd.api.types.is_float_dtype(column) or not column.isna().any():
+        return column
+
+    if not column.dropna().map(float.is_integer).all():
+        return column
+
+    return column.astype("Int64")
+
+
 class ConcordanceTable(ConcordanceTableBase):
     def _build_concordance_table(self, data: pd.DataFrame | pd.Series) -> pd.DataFrame:
         """Apply the pipeline to the data.
@@ -47,6 +69,29 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         workers: int = 1,
     ) -> None:
         super().__init__(configuration, workers, dtype=ConcordanceTable)
+
+    def _preprocess_data(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Preprocess the data, keeping integer columns with nulls as integers.
+
+        Args:
+        ----
+            data (pd.DataFrame): input dataframe
+
+        Returns:
+        -------
+            pd.DataFrame: preprocessed dataframe
+
+        """
+        data = super()._preprocess_data(data)
+        for pipeline in self.col_pipelines:
+            c_name = (
+                pipeline.column_name
+                if not isinstance(pipeline, list)
+                else pipeline[0].column_name
+            )
+            if c_name in data.columns:
+                data[c_name] = _as_nullable_integers(data[c_name])
+        return data
 
     @staticmethod
     def _get_unique_values(data: pd.DataFrame, col_name: str) -> list:
@@ -114,10 +159,16 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 else pipeline[0].column_name
             )
             if concordance_tables[c_name]:
-                data[c_name] = data[c_name].map(
-                    lambda x, col_name=c_name: concordance_tables[col_name].get(x, x)
-                    if not pd.isna(x)
-                    else x
+                table = concordance_tables[c_name]
+                # Values not in the table become strings, as in the other backends.
+                # astype(object) keeps nullable integers as int, unlike Series.map.
+                data[c_name] = pd.Series(
+                    [
+                        None if pd.isna(x) else table.get(x, str(x))
+                        for x in data[c_name].astype(object)
+                    ],
+                    index=data.index,
+                    dtype=object,
                 )
 
         return data
