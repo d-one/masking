@@ -8,6 +8,7 @@ from masking.base_operations.operation_fake_name import FakeNameBase
 from masking.base_operations.operation_fake_plz import FakePLZBase
 from masking.base_operations.operation_hash import HashOperationBase
 from masking.base_operations.operation_med_stats import MedStatsOperationBase
+from masking.base_operations.operation_null import NullOperationBase
 from masking.base_operations.operation_presidio import MaskPresidioBase
 from masking.base_operations.operation_presidio_dict import MaskDictOperationBase
 from masking.base_operations.operation_string_match import StringMatchOperationBase
@@ -21,6 +22,7 @@ from masking.mask_polars.operations.operation_fake_name import FakeNameOperation
 from masking.mask_polars.operations.operation_fake_plz import FakePLZ
 from masking.mask_polars.operations.operation_hash import HashOperation
 from masking.mask_polars.operations.operation_med_stats import MedStatsOperation
+from masking.mask_polars.operations.operation_null import NullOperation
 from masking.mask_polars.operations.operation_presidio import MaskPresidio
 from masking.mask_polars.operations.operation_presidio_dict import MaskDictOperation
 from masking.mask_polars.operations.operation_string_match import StringMatchOperation
@@ -57,6 +59,7 @@ class Recorder(PolarsOperation):
         (FakePLZ, FakePLZBase),
         (HashOperation, HashOperationBase),
         (MedStatsOperation, MedStatsOperationBase),
+        (NullOperation, NullOperationBase),
         (MaskPresidio, MaskPresidioBase),
         (MaskDictOperation, MaskDictOperationBase),
         (StringMatchOperation, StringMatchOperationBase),
@@ -122,6 +125,14 @@ class TestLookupOperations:
     def test_med_stats(self):
         out = MedStatsOperation(col_name="p")(pl.DataFrame({"p": ["1000", "0000"]}))
         assert out.to_list() == ["VD02", "0000"]
+
+    def test_null_every_value(self):
+        out = NullOperation(col_name="c")(pl.DataFrame({"c": ["a", None]}))
+        assert out.to_list() == [None, None]
+
+    def test_null_with_condition_keeps_others_as_strings(self):
+        op = NullOperation(col_name="c", condition=lambda v: v == "10")
+        assert op(pl.DataFrame({"c": [10, 20]})).to_list() == [None, "20"]
 
 
 class TestFakeOperations:

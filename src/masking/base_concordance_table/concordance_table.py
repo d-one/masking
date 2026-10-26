@@ -5,6 +5,7 @@ import pandas as pd
 from pyspark.sql import DataFrame
 
 from masking.base_operations.operation import Operation
+from masking.base_operations.operation_null import NullOperationBase
 from masking.utils.spark_utils import spark_df_to_dict
 
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
@@ -34,6 +35,10 @@ class ConcordanceTableBase(ABC):
             concordance_table (pd.DataFrame or None): unique values in the column
 
         """
+        if isinstance(masking_operation, NullOperationBase):
+            msg = "NullOperation cannot be used in a pipeline yet; call it on the data directly (see issue #24)."
+            raise TypeError(msg)
+
         self.masking_operation = masking_operation
 
         # Snapshot of the operation's own table, restored when clearing

@@ -7,6 +7,7 @@ from masking.mask.operations.operation_fake_name import FakeNameOperation as Fak
 from masking.mask.operations.operation_fake_plz import FakePLZ as FakePLZPd
 from masking.mask.operations.operation_hash import HashOperation as HashPd
 from masking.mask.operations.operation_med_stats import MedStatsOperation as MedStatsPd
+from masking.mask.operations.operation_null import NullOperation as NullPd
 from masking.mask.operations.operation_presidio import MaskPresidio as MaskPresidioPd
 from masking.mask.operations.operation_presidio_dict import (
     MaskDictOperation as MaskDictPd,
@@ -24,6 +25,7 @@ from masking.mask_spark.operations.operation_fake_name import FakeNameOperation
 from masking.mask_spark.operations.operation_fake_plz import FakePLZ
 from masking.mask_spark.operations.operation_hash import HashOperation
 from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
+from masking.mask_spark.operations.operation_null import NullOperation
 from masking.mask_spark.operations.operation_presidio import MaskPresidio
 from masking.mask_spark.operations.operation_presidio_dict import MaskDictOperation
 from masking.mask_spark.operations.operation_string_match import StringMatchOperation
@@ -47,6 +49,7 @@ SECRET = "s"  # noqa: S105
         (FakePLZ, FakePLZPd),
         (HashOperation, HashPd),
         (MedStatsOperation, MedStatsPd),
+        (NullOperation, NullPd),
         (MaskPresidio, MaskPresidioPd),
         (MaskDictOperation, MaskDictPd),
         (StringMatchOperation, StringMatchPd),
@@ -129,6 +132,15 @@ class TestSparkOperation:
         data = spark.createDataFrame(list(enumerate(values)), "id int, p string")
         out = column(FakePLZ(col_name="p")(data), "p")
         assert all(len(o) == 4 and o != v for o, v in zip(out, values, strict=True))
+
+    def test_null_every_value(self, spark: SparkSession):
+        data = spark.createDataFrame([(1, "a"), (2, None)], "id int, c string")
+        assert column(NullOperation(col_name="c")(data), "c") == [None, None]
+
+    def test_null_with_condition_keeps_others_as_strings(self, spark: SparkSession):
+        data = spark.createDataFrame([(1, 10), (2, 20)], "id int, c int")
+        op = NullOperation(col_name="c", condition=lambda v: v == "10")
+        assert column(op(data), "c") == [None, "20"]
 
 
 class TestServingColumns:
