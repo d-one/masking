@@ -3,6 +3,10 @@ import warnings
 import spacy
 from presidio_analyzer import AnalyzerEngine, RecognizerRegistry
 from presidio_analyzer.nlp_engine import NerModelConfiguration, SpacyNlpEngine
+from presidio_analyzer.recognizer_registry import RecognizerRegistryProvider
+
+# Class name prefixes of the region-specific recognizers left out of the default registry
+EXCLUDED_RECOGNIZER_PREFIXES = ("Us", "In", "Sg", "Au")
 
 # Ignore the specific FutureWarnings from torch.load
 warnings.filterwarnings(
@@ -83,16 +87,23 @@ class PresidioRegistry:
 
         """
         if not registry:
-            registry = RecognizerRegistry()
-            registry.load_predefined_recognizers()
+            configuration = (
+                None
+                if supported_languages is None
+                else {"supported_languages": supported_languages}
+            )
+            registry = RecognizerRegistryProvider(
+                registry_configuration=configuration
+            ).create_recognizer_registry()
 
-            # Remove all recognizers except for the ones that are needed: skip US-, India-, Singapore-, Australia-, and Crypto-recognizers
-            for recognizer in registry.recognizers:
-                if any(
-                    recognizer.__class__.__name__.split(".")[-1].startswith(x)
-                    for x in ("Us", "In", "Sg", "Au")
-                ):
-                    registry.remove_recognizer(recognizer)
+            # Skip the US-, India-, Singapore-, and Australia-specific recognizers
+            registry.recognizers = [
+                recognizer
+                for recognizer in registry.recognizers
+                if not recognizer.__class__.__name__.startswith(
+                    EXCLUDED_RECOGNIZER_PREFIXES
+                )
+            ]
 
         if supported_languages is not None:
             registry.supported_languages = supported_languages
@@ -123,14 +134,18 @@ class PresidioMultilingualAnalyzer:
         if not models:
             models = {"de": "de_core_news_lg", "en": "en_core_web_lg"}
 
+        nlp_engine = MultilingualSpacyNlpEngine(
+            models=models, ner_model_mapping=ner_model_mapping
+        )
+
         if not registry:
             registry = PresidioRegistry(
                 supported_languages=list(models.keys())
             ).registry
+            registry.add_nlp_recognizer(nlp_engine=nlp_engine)
 
         self.analyzer = AnalyzerEngine(
-            nlp_engine=MultilingualSpacyNlpEngine(
-                models=models, ner_model_mapping=ner_model_mapping
-            ),
+            registry=registry,
+            nlp_engine=nlp_engine,
             supported_languages=list(models.keys()),
         )
