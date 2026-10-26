@@ -1,9 +1,11 @@
+import datetime as dt
 import pickle  # noqa: S403
 import random
 
 import pytest
 from dateparser import parse
 from masking.faker.name import FakeNameProvider
+from masking.utils import date_parsing
 from masking.utils.date_parsing import parse_date
 
 
@@ -38,6 +40,29 @@ def test_parse_date_matches_dateparser_random_iso() -> None:
 def test_parse_date_invalid_type() -> None:
     with pytest.raises(TypeError):
         parse_date(None)
+
+
+def test_parse_date_cache_is_per_day(monkeypatch) -> None:
+    calls = []
+    monkeypatch.setattr(date_parsing, "parse", lambda v: calls.append(v) or None)
+    date_parsing._parse_with_dateparser.cache_clear()
+
+    class Today(dt.date):
+        current = dt.date(2025, 12, 31)
+
+        @classmethod
+        def today(cls):
+            return cls.current
+
+    monkeypatch.setattr(date_parsing, "date", Today)
+    parse_date("15 March")
+    parse_date("15 March")
+    assert calls == ["15 March"]
+
+    Today.current = dt.date(2026, 1, 1)
+    parse_date("15 March")
+    assert calls == ["15 March", "15 March"]
+    date_parsing._parse_with_dateparser.cache_clear()
 
 
 def test_fake_name_provider_lists() -> None:
