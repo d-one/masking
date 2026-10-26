@@ -8,7 +8,7 @@ def hash_string(
     secret: str,
     method: Callable = hashlib.sha256,
     text_encoding: str = "utf-8",
-) -> str:
+) -> str | None:
     """Hashes a string using a secret key with SHA256 as the default hashing algorithm.
 
     Args:
@@ -20,15 +20,15 @@ def hash_string(
 
     Returns:
     -------
-        str: hashed string
+        str | None: hashed string, or None if data is None
 
     """
     if data is None:
         return None
 
-    assert isinstance(  # noqa: S101
-        data, str
-    ), f"Provided input is a {type(data)}. Make sure the type is str."
+    if not isinstance(data, str):
+        msg = f"Provided input is a {type(data)}. Make sure the type is str."
+        raise TypeError(msg)
 
     input_data: bytes = data.encode(encoding=text_encoding)
     secret_key: bytes = secret.encode(encoding=text_encoding)

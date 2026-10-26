@@ -56,8 +56,9 @@ class FakePLZProvider(FakeProvider):
                 preserve = (preserve,)
 
             # Check if the preserve values are admissible
-            msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE.values()])}."""
-            assert all(s in self._ADMISSIBLE.values() for s in preserve), msg  # noqa: S101
+            if not all(s in self._ADMISSIBLE.values() for s in preserve):
+                msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE.values()])}."""
+                raise ValueError(msg)
 
             self._PRESERVED = set(preserve)
 
@@ -111,9 +112,9 @@ class FakePLZProvider(FakeProvider):
 
         """
         # Make sure plz is of 4 digits
-        assert len(plz) == len(  # noqa: S101
-            self._ADMISSIBLE
-        ), f"PLZ must be of {len(self._ADMISSIBLE)} digits."
+        if len(plz) != len(self._ADMISSIBLE):
+            msg = f"PLZ must be of {len(self._ADMISSIBLE)} digits."
+            raise ValueError(msg)
 
         return {"district": plz[0], "area": plz[1], "route": plz[2], "postcode": plz[3]}
 

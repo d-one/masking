@@ -15,8 +15,8 @@ class PresidioHandler:
 
     operators: dict[str, OperatorConfig] | None = None
 
-    allow_list: list[str] | None = (None,)
-    deny_list: list[str] | None = (None,)
+    allow_list: list[str] | None = None
+    deny_list: list[str] | None = None
 
     # Entities to be detected as PII
     _PII_ENTITIES: ClassVar[set[str]] = {

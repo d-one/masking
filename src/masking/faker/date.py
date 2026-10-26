@@ -31,8 +31,9 @@ class FakeDateProvider(FakeProvider):
                 preserve = (preserve,)
 
             # Check if the preserve values are admissible
-            msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE])}."""
-            assert all(s in self._ADMISSIBLE for s in preserve), msg  # noqa: S101
+            if not all(s in self._ADMISSIBLE for s in preserve):
+                msg = f"""Preserve values must be {", ".join([f"'{s}'" for s in self._ADMISSIBLE])}."""
+                raise ValueError(msg)
 
             self._PRESERVED = set(preserve)
 
