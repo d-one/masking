@@ -142,6 +142,14 @@ class TestServingColumns:
         assert column(out, "t") == ["<PATIENT_DATA> here", "<PATIENT_DATA> here"]
         assert column(out, "first") == ["John", "Ann"]
 
+    def test_string_match_skips_null_pii_value(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, "None of John", "John"), (2, "None of Ann", None)],
+            "id int, t string, first string",
+        )
+        out = StringMatchOperation(col_name="t", pii_cols=["first"])(data)
+        assert column(out, "t") == ["None of <PATIENT_DATA>", "None of Ann"]
+
     def test_string_match_dict(self, spark: SparkSession):
         data = spark.createDataFrame(
             [(1, json.dumps({"n": "John here"}), "John")],
