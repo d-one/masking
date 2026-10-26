@@ -400,7 +400,7 @@ class MultiNestedDictHandler:
             try:
                 d = d[self._get_index(key)]
             except Exception as e:
-                msg = f"Key {key} not found in {d} with data {data}"
+                msg = f"Key {key} not found in the nested data."
                 raise KeyError(msg) from e
         return d
 
@@ -468,13 +468,13 @@ class MultiNestedDictHandler:
             try:
                 d = d[self._get_index(key)]
             except Exception as e:
-                msg = f"Key {key} not found in {d}"
+                msg = f"Key {key} not found in the nested data."
                 raise KeyError(msg) from e
 
         try:
             d[self._get_index(path[-1])] = value
         except Exception as e:
-            msg = f"Key {path[-1]} not found in {d}"
+            msg = f"Key {path[-1]} not found in the nested data."
             raise KeyError(msg) from e
 
         return data

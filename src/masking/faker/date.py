@@ -167,5 +167,5 @@ class FakeDateProvider(FakeProvider):
             if days[0] <= last_day:
                 return date(year, month, randint(days[0], min(days[1], last_day)))
 
-        msg = f"Could not generate a valid date within the ranges {dates_ranges}."
+        msg = "Could not generate a valid date within the preserved date ranges."
         raise ValueError(msg)

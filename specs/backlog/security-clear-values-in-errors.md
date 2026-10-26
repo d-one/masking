@@ -3,7 +3,7 @@ ticket: "#5"
 links:
   - docs/security/README.md
 owner: petmarco7
-status: draft
+status: in progress
 affected_components:
   - src/masking/base_operations/operation_fake.py
   - src/masking/base_operations/operation_yyyy_hash.py
@@ -42,6 +42,7 @@ Confirmed by reading the code:
 | `base_operations/operation_fake.py:70`      | `Unable to mask the line {line} after … attempts for column …`            |
 | `base_operations/operation_yyyy_hash.py:35` | `Could not parse date from line: {line}. Error: {e}`                      |
 | `utils/multi_nested_dict.py:403`            | `Key {key} not found in {d} with data {data}` (the whole JSON record)     |
+| `utils/multi_nested_dict.py:471,477`        | `Key {key} not found in {d}` (a sub-document, in `_set_leaf`)             |
 | `faker/date.py:170`                         | `… within the ranges {dates_ranges}` (bounds derived from the clear date) |
 
 `{e}` from dateparser can also echo the input.

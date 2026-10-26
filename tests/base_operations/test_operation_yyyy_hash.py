@@ -73,6 +73,15 @@ def test_operation_yyyy_hash_is_abstract() -> None:
     ), "YYYYHashOperationBase should be an abstract base class"
 
 
+def test_unparseable_date_error_has_no_clear_value(operation_class: type) -> None:
+    sentinel = "Sentinel Clear Value"
+    operation = operation_class(col_name="birth_date")
+    with pytest.raises(ValueError, match="column birth_date") as exc:
+        operation._mask_line(sentinel)
+    assert sentinel not in str(exc.value)
+    assert sentinel not in str(exc.value.__cause__)
+
+
 def test_yyyy_hash_operation_hash(
     operation_class: type, v_input_name_and_line: tuple[str, str | pd.Series]
 ) -> None:

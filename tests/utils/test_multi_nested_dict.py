@@ -902,6 +902,22 @@ class TestGetSetLeafErrors:
         data = ["x", "y"]
         assert handler._set_leaf(data, "[1]", "Y") == ["x", "Y"]
 
+    @pytest.mark.parametrize(
+        ("method", "path"),
+        [
+            ("_get_leaf", "missing"),
+            ("_set_leaf", f"missing{SEP}b"),
+            ("_set_leaf", f"name{SEP}b"),
+        ],
+    )
+    def test_error_message_has_no_clear_value(self, handler, method, path):
+        sentinel = "Sentinel Clear Value"
+        args = ("v",) if method == "_set_leaf" else ()
+        with pytest.raises(KeyError, match="not found in the nested data") as exc:
+            getattr(handler, method)({"name": sentinel}, path, *args)
+        assert sentinel not in str(exc.value)
+        assert sentinel not in str(exc.value.__cause__)
+
 
 # ---------------------------------------------------------------------------
 # deny handling in generators

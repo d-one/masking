@@ -32,7 +32,7 @@ class YYYYHashOperationBase(HashOperationBase):
             line_date = parse_date(line)
             year = line_date.year
         except Exception as e:
-            msg = f"Could not parse date from line: {line}. Error: {e}"
+            msg = f"Could not parse a date for column {self.col_name}."
             raise ValueError(msg) from e
 
         signature = self._hashing_function(line)
