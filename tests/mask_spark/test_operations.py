@@ -178,6 +178,33 @@ class TestServingColumns:
             {"n": "<PATIENT_DATA> here"}
         ]
 
+    def test_string_match_dict_inner_wildcard_allow_key(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, json.dumps({"items": [{"a": "John", "b": "John"}]}), "John")],
+            "id int, j string, first string",
+        )
+        op = StringMatchDictOperation(
+            col_name="j", pii_cols=["first"], allow_keys=["items.[$].[*].[$].a"]
+        )
+        assert [json.loads(v) for v in column(op(data), "j")] == [
+            {"items": [{"a": "John", "b": "<PATIENT_DATA>"}]}
+        ]
+
+    def test_string_match_dict_denies_scalar_list_entries(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, json.dumps({"items": [123, "John", None, True]}), "John")],
+            "id int, j string, first string",
+        )
+        op = StringMatchDictOperation(
+            col_name="j",
+            pii_cols=["first"],
+            deny_keys=["items.[$].[*]"],
+            masking_function=lambda s: f"<{s}>",
+        )
+        assert [json.loads(v) for v in column(op(data), "j")] == [
+            {"items": ["<123>", "<John>", "<null>", "<true>"]}
+        ]
+
 
 class TestPresidio:
     def test_mask_presidio(self, spark: SparkSession, blank_analyzer):
@@ -195,6 +222,19 @@ class TestPresidio:
         assert isinstance(out.schema["id"].dataType, LongType)
         assert [json.loads(v) for v in column(out, "j")] == [
             {"c": "mail <EMAIL_ADDRESS>", "n": "hi"}
+        ]
+
+    def test_mask_dict_inner_wildcard_allow_key(
+        self, spark: SparkSession, blank_analyzer
+    ):
+        data = spark.createDataFrame(
+            [(1, json.dumps({"items": [{"a": EMAIL, "b": EMAIL}]}))], "id int, j string"
+        )
+        op = MaskDictOperation(
+            col_name="j", analyzer=blank_analyzer, allow_keys=["items.[$].[*].[$].a"]
+        )
+        assert [json.loads(v) for v in column(op(data), "j")] == [
+            {"items": [{"a": EMAIL, "b": "<EMAIL_ADDRESS>"}]}
         ]
 
     def test_mask_dict_every_language(

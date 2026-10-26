@@ -187,8 +187,8 @@ class MultiNestedDictHandler:
           by the end of the key.
         - If the key ends with "*", the key is a wildcard and the match is done
             by the start of the key.
-        - If the key contains "[*]", the key is a wildcard and the match is done
-            by ignoring the index of the list.
+        - If the key contains "[*]", each "[*]" matches any list index at its
+            position; all other path parts must match exactly.
         - If the key contains "[k]" where k is a number, the key is a wildcard and the
             match is done by ignoring the index of the list that is different from k.
 
@@ -212,7 +212,7 @@ class MultiNestedDictHandler:
         for allowed_key in keys_list:
             if not any([
                 allowed_key.startswith("*"),
-                allowed_key.startswith("[*]"),
+                "[*]" in allowed_key,
                 allowed_key.startswith(key_path),
             ]):
                 continue
@@ -239,13 +239,10 @@ class MultiNestedDictHandler:
 
             # Handle the case where the key is a wildcard containing "[*]"
             if "[*]" in allowed_key:
-                allowed_parts_no_index = [
-                    part_clean
-                    for part in allowed_key.split("[*]")
-                    if (part_clean := strip_key(part, self.path_separator))
-                ]
-
-                if all(key_part in key_path for key_part in allowed_parts_no_index):
+                if len(allowed_parts) == len(key_path_parts) and all(
+                    allowed == part or (allowed == "[*]" and self._is_list_index(part))
+                    for allowed, part in zip(allowed_parts, key_path_parts, strict=True)
+                ):
                     return True
                 continue
 
@@ -479,6 +476,40 @@ class MultiNestedDictHandler:
 
         return data
 
+    def _iter_children(
+        self, data: dict | list, parent: str | None
+    ) -> Generator[tuple[str, str, object], None, None]:
+        """Yield the key to match, the path, and the value of each child.
+
+        Args:
+        ----
+            data (dict|list): The data whose children to iterate
+            parent (str): The parent path
+
+        Returns:
+        -------
+            Generator: (key to match against allow/deny keys, child path, child value)
+
+        """
+        if isinstance(data, dict):
+            items = (
+                (
+                    key.lower().strip() if not self.case_sensitive else key.strip(),
+                    key,
+                    v,
+                )
+                for key, v in data.items()
+            )
+        else:
+            index_keys = (self._list_index_to_path(i) for i in range(len(data)))
+            items = ((k, k, v) for k, v in zip(index_keys, data, strict=True))
+
+        for match_key, key, value in items:
+            key_path = (
+                f"{parent}{self.path_separator}{key}" if parent is not None else key
+            )
+            yield match_key, key_path, value
+
     def _find_leaf_path(
         self, data: str | dict | list | None, parent: str | None = None
     ) -> Generator[str, None, None]:
@@ -494,36 +525,15 @@ class MultiNestedDictHandler:
             Generator: The leaf path
 
         """
-        if isinstance(data, dict):
-            for key, value in data.items():
-                key_path = (
-                    f"{parent}{self.path_separator}{key}" if parent is not None else key
-                )
-
-                if self._is_skippable(
-                    key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent,
-                ):
+        if isinstance(data, dict | list):
+            for match_key, key_path, value in self._iter_children(data, parent):
+                if self._is_skippable(match_key, parent):
                     continue
 
-                if self._is_denied(
-                    key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent,
-                ):
+                if self._is_denied(match_key, parent):
                     yield self._deny_path(key_path)
                     continue
 
-                yield from self._find_leaf_path(data=value, parent=key_path)
-
-            return
-
-        if isinstance(data, list):
-            for index, value in enumerate(data):
-                key_path = (
-                    f"{parent}{self.path_separator}{self._list_index_to_path(index)}"
-                    if parent is not None
-                    else self._list_index_to_path(index)
-                )
                 yield from self._find_leaf_path(data=value, parent=key_path)
             return
 
@@ -553,36 +563,15 @@ class MultiNestedDictHandler:
             Generator: The leaf path and value
 
         """
-        if isinstance(data, dict):
-            for key, value in data.items():
-                key_path = (
-                    f"{parent}{self.path_separator}{key}" if parent is not None else key
-                )
-
-                if self._is_skippable(
-                    key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent,
-                ):
+        if isinstance(data, dict | list):
+            for match_key, key_path, value in self._iter_children(data, parent):
+                if self._is_skippable(match_key, parent):
                     continue
 
-                if self._is_denied(
-                    key.lower().strip() if not self.case_sensitive else key.strip(),
-                    parent,
-                ):
+                if self._is_denied(match_key, parent):
                     yield (self._deny_path(key_path), value)
                     continue
 
-                yield from self._find_leaf_path_and_value(data=value, parent=key_path)
-
-            return
-
-        if isinstance(data, list):
-            for index, value in enumerate(data):
-                key_path = (
-                    f"{parent}{self.path_separator}{self._list_index_to_path(index)}"
-                    if parent is not None
-                    else self._list_index_to_path(index)
-                )
                 yield from self._find_leaf_path_and_value(data=value, parent=key_path)
             return
 

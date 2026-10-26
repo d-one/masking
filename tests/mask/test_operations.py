@@ -203,6 +203,16 @@ class TestPresidioOperations:
         assert [json.loads(v) for v in out] == [{"c": "mail <EMAIL_ADDRESS>"}]
         assert out.index.tolist() == [3]
 
+    def test_mask_dict_inner_wildcard_allow_key(self, blank_analyzer):
+        line = json.dumps({"items": [{"a": EMAIL, "b": EMAIL}]})
+        op = MaskDictOperation(
+            col_name="j", analyzer=blank_analyzer, allow_keys=["items.[$].[*].[$].a"]
+        )
+        out = op(pd.DataFrame({"j": [line]}))
+        assert [json.loads(v) for v in out] == [
+            {"items": [{"a": EMAIL, "b": "<EMAIL_ADDRESS>"}]}
+        ]
+
     def test_mask_presidio_every_language(self, last_language_analyzer):
         op = MaskPresidio(
             col_name="t", analyzer=last_language_analyzer, pii_entities=["CODE_WORD"]
@@ -247,6 +257,33 @@ class TestStringMatchOperations:
             {"n": "<PATIENT_DATA>"},
         ]
         assert out.index.tolist() == data.index.tolist()
+
+    def test_string_match_dict_inner_wildcard_allow_key(self):
+        data = pd.DataFrame({
+            "j": [json.dumps({"items": [{"a": "John", "b": "John"}]})],
+            "first": ["John"],
+        })
+        op = StringMatchDictOperation(
+            col_name="j", pii_cols=["first"], allow_keys=["items.[$].[*].[$].a"]
+        )
+        assert [json.loads(v) for v in op(data)] == [
+            {"items": [{"a": "John", "b": "<PATIENT_DATA>"}]}
+        ]
+
+    def test_string_match_dict_denies_scalar_list_entries(self):
+        data = pd.DataFrame({
+            "j": [json.dumps({"items": [123, "John", None, True]})],
+            "first": ["John"],
+        })
+        op = StringMatchDictOperation(
+            col_name="j",
+            pii_cols=["first"],
+            deny_keys=["items.[$].[*]"],
+            masking_function=lambda s: f"<{s}>",
+        )
+        assert [json.loads(v) for v in op(data)] == [
+            {"items": ["<123>", "<John>", "<null>", "<true>"]}
+        ]
 
     def test_string_match_dict_series(self):
         line = json.dumps({"n": "John"})

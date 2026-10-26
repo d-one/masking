@@ -1,3 +1,4 @@
+import json
 from abc import abstractmethod
 
 from masking.base_operations.operation import Operation
@@ -24,7 +25,12 @@ class DictOperationBase(Operation, MultiNestedDictHandler):
         """
         for leaf in leaf_to_deny:
             value = self._get_leaf(line, leaf)
-            masked = self.masking_function(self._dump_line(value))
+            text = (
+                value
+                if isinstance(value, str)
+                else json.dumps(value, ensure_ascii=False)
+            )
+            masked = self.masking_function(text)
             line = self._set_leaf(line, leaf, masked)
         return line
 

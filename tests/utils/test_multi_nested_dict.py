@@ -806,15 +806,36 @@ class TestHasMatchStrExtra:
         assert handler._has_match_str("a") is False
         assert handler._has_match_str("a", mode="deny") is False
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: '[*]' wildcards not at the start of the key never match, as "
-        "the key must start with the current key path to be considered.",
-    )
     def test_inner_bracket_wildcard_skips_key(self):
         h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]{SEP}name"])
         data = {"items": [{"name": "Alice", "age": 30}]}
         assert list(h._find_leaf_path(data)) == [f"items{SEP}[0]{SEP}age"]
+
+    def test_bracket_wildcard_matches_whole_path_parts_only(self):
+        h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]{SEP}name"])
+        assert h._has_match_str("name", parent=f"items{SEP}[3]") is True
+        assert h._has_match_str("surname", parent=f"items{SEP}[0]") is False
+        assert h._has_match_str("name", parent=f"archived_items{SEP}[0]") is False
+        assert h._has_match_str("name", parent="items") is False
+        assert h._has_match_str("name", parent=f"items{SEP}x") is False
+
+    def test_bracket_wildcard_deny_matches_whole_path_parts_only(self):
+        h = MultiNestedDictHandler(deny_keys=[f"items{SEP}[*]{SEP}name"])
+        assert h._has_match_str("name", parent=f"items{SEP}[3]", mode="deny")
+        assert not h._has_match_str("surname", parent=f"items{SEP}[0]", mode="deny")
+
+    def test_terminal_bracket_wildcard_allow_skips_list_entries(self):
+        h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]"])
+        data = {"items": ["a", {"b": "c"}], "x": "d"}
+        assert list(h._find_leaf_path(data)) == ["x"]
+        assert list(h._find_leaf_path_and_value(data)) == [("x", "d")]
+
+    def test_terminal_bracket_wildcard_deny_denies_list_entries(self):
+        h = MultiNestedDictHandler(deny_keys=[f"items{SEP}[*]"])
+        data = {"items": ["a"], "x": "d"}
+        denied = h._deny_path(f"items{SEP}[0]")
+        assert list(h._find_leaf_path(data)) == [denied, "x"]
+        assert list(h._find_leaf_path_and_value(data)) == [(denied, "a"), ("x", "d")]
 
 
 # ---------------------------------------------------------------------------
