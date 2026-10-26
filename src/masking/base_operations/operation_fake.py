@@ -67,7 +67,7 @@ class FakerOperation(Operation):
             counter += 1
 
         if masked == line:
-            msg = f"Unable to mask the line {line} after {self.MAX_RETRY_MASK_LINE} attempts for column {self.col_name}."
+            msg = f"Unable to mask a value after {self.MAX_RETRY_MASK_LINE} attempts for column {self.col_name}."
             raise ValueError(msg)
 
         return masked

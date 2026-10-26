@@ -32,10 +32,12 @@ def test_mask_line_retries_until_value_changes():
 
 
 def test_mask_line_raises_when_value_never_changes():
-    op = SequenceFaker(itertools.repeat("a"))
+    sentinel = "Sentinel Clear Value"
+    op = SequenceFaker(itertools.repeat(sentinel))
     op.MAX_RETRY_MASK_LINE = 5
-    with pytest.raises(ValueError, match="Unable to mask the line a"):
-        op._mask_line("a")
+    with pytest.raises(ValueError, match="after 5 attempts for column c") as exc:
+        op._mask_line(sentinel)
+    assert sentinel not in str(exc.value)
 
 
 def test_check_mask_line_records_unique_values():

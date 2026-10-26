@@ -105,9 +105,10 @@ class TestDateFromRanges:
 
     def test_impossible_ranges_raise(self):
         ranges = {**self.RANGES, "month_start": "2", "month_end": "2"}
-        ranges.update(day_start="30", day_end="30")
-        with pytest.raises(ValueError, match="Could not generate a valid date"):
+        ranges.update(day_start="30", day_end="30", year_start="1987", year_end="1987")
+        with pytest.raises(ValueError, match="Could not generate a valid date") as exc:
             FakeDateProvider().get_date_from_ranges(ranges)
+        assert not any(v in str(exc.value) for v in ("1987", "30"))
 
 
 class TestCall:

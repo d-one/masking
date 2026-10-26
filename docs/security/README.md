@@ -29,10 +29,13 @@ The library processes personally identifiable information (PII). Masked output i
 
 ## Known Issues
 
-| Issue                                                                                                                         | Mitigation until fixed                                        |
-| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `FakeNameOperation` with `reuse_existing=True` can output clear input names ([#4](https://github.com/d-one/masking/issues/4)) | Pass `reuse_existing=False`.                                  |
-| Some exception messages contain the clear value being masked ([#5](https://github.com/d-one/masking/issues/5))                | Do not forward masking exceptions to logs readable by others. |
+| Issue                                                                                                                         | Mitigation until fixed       |
+| ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `FakeNameOperation` with `reuse_existing=True` can output clear input names ([#4](https://github.com/d-one/masking/issues/4)) | Pass `reuse_existing=False`. |
+
+## Exceptions
+
+Exceptions raised by the library name the column, operation, or path and the reason for the failure, but contain no clear value, masked value, or part of the input document. Exceptions raised by third-party libraries (Presidio, dateparser, Spark) can still contain input values.
 
 ## Repository Data
 
