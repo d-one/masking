@@ -79,6 +79,13 @@ class TestPipeline:
         # MedStats sees "1000.0", not "1000", so nothing is mapped
         assert values(pipeline(data)["p"]) == [1e20, None, 1000.0]
 
+    def test_column_named_self(self):
+        data = pd.DataFrame({"self": ["1000", None]})
+        pipeline = MaskDataFramePipeline({
+            "self": {"masking_operation": MedStatsOperation(col_name="self")}
+        })
+        assert values(pipeline(data)["self"]) == ["VD02", None]
+
     def test_null_operation_is_rejected(self):
         with pytest.raises(TypeError, match="NullOperation cannot be used"):
             MaskDataFramePipeline({

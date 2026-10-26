@@ -105,8 +105,8 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
 
         """
         # Mask integer columns with nulls as integers, as polars and Spark do
-        data = data[necessary_columns]
-        data = data.assign(**{col_name: _as_nullable_integers(data[col_name])})
+        data = data[necessary_columns].copy()
+        data[col_name] = _as_nullable_integers(data[col_name])
 
         # Filter out all the row which have null valus on the col_name
         return data.dropna(subset=[col_name]).drop_duplicates(keep="first")
