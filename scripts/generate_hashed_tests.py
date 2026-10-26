@@ -22,4 +22,4 @@ for param in params:
 
     method_name = inputs["method"].__name__.replace("openssl_", "hashlib.")
     string_to_print = f"('{inputs['data']}', {method_name}, '{inputs['secret']}', '{inputs['text_encoding']}', '{hashed_value}'),"
-    print(string_to_print)  # noqa: T201
+    print(string_to_print)

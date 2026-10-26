@@ -20,6 +20,12 @@ from masking.mask_polars.operations.operation_hash import HashOperation as HashP
 from masking.mask_polars.operations.operation_med_stats import (
     MedStatsOperation as MedStatsPl,
 )
+from masking.mask_polars.operations.operation_string_match import (
+    StringMatchOperation as StringMatchPl,
+)
+from masking.mask_polars.operations.operation_yyyy_hash import (
+    YYYYHashOperation as YYYYHashPl,
+)
 from masking.mask_polars.pipeline import MaskDataFramePipeline as PolarsPipeline
 from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_fake_name import FakeNameOperation
@@ -44,6 +50,7 @@ SPARK_OPS = SimpleNamespace(
     hash=HashOperation, yyyy=YYYYHashOperation, match=StringMatchOperation
 )
 PANDAS_OPS = SimpleNamespace(hash=HashPd, yyyy=YYYYHashPd, match=StringMatchPd)
+POLARS_OPS = SimpleNamespace(hash=HashPl, yyyy=YYYYHashPl, match=StringMatchPl)
 
 # Each entry builds a configuration from a namespace of operation classes
 DETERMINISTIC_CONFIGS: dict[str, Callable] = {
@@ -116,26 +123,40 @@ def _run_pandas(data: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
     return out, {k: dict(v) for k, v in pipeline.concordance_tables.items()}
 
 
+def _run_polars(data: pd.DataFrame, config: dict) -> tuple[pd.DataFrame, dict]:
+    pipeline = PolarsPipeline(config)
+    out = pipeline(pl.from_pandas(data)).sort("row_id").to_pandas()
+    return out, {k: dict(v) for k, v in pipeline.concordance_tables.items()}
+
+
+def _assert_same_output(
+    out: pd.DataFrame, tables: dict, ref_out: pd.DataFrame, ref_tables: dict
+) -> None:
+    assert list(out.columns) == list(ref_out.columns)
+    for c in ref_out.columns:
+        assert (
+            out[c].map(normalize).tolist() == ref_out[c].map(normalize).tolist()
+        ), f"column {c} differs"
+
+    assert tables.keys() == ref_tables.keys()
+    for c, table in ref_tables.items():
+        assert {str(k): v for k, v in tables[c].items()} == {
+            str(k): v for k, v in table.items()
+        }
+
+
 @pytest.mark.parametrize("config_name", list(DETERMINISTIC_CONFIGS))
-def test_spark_matches_pandas(
+def test_backends_match_pandas(
     spark: SparkSession, clear_data: pd.DataFrame, config_name: str
 ) -> None:
     build = DETERMINISTIC_CONFIGS[config_name]
-    spark_out, spark_tables = _run_spark(spark, clear_data, build(SPARK_OPS))
     pandas_out, pandas_tables = _run_pandas(clear_data, build(PANDAS_OPS))
 
-    assert list(spark_out.columns) == list(pandas_out.columns)
-    for c in pandas_out.columns:
-        assert (
-            spark_out[c].map(normalize).tolist()
-            == pandas_out[c].map(normalize).tolist()
-        ), f"column {c} differs"
+    spark_out, spark_tables = _run_spark(spark, clear_data, build(SPARK_OPS))
+    _assert_same_output(spark_out, spark_tables, pandas_out, pandas_tables)
 
-    assert spark_tables.keys() == pandas_tables.keys()
-    for c, table in pandas_tables.items():
-        assert {str(k): v for k, v in spark_tables[c].items()} == {
-            str(k): v for k, v in table.items()
-        }
+    polars_out, polars_tables = _run_polars(clear_data, build(POLARS_OPS))
+    _assert_same_output(polars_out, polars_tables, pandas_out, pandas_tables)
 
 
 def _assert_fake_invariants(

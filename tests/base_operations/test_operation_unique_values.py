@@ -106,14 +106,22 @@ def test_external_modification_is_respected() -> None:
     assert op._check_mask_line("y") == "c"
 
 
-def test_unique_masking_is_linear() -> None:
+def _time_unique_masking(n: int) -> float:
     op = _CounterOp()
-    n = 50_000
     start = time.perf_counter()
     for i in range(n):
         op._check_mask_line(str(i))
-    assert time.perf_counter() - start < 2
+    elapsed = time.perf_counter() - start
     assert len(set(op.concordance_table.values())) == n
+    return elapsed
+
+
+def test_unique_masking_is_linear() -> None:
+    # 4x the calls takes ~4x the time when linear and ~16x when quadratic
+    n = 5_000
+    small = min(_time_unique_masking(n) for _ in range(3))
+    large = min(_time_unique_masking(4 * n) for _ in range(3))
+    assert large / small < 8
 
 
 def test_random_set() -> None:
