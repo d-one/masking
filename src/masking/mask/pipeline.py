@@ -16,13 +16,14 @@ def _as_nullable_integers(column: pd.Series) -> pd.Series:
     Returns:
     -------
         pd.Series: the column as nullable integers, or unchanged if it is not a
-            float column with nulls and only integral values
+            float column with nulls and only integral values within the int64 range
 
     """
     if not pd.api.types.is_float_dtype(column) or not column.isna().any():
         return column
 
-    if not column.dropna().map(float.is_integer).all():
+    values = column.dropna()
+    if not (values.map(float.is_integer).all() and (values.abs() < 2**63).all()):
         return column
 
     return column.astype("Int64")
@@ -70,29 +71,6 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
     ) -> None:
         super().__init__(configuration, workers, dtype=ConcordanceTable)
 
-    def _preprocess_data(self, data: pd.DataFrame) -> pd.DataFrame:
-        """Preprocess the data, keeping integer columns with nulls as integers.
-
-        Args:
-        ----
-            data (pd.DataFrame): input dataframe
-
-        Returns:
-        -------
-            pd.DataFrame: preprocessed dataframe
-
-        """
-        data = super()._preprocess_data(data)
-        for pipeline in self.col_pipelines:
-            c_name = (
-                pipeline.column_name
-                if not isinstance(pipeline, list)
-                else pipeline[0].column_name
-            )
-            if c_name in data.columns:
-                data[c_name] = _as_nullable_integers(data[c_name])
-        return data
-
     @staticmethod
     def _get_unique_values(data: pd.DataFrame, col_name: str) -> list:
         """Return the distinct non-null values of a column.
@@ -126,12 +104,12 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             pd.DataFrame: dataframe with masked column
 
         """
+        # Mask integer columns with nulls as integers, as polars and Spark do
+        data = data[necessary_columns]
+        data = data.assign(**{col_name: _as_nullable_integers(data[col_name])})
+
         # Filter out all the row which have null valus on the col_name
-        return (
-            data[necessary_columns]
-            .dropna(subset=[col_name])
-            .drop_duplicates(keep="first")
-        )
+        return data.dropna(subset=[col_name]).drop_duplicates(keep="first")
 
     @staticmethod
     def _substitute_masked_values(
@@ -165,7 +143,7 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 data[c_name] = pd.Series(
                     [
                         None if pd.isna(x) else table.get(x, str(x))
-                        for x in data[c_name].astype(object)
+                        for x in _as_nullable_integers(data[c_name]).astype(object)
                     ],
                     index=data.index,
                     dtype=object,

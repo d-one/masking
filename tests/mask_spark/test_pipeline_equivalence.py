@@ -16,6 +16,7 @@ from masking.mask.operations.operation_string_match import (
 )
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation as YYYYHashPd
 from masking.mask.pipeline import MaskDataFramePipeline as PandasPipeline
+from masking.mask_polars.operations.operation_hash import HashOperation as HashPl
 from masking.mask_polars.operations.operation_med_stats import (
     MedStatsOperation as MedStatsPl,
 )
@@ -27,6 +28,7 @@ from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
 from masking.mask_spark.operations.operation_string_match import StringMatchOperation
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline as SparkPipeline
+from masking.utils.hash import hash_string
 from pyspark.sql import DataFrame, SparkSession
 
 from .conftest import normalize
@@ -300,3 +302,35 @@ def test_backends_agree_on_values_missing_from_the_table(spark: SparkSession) ->
         assert pandas_out[c].tolist() == expected, f"pandas column {c}"
         assert polars_out[c].to_list() == expected, f"polars column {c}"
         assert [row[c] for row in spark_rows] == expected, f"spark column {c}"
+
+
+def test_backends_agree_on_chained_operations(spark: SparkSession) -> None:
+    # MedStats keeps 99999, so the hash must apply to its string "99999"
+    rows = [(0, 1000), (1, 99999), (2, None)]
+    expected = [hash_string("VD02", SECRET), hash_string("99999", SECRET), None]
+
+    def config(med_stats: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {"masking_operation": med_stats(col_name="c")},
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+            ]
+        }
+
+    pandas_out = PandasPipeline(config(MedStatsPd, HashPd))(
+        pd.DataFrame(rows, columns=["row_id", "c"])
+    )
+    polars_out = PolarsPipeline(config(MedStatsPl, HashPl))(
+        pl.DataFrame(rows, schema=["row_id", "c"], orient="row")
+    ).sort("row_id")
+    spark_rows = (
+        SparkPipeline(config(MedStatsOperation, HashOperation))(
+            spark.createDataFrame(rows, "row_id long, c long")
+        )
+        .orderBy("row_id")
+        .collect()
+    )
+
+    assert pandas_out["c"].tolist() == expected
+    assert polars_out["c"].to_list() == expected
+    assert [row["c"] for row in spark_rows] == expected

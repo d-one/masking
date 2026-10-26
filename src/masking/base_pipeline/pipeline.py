@@ -209,10 +209,13 @@ class MaskDataFramePipelineBase(ABC):
                 col_data, [pipe], {pipe.column_name: new_table}
             )
 
-            current_values = {
-                clear: new_table.get(value, value)
-                for clear, value in current_values.items()
-            }
+            # Substitution only runs for a non-empty table and turns values
+            # missing from it into strings
+            if new_table:
+                current_values = {
+                    clear: new_table.get(value, str(value))
+                    for clear, value in current_values.items()
+                }
 
         return {
             **self.concordance_tables.get(col_name, {}),
