@@ -104,6 +104,7 @@ class HashOperation(HashOperationBase, PandasOperation):
 ## Git Workflow and Pull Requests
 
 - Branches: `<type>/<short-name>`, e.g. `perf/spark-arrow`, `fix/base-operation-tests`. Never commit to `main`; a pre-commit hook blocks it.
+- Merging a pull request deletes its remote head branch automatically, except `main` and `dev`.
 - Commit messages: one imperative sentence, e.g. `Add unit tests and fix composed pipelines`.
 - Prefer small pull requests with explicit boundaries; one spec (or one slice of a spec) per PR.
 - Link the ticket and spec in the PR template's References section.
