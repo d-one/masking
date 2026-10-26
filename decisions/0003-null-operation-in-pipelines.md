@@ -19,8 +19,8 @@ Pipelines therefore rejected `NullOperation` with a `TypeError` ([#24](https://g
 Pipelines null values directly instead of storing null mappings:
 
 - A `NullOperation` stage adds no entries to its concordance table or to `pipeline.concordance_tables`.
-- The base pipeline records, per column and call, the clear values that end up null; each backend nulls them after substitution with `_null_values`.
-- Without a `condition`, the whole column is nulled without collecting its distinct values.
+- The base pipeline records, per column and call, the clear values that end up null; each backend nulls them with `_null_values` before substitution, while the column still holds the clear values in their own type.
+- Without a `condition`, the whole column is nulled without collecting its distinct values, also when the `NullOperation` is part of a list.
 - With a `condition`, the stage nulls the distinct values for which `condition(str(value))` is true.
 - In a chain, the condition sees the previous stage's output, values nulled by a stage stay null in later stages, and the column's table excludes nulled clear values.
 - Values a `NullOperation` keeps are left unchanged, like any value without a mapping.

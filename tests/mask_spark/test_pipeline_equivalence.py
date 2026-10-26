@@ -495,3 +495,77 @@ def test_backends_agree_on_null_operation(
     if config_name == "hash_then_null":
         # The condition sees the hashes, so it nulls some names but not all
         assert 0 < expected_null.sum() < clear[col].notna().sum()
+
+
+def _run_all_backends(
+    spark: SparkSession, build: Callable, rows: list, spark_type: str
+) -> dict[str, list]:
+    pipelines = {
+        "pandas": PandasPipeline(build(NullPd, HashPd)),
+        "polars": PolarsPipeline(build(NullPl, HashPl)),
+        "spark": SparkPipeline(build(NullOperation, HashOperation)),
+    }
+    data = list(enumerate(rows))
+    pandas_out = pipelines["pandas"](pd.DataFrame(data, columns=["row_id", "c"]))
+    polars_out = pipelines["polars"](
+        pl.DataFrame(data, schema=["row_id", "c"], orient="row")
+    ).sort("row_id")
+    spark_out = pipelines["spark"](
+        spark.createDataFrame(data, f"row_id long, c {spark_type}")
+    ).orderBy("row_id")
+    return {
+        "pandas": [normalize(v) for v in pandas_out.sort_values("row_id")["c"]],
+        "polars": [normalize(v) for v in polars_out["c"]],
+        "spark": [normalize(r["c"]) for r in spark_out.collect()],
+    }
+
+
+def test_backends_null_integers_before_a_later_operation(spark: SparkSession) -> None:
+    def build(null: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {"masking_operation": null(col_name="c", condition=lambda v: v == "1")},
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+            ]
+        }
+
+    outputs = _run_all_backends(spark, build, [1, 2, None], "long")
+    expected = [None, hash_string("2", SECRET), None]
+    assert outputs == {"pandas": expected, "polars": expected, "spark": expected}
+
+
+def test_backends_keep_masked_values_equal_to_a_nulled_clear_value(
+    spark: SparkSession,
+) -> None:
+    # "y" hashes to a value that is itself a clear value selected for nulling
+    hashed_y = hash_string("y", SECRET)
+
+    def build(null: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {
+                    "masking_operation": null(
+                        col_name="c", condition=lambda v: v == hashed_y
+                    )
+                },
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+            ]
+        }
+
+    outputs = _run_all_backends(spark, build, ["y", hashed_y], "string")
+    expected = [hashed_y, None]
+    assert outputs == {"pandas": expected, "polars": expected, "spark": expected}
+
+
+def test_backends_null_all_in_a_list(spark: SparkSession) -> None:
+    def build(null: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+                {"masking_operation": null(col_name="c")},
+            ]
+        }
+
+    outputs = _run_all_backends(spark, build, ["a", None, "b"], "string")
+    expected = [None, None, None]
+    assert outputs == {"pandas": expected, "polars": expected, "spark": expected}

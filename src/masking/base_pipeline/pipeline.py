@@ -246,6 +246,13 @@ class MaskDataFramePipelineBase(ABC):
             return pipeline(col_data)
 
         col_name = pipeline[0].column_name
+        if any(
+            p.nulls_values and p.masking_operation.nulls_every_value for p in pipeline
+        ):
+            # Every value ends up null: no distinct values to collect, no mappings
+            self._nulled_values[col_name] = None
+            return {}
+
         current_values = {
             v: v for v in self._get_unique_values(col_data, col_name=col_name)
         }
@@ -483,13 +490,15 @@ class MaskDataFramePipelineBase(ABC):
         self._nulled_values = {}
         self._run_pipelines(data)
 
+        # Null before substituting: the nulled values are clear values, in their own type
+        for col_name, values in self._nulled_values.items():
+            if values is None or values:
+                data = self._null_values(data, col_name, values)
+
         # Substitute the masked values in the original dataframe
         data = self._substitute_masked_values(
             data, self.col_pipelines, self.concordance_tables
         )
-        for col_name, values in self._nulled_values.items():
-            if values is None or values:
-                data = self._null_values(data, col_name, values)
 
         # Impose the ordering of the columns
         data = self._impose_ordering(data, columns_order)
