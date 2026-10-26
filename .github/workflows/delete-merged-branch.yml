@@ -21,7 +21,12 @@ jobs:
           REPO: ${{ github.repository }}
           BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          if ! gh api -X DELETE "repos/$REPO/git/refs/heads/$BRANCH"; then
-            # Fail only if the branch still exists; someone may have deleted it already.
-            ! gh api "repos/$REPO/branches/$BRANCH" --silent
+          # Encode each path segment so characters like '#' or '?' cannot retarget the request.
+          ref=$(jq -rn --arg b "$BRANCH" '$b | split("/") | map(@uri) | join("/")')
+          if ! gh api -X DELETE "repos/$REPO/git/refs/heads/$ref"; then
+            # Succeed only if the branch is confirmed gone (404); surface any other failure.
+            if out=$(gh api "repos/$REPO/branches/$ref" --silent 2>&1); then
+              exit 1
+            fi
+            grep -q "HTTP 404" <<< "$out" || { echo "$out" >&2; exit 1; }
           fi
