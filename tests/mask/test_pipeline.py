@@ -79,6 +79,13 @@ class TestPipeline:
         # MedStats sees "1000.0", not "1000", so nothing is mapped
         assert values(pipeline(data)["p"]) == [1e20, None, 1000.0]
 
+    def test_int64_minimum_is_masked_as_integer(self):
+        data = pd.DataFrame({"p": [float(-(2**63)), None, 1000.0]})
+        pipeline = MaskDataFramePipeline({
+            "p": {"masking_operation": MedStatsOperation(col_name="p")}
+        })
+        assert values(pipeline(data)["p"]) == [str(-(2**63)), None, "VD02"]
+
     def test_column_named_self(self):
         data = pd.DataFrame({"self": ["1000", None]})
         pipeline = MaskDataFramePipeline({

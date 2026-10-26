@@ -23,7 +23,8 @@ def _as_nullable_integers(column: pd.Series) -> pd.Series:
         return column
 
     values = column.dropna()
-    if not (values.map(float.is_integer).all() and (values.abs() < 2**63).all()):
+    in_int64 = values.between(-(2**63), 2**63, inclusive="left")
+    if not (values.map(float.is_integer).all() and in_int64.all()):
         return column
 
     return column.astype("Int64")
