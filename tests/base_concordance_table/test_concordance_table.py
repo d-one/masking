@@ -280,11 +280,6 @@ class TestCallContract:
             DictConcordanceTable(op, {1: "x"})("data")
         op.assert_not_called()
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="ConcordanceTableBase relies on the operation to honour prescribed "
-        "values: whatever the operation returns overrides the prescription.",
-    )
     def test_prescription_wins_over_operation_output(self):
         op = mock_operation(masked={"Alice": "other", "Bob": "masked_Bob"})
         result = DictConcordanceTable(op, dict(PRESCRIBED))("data")
