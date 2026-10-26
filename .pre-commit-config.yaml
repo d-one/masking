@@ -1,3 +1,6 @@
+# APM-managed skills are vendored; edit them upstream, not here.
+exclude: ^(\.agents|\.claude|apm_modules)/
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -24,6 +27,7 @@ repos:
     hooks:
       - id: mdformat
         additional_dependencies:
+          - mdformat-frontmatter
           - mdformat-gfm
           - mdformat-tables
   - repo: https://github.com/igorshubovych/markdownlint-cli
@@ -31,6 +35,8 @@ repos:
     hooks:
       - id: markdownlint
         args: [--config, .markdownlint.yaml, --fix]
+        # Prompts, the PR template, and include stubs must not start with an H1.
+        exclude: ^(\.github/prompts/.*\.prompt\.md|\.github/pull_request_template\.md|CLAUDE\.md)$
   - repo: local
     hooks:
       - id: uv-lock-check

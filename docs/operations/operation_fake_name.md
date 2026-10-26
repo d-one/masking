@@ -35,7 +35,8 @@ ______________________________________________________________________
   **Valid values:** `"full"`, `"first"`, `"last"`
 
 - **`reuse_existing`** (`bool`, default `True`):\
-  When `True`, randomly reuses previously generated names alongside new ones, creating more realistic distributions. When `False`, always generates fresh names.
+  When `True`, randomly returns an earlier input value of any `FakeNameOperation` instead of a new name. When `False`, always generates fresh names.\
+  **Warning:** the reused values are clear input names, so real names can appear in the masked output ([#4](https://github.com/d-one/masking/issues/4)). Use `reuse_existing=False` for PII until this is fixed.
 
 - **`concordance_table`** (`dict | pd.DataFrame | None`, optional):\
   A pre-existing mapping of clear name values to masked values.
@@ -49,7 +50,7 @@ ______________________________________________________________________
 
 - Generates new names based on the provided configuration.
 - Substitutes the entire cell content with a newly generated name.
-- When `reuse_existing=True`, randomly decides whether to generate a new name or reuse a previously seen one, producing a more natural distribution of names.
+- When `reuse_existing=True`, randomly decides whether to generate a new name or return an earlier input value (see the warning above).
 - Retries up to 1000 times to ensure the generated name differs from the original.
 
 ______________________________________________________________________

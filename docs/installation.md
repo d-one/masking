@@ -1,56 +1,42 @@
-# Project Installation Guide
+# Installation
 
-This guide will help you set up and install the project dependencies using the Makefile. The Makefile will ensure that `uv` is installed, and then use `uv` to install the project dependencies.
+Development setup for working on the package. To use the package in another project, see [Installation in the README](../README.md#installation).
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed on your machine:
+| Tool                                               | Needed for                                                                                                 |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Python 3.11 or later                               | Everything                                                                                                 |
+| `make` and `curl`                                  | `make install`, which installs [uv](https://docs.astral.sh/uv/) if it is missing                           |
+| Java 17 or later                                   | The Spark backend and its tests (PySpark 4.0); see [Running Spark locally](spark.md#running-spark-locally) |
+| [APM](https://github.com/microsoft/apm) (optional) | Agent skills for coding agents; see [Development](development/README.md)                                   |
 
-- **Python 3.x**: The project requires Python 3.11.0. You can download it from [python.org](https://www.python.org/downloads/).
+## Set Up
 
-## Steps
+```sh
+git clone https://github.com/d-one/masking.git
+cd masking
+make install   # installs uv if missing, runs `uv sync`, installs the pre-commit hooks
+apm install    # optional: agent skills pinned in apm.lock.yaml
+```
 
-1. **Clone the repository**:
+`uv sync` installs the runtime and `dev` dependencies into `.venv`, including the spaCy models `en_core_web_trf` and `de_core_news_lg` used by the Presidio operations.
 
-   ```sh
-   git clone https://github.com/d-one/masking.git
-   cd masking
-   ```
+## Commands
 
-1. **Run the Makefile**:
-   The Makefile contains commands to check for `uv` and install it if not already installed. It then installs the project dependencies using `uv`.
+| Task                                           | Command                             |
+| ---------------------------------------------- | ----------------------------------- |
+| Run tests                                      | `uv run pytest tests`               |
+| Lint and format (ruff, mdformat, markdownlint) | `uv run pre-commit run --all-files` |
+| Build the wheel and sdist into `dist/`         | `uv build`                          |
+| Check that `uv.lock` matches `pyproject.toml`  | `uv lock --check`                   |
 
-   To run the Makefile, use the following command:
-
-   ```sh
-   make install
-   ```
-
-1. **Verify the installation**:
-   After running the `make` command, verify that the virtual environment has been created and the dependencies are installed.
-
-   By running
-
-   ```bash
-   ls -a .
-   ```
-
-   You should see a `.venv` directory in the project root.
-
-## Additional Information
-
-- Package management is done through [uv](https://docs.astral.sh/uv/).
-- Running the Spark pipeline and its tests requires Java 17 or later. See [Running Spark locally](spark.md#running-spark-locally) for the environment variables.
+The pre-commit hooks run on every commit, block commits to `main`, and run `uv build` when `src/` or `pyproject.toml` change.
 
 ## Troubleshooting
 
-If you encounter any issues during the installation, please check the following:
-
-- Ensure that you have Python 3.11 installed and it is added to your system's PATH.
-- Ensure that you have the necessary permissions to install packages and create directories.
-
-For further assistance, feel free to open an issue in the repository or contact the project maintainers.
-
-______________________________________________________________________
-
-By following these steps, you should be able to set up your development environment and start working on the project. Happy coding!
+| Symptom                                                        | Fix                                                                                           |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `OSError: [E050] Can't find model ...`                         | Run `uv sync`, or pass `models` to `PresidioMultilingualAnalyzer` with installed models only. |
+| Spark fails with `JAVA_GATEWAY_EXITED` or a Java version error | Install Java 17 or later and set `JAVA_HOME`.                                                 |
+| `uv: command not found` after `make install`                   | Open a new shell so the `uv` install directory is on `PATH`.                                  |

@@ -2,14 +2,26 @@
 
 This page provides an overview of the available operations in the masking module. Each operation is designed to anonymize or pseudonymize specific data types while preserving utility. Use this guide to find the operation that best suits your masking needs.
 
+## Importing an Operation
+
+Every operation exists in each backend with the same class name and parameters. The examples on the operation pages use the pandas backend; for polars or Spark, replace `masking.mask` with `masking.mask_polars` or `masking.mask_spark`:
+
+```python
+from masking.mask.operations.operation_hash import HashOperation  # pandas
+from masking.mask_polars.operations.operation_hash import HashOperation  # polars
+from masking.mask_spark.operations.operation_hash import HashOperation  # Spark
+```
+
+Use operations from the same backend as the pipeline; see [Backends and pipelines](../available_modules.md).
+
 ______________________________________________________________________
 
 ## 🔐 Minimization
 
-Use when deterministic, irreversible masking is required.
+Use when a value must be removed entirely.
 
 - [`null`](./operation_null.md):
-  Replace any entry with a null value
+  Replace any entry with a null value. Not yet available in any backend; see the operation page.
 
 ______________________________________________________________________
 

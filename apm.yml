@@ -1,0 +1,29 @@
+name: masking
+version: 1.0.0
+description: Agent context for the masking library
+author: petmarco7
+# Which agent platforms to deploy to.
+# Resolution order: --target flag > this field > auto-detect from filesystem.
+# Accepted values: agent-skills, antigravity, claude, codex, copilot, cursor, gemini, grok-build, hermes, kiro, opencode, vscode, windsurf
+targets:
+  - claude
+  - copilot
+dependencies:
+  apm:
+    - mattpocock/skills/skills/productivity/grilling#5beb35b040e3de97e54fa9e386d7e42d15c295c2
+    - mattpocock/skills/skills/productivity/grill-me#5beb35b040e3de97e54fa9e386d7e42d15c295c2
+    - DietrichGebert/ponytail/skills/ponytail#09c434ab73ca43761c5d8b0c5d341926c2fba710
+    - addyosmani/agent-skills/skills/spec-driven-development#aeac41d4d005999432bb7312f7ff06383a91d59d
+    - addyosmani/agent-skills/skills/documentation-and-adrs#aeac41d4d005999432bb7312f7ff06383a91d59d
+    - softaworks/agent-toolkit/skills/crafting-effective-readmes#3027f20f3181758385a1bb8c022d4041dfb4de84
+    - softaworks/agent-toolkit/skills/writing-clearly-and-concisely#3027f20f3181758385a1bb8c022d4041dfb4de84
+    - softaworks/agent-toolkit/skills/c4-architecture#3027f20f3181758385a1bb8c022d4041dfb4de84
+    - github/awesome-copilot/skills/documentation-writer#eed23f0050591a710148fe40d207bc88dfd1d58b
+    - github/awesome-copilot/skills/docs-sync-audit#eed23f0050591a710148fe40d207bc88dfd1d58b
+    - addyosmani/agent-skills/skills/git-workflow-and-versioning#aeac41d4d005999432bb7312f7ff06383a91d59d
+    - addyosmani/agent-skills/skills/code-review-and-quality#aeac41d4d005999432bb7312f7ff06383a91d59d
+    - mattpocock/skills/skills/engineering/code-review#5beb35b040e3de97e54fa9e386d7e42d15c295c2
+    - obra/superpowers/skills/receiving-code-review#2ce8aa15d05bd57213e6f746f953aafb7ded7a8b
+  mcp: []
+includes: auto
+scripts: {}

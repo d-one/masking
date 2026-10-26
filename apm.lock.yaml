@@ -1,0 +1,1377 @@
+lockfile_version: '1'
+apm_version: 0.33.0
+dependencies:
+- repo_url: addyosmani/agent-skills
+  name: code-review-and-quality
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/code-review-and-quality
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/code-review-and-quality
+  - .agents/skills/code-review-and-quality/SKILL.md
+  - .claude/skills/code-review-and-quality
+  - .claude/skills/code-review-and-quality/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/code-review-and-quality/SKILL.md: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+    .claude/skills/code-review-and-quality/SKILL.md: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+  content_hash: sha256:0667c7af98996c0bec4fb0eb444680bdbf1da1d6a3cfdf5dbe8cbd350d9d2752
+- repo_url: addyosmani/agent-skills
+  name: documentation-and-adrs
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/documentation-and-adrs
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/documentation-and-adrs
+  - .agents/skills/documentation-and-adrs/SKILL.md
+  - .claude/skills/documentation-and-adrs
+  - .claude/skills/documentation-and-adrs/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/documentation-and-adrs/SKILL.md: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
+    .claude/skills/documentation-and-adrs/SKILL.md: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
+  content_hash: sha256:f1bd038e74194364c1dcdb3dd0a72194ffd3ca9d3a103c125ca1a62e801a0cc4
+- repo_url: addyosmani/agent-skills
+  name: git-workflow-and-versioning
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/git-workflow-and-versioning
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/git-workflow-and-versioning
+  - .agents/skills/git-workflow-and-versioning/SKILL.md
+  - .claude/skills/git-workflow-and-versioning
+  - .claude/skills/git-workflow-and-versioning/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/git-workflow-and-versioning/SKILL.md: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+    .claude/skills/git-workflow-and-versioning/SKILL.md: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+  content_hash: sha256:e8e0d1cc98c0a6b81d2979442ae92addae32cd5194fb5c4eac4ac5228b408770
+- repo_url: addyosmani/agent-skills
+  name: spec-driven-development
+  host: github.com
+  resolved_commit: aeac41d4d005999432bb7312f7ff06383a91d59d
+  resolved_ref: aeac41d4d005999432bb7312f7ff06383a91d59d
+  version: unknown
+  virtual_path: skills/spec-driven-development
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/spec-driven-development
+  - .agents/skills/spec-driven-development/SKILL.md
+  - .claude/skills/spec-driven-development
+  - .claude/skills/spec-driven-development/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/spec-driven-development/SKILL.md: sha256:c4b97ce3d7f24be0e67fd612c7595f65504872e3a9f8d338d098b2363fdb66ef
+    .claude/skills/spec-driven-development/SKILL.md: sha256:c4b97ce3d7f24be0e67fd612c7595f65504872e3a9f8d338d098b2363fdb66ef
+  content_hash: sha256:90a53ee823e49fd1518a01e6cf64968d4848bce3fc0b0115b1c19b7e5a87a5ca
+- repo_url: dietrichgebert/ponytail
+  materialization_repo_url: DietrichGebert/ponytail
+  name: ponytail
+  host: github.com
+  resolved_commit: 09c434ab73ca43761c5d8b0c5d341926c2fba710
+  resolved_ref: 09c434ab73ca43761c5d8b0c5d341926c2fba710
+  version: unknown
+  virtual_path: skills/ponytail
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/ponytail
+  - .agents/skills/ponytail/SKILL.md
+  - .claude/skills/ponytail
+  - .claude/skills/ponytail/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/ponytail/SKILL.md: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+    .claude/skills/ponytail/SKILL.md: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+  content_hash: sha256:061f887d9e3e735f85db3be3655a8936a00f24d5fb65ac4ab74a968a770fe342
+- repo_url: github/awesome-copilot
+  name: docs-sync-audit
+  host: github.com
+  resolved_commit: eed23f0050591a710148fe40d207bc88dfd1d58b
+  resolved_ref: eed23f0050591a710148fe40d207bc88dfd1d58b
+  version: unknown
+  virtual_path: skills/docs-sync-audit
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/docs-sync-audit
+  - .agents/skills/docs-sync-audit/SKILL.md
+  - .agents/skills/docs-sync-audit/scripts/docs_drift.py
+  - .claude/skills/docs-sync-audit
+  - .claude/skills/docs-sync-audit/SKILL.md
+  - .claude/skills/docs-sync-audit/scripts/docs_drift.py
+  deployed_file_hashes:
+    .agents/skills/docs-sync-audit/SKILL.md: sha256:c21b20dcc59ac43449ef02ed7f69bfa222a241cdf46b870675ac10aac736a203
+    .agents/skills/docs-sync-audit/scripts/docs_drift.py: sha256:1af66a256a5ef8c86f30e3789c93eb609020d5cf2360871819df51fa99f27bfc
+    .claude/skills/docs-sync-audit/SKILL.md: sha256:c21b20dcc59ac43449ef02ed7f69bfa222a241cdf46b870675ac10aac736a203
+    .claude/skills/docs-sync-audit/scripts/docs_drift.py: sha256:1af66a256a5ef8c86f30e3789c93eb609020d5cf2360871819df51fa99f27bfc
+  content_hash: sha256:5006af1ccee94cdaa691931e5758588383ed28c1f4252b5e3e00b203a156c4df
+- repo_url: github/awesome-copilot
+  name: documentation-writer
+  host: github.com
+  resolved_commit: eed23f0050591a710148fe40d207bc88dfd1d58b
+  resolved_ref: eed23f0050591a710148fe40d207bc88dfd1d58b
+  version: unknown
+  virtual_path: skills/documentation-writer
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/documentation-writer
+  - .agents/skills/documentation-writer/SKILL.md
+  - .claude/skills/documentation-writer
+  - .claude/skills/documentation-writer/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/documentation-writer/SKILL.md: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
+    .claude/skills/documentation-writer/SKILL.md: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
+  content_hash: sha256:ee53d65b163cd7eb953a930c95841cfe398cc2c0bd24c06508bbaa07c432be35
+- repo_url: mattpocock/skills
+  name: code-review
+  host: github.com
+  resolved_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  resolved_ref: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  version: unknown
+  virtual_path: skills/engineering/code-review
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/code-review
+  - .agents/skills/code-review/SKILL.md
+  - .agents/skills/code-review/agents/openai.yaml
+  - .claude/skills/code-review
+  - .claude/skills/code-review/SKILL.md
+  - .claude/skills/code-review/agents/openai.yaml
+  deployed_file_hashes:
+    .agents/skills/code-review/SKILL.md: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+    .agents/skills/code-review/agents/openai.yaml: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+    .claude/skills/code-review/SKILL.md: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+    .claude/skills/code-review/agents/openai.yaml: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+  content_hash: sha256:bb3048304e5c783c09783326a9e8f8ba55a31e810f511a792238bb8ad45a0978
+- repo_url: mattpocock/skills
+  name: grill-me
+  host: github.com
+  resolved_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  resolved_ref: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  version: unknown
+  virtual_path: skills/productivity/grill-me
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/grill-me
+  - .agents/skills/grill-me/SKILL.md
+  - .agents/skills/grill-me/agents/openai.yaml
+  - .claude/skills/grill-me
+  - .claude/skills/grill-me/SKILL.md
+  - .claude/skills/grill-me/agents/openai.yaml
+  deployed_file_hashes:
+    .agents/skills/grill-me/SKILL.md: sha256:caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637
+    .agents/skills/grill-me/agents/openai.yaml: sha256:c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b
+    .claude/skills/grill-me/SKILL.md: sha256:caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637
+    .claude/skills/grill-me/agents/openai.yaml: sha256:c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b
+  content_hash: sha256:fe33aaa8e8dcd606107b1bfe3109f257b4a7e0f4907afd6506b62ccfb73cd1d3
+- repo_url: mattpocock/skills
+  name: grilling
+  host: github.com
+  resolved_commit: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  resolved_ref: 5beb35b040e3de97e54fa9e386d7e42d15c295c2
+  version: unknown
+  virtual_path: skills/productivity/grilling
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/grilling
+  - .agents/skills/grilling/SKILL.md
+  - .agents/skills/grilling/agents/openai.yaml
+  - .claude/skills/grilling
+  - .claude/skills/grilling/SKILL.md
+  - .claude/skills/grilling/agents/openai.yaml
+  deployed_file_hashes:
+    .agents/skills/grilling/SKILL.md: sha256:befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15
+    .agents/skills/grilling/agents/openai.yaml: sha256:1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b
+    .claude/skills/grilling/SKILL.md: sha256:befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15
+    .claude/skills/grilling/agents/openai.yaml: sha256:1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b
+  content_hash: sha256:90b54c72a48114f62072de27e1bef0c61d55f0959044725c593ed9fc72197755
+- repo_url: obra/superpowers
+  name: receiving-code-review
+  host: github.com
+  resolved_commit: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b
+  resolved_ref: 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b
+  version: unknown
+  virtual_path: skills/receiving-code-review
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/receiving-code-review
+  - .agents/skills/receiving-code-review/SKILL.md
+  - .claude/skills/receiving-code-review
+  - .claude/skills/receiving-code-review/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/receiving-code-review/SKILL.md: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+    .claude/skills/receiving-code-review/SKILL.md: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+  content_hash: sha256:59361179fc9225173e0c145ffd9bafbf9fdbf8b43ce3dc308497a0b4f83a6063
+- repo_url: softaworks/agent-toolkit
+  name: c4-architecture
+  host: github.com
+  resolved_commit: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  resolved_ref: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  version: unknown
+  virtual_path: skills/c4-architecture
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/c4-architecture
+  - .agents/skills/c4-architecture/README.md
+  - .agents/skills/c4-architecture/SKILL.md
+  - .agents/skills/c4-architecture/references/advanced-patterns.md
+  - .agents/skills/c4-architecture/references/c4-syntax.md
+  - .agents/skills/c4-architecture/references/common-mistakes.md
+  - .claude/skills/c4-architecture
+  - .claude/skills/c4-architecture/README.md
+  - .claude/skills/c4-architecture/SKILL.md
+  - .claude/skills/c4-architecture/references/advanced-patterns.md
+  - .claude/skills/c4-architecture/references/c4-syntax.md
+  - .claude/skills/c4-architecture/references/common-mistakes.md
+  deployed_file_hashes:
+    .agents/skills/c4-architecture/README.md: sha256:e3fcab85719e96c9acf9eba3e5bdce6894b68b735ff1d64a6aa884d557539ee8
+    .agents/skills/c4-architecture/SKILL.md: sha256:e27b4bac48f6da02183013f5ae8e35573774d96a3c5bf1ca24870a045135d1a6
+    .agents/skills/c4-architecture/references/advanced-patterns.md: sha256:d7cfb170acbb2b8ff31b36d67715ca8d0ef8123e4da9dde18c04c9f618acb650
+    .agents/skills/c4-architecture/references/c4-syntax.md: sha256:8c9d1f3af34b4af66b395a7b731dbdeba912b08e5535c7cc471f7048b160b96c
+    .agents/skills/c4-architecture/references/common-mistakes.md: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
+    .claude/skills/c4-architecture/README.md: sha256:e3fcab85719e96c9acf9eba3e5bdce6894b68b735ff1d64a6aa884d557539ee8
+    .claude/skills/c4-architecture/SKILL.md: sha256:e27b4bac48f6da02183013f5ae8e35573774d96a3c5bf1ca24870a045135d1a6
+    .claude/skills/c4-architecture/references/advanced-patterns.md: sha256:d7cfb170acbb2b8ff31b36d67715ca8d0ef8123e4da9dde18c04c9f618acb650
+    .claude/skills/c4-architecture/references/c4-syntax.md: sha256:8c9d1f3af34b4af66b395a7b731dbdeba912b08e5535c7cc471f7048b160b96c
+    .claude/skills/c4-architecture/references/common-mistakes.md: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
+  content_hash: sha256:4504e7b30eeef5eee1e9ad21bd0927f229c31d921a3bba1ed7c732c9f808cf93
+- repo_url: softaworks/agent-toolkit
+  name: crafting-effective-readmes
+  host: github.com
+  resolved_commit: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  resolved_ref: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  version: unknown
+  virtual_path: skills/crafting-effective-readmes
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/crafting-effective-readmes
+  - .agents/skills/crafting-effective-readmes/README.md
+  - .agents/skills/crafting-effective-readmes/SKILL.md
+  - .agents/skills/crafting-effective-readmes/references/art-of-readme.md
+  - .agents/skills/crafting-effective-readmes/references/make-a-readme.md
+  - .agents/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md
+  - .agents/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md
+  - .agents/skills/crafting-effective-readmes/references/standard-readme-spec.md
+  - .agents/skills/crafting-effective-readmes/section-checklist.md
+  - .agents/skills/crafting-effective-readmes/style-guide.md
+  - .agents/skills/crafting-effective-readmes/templates/internal.md
+  - .agents/skills/crafting-effective-readmes/templates/oss.md
+  - .agents/skills/crafting-effective-readmes/templates/personal.md
+  - .agents/skills/crafting-effective-readmes/templates/xdg-config.md
+  - .agents/skills/crafting-effective-readmes/using-references.md
+  - .claude/skills/crafting-effective-readmes
+  - .claude/skills/crafting-effective-readmes/README.md
+  - .claude/skills/crafting-effective-readmes/SKILL.md
+  - .claude/skills/crafting-effective-readmes/references/art-of-readme.md
+  - .claude/skills/crafting-effective-readmes/references/make-a-readme.md
+  - .claude/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md
+  - .claude/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md
+  - .claude/skills/crafting-effective-readmes/references/standard-readme-spec.md
+  - .claude/skills/crafting-effective-readmes/section-checklist.md
+  - .claude/skills/crafting-effective-readmes/style-guide.md
+  - .claude/skills/crafting-effective-readmes/templates/internal.md
+  - .claude/skills/crafting-effective-readmes/templates/oss.md
+  - .claude/skills/crafting-effective-readmes/templates/personal.md
+  - .claude/skills/crafting-effective-readmes/templates/xdg-config.md
+  - .claude/skills/crafting-effective-readmes/using-references.md
+  deployed_file_hashes:
+    .agents/skills/crafting-effective-readmes/README.md: sha256:f3be191de12d5f3ffb1293348830b28e067d181542f606e5efcbe5563ae106ca
+    .agents/skills/crafting-effective-readmes/SKILL.md: sha256:638b271fdc148249ed8896dbdcf15f9067a8d64ba7d2d82ec3e86f8d82831b51
+    .agents/skills/crafting-effective-readmes/references/art-of-readme.md: sha256:8ca299e44ce728bd5e15803b1414b893c52ff67aed1d395181a789a5b7c98123
+    .agents/skills/crafting-effective-readmes/references/make-a-readme.md: sha256:81b1d33bc39b53dd8444c627fb7a5424a6a1272507a3f03e1a13c4bc03761057
+    .agents/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md: sha256:75133e20217c8a431ab33d42c53e22a69bb5a57828cea6dfd2c93c1bc8693ba2
+    .agents/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md: sha256:1377439694911b257ed0ced67efd8b46212c9f05e1d831730fa3ff7180fcd162
+    .agents/skills/crafting-effective-readmes/references/standard-readme-spec.md: sha256:e1b5584f15ed13e60442ff78e4989af7b6934c42330faa6fe567e9757aafbb22
+    .agents/skills/crafting-effective-readmes/section-checklist.md: sha256:e9da988cb2f4ec9f9bb830e7e39e161ff7053c80d55f2c6f043fa2beaf4b777b
+    .agents/skills/crafting-effective-readmes/style-guide.md: sha256:9bc6308113d392d75bbd792799db1c4b12c852d45ec500e2d10f4e2b1230ce60
+    .agents/skills/crafting-effective-readmes/templates/internal.md: sha256:6d2d0ac208385fa97f5753608f3a941411f40daaa1901fb60021d29ed24c6ff0
+    .agents/skills/crafting-effective-readmes/templates/oss.md: sha256:4e92c24937dee83f1d7fe7b8265ddaf91e5f1b1ae6808e1863f704d94949fa74
+    .agents/skills/crafting-effective-readmes/templates/personal.md: sha256:2aea82c27a5f779b4cd4d67c3d5c08fc4c6ed476a18298ca7b3070f8a7ec6714
+    .agents/skills/crafting-effective-readmes/templates/xdg-config.md: sha256:129095375dedfc2856bf68b561d7968c57aae433721f5ac412442e51ff94abc5
+    .agents/skills/crafting-effective-readmes/using-references.md: sha256:de80ec04ef24a43fdb205d47883efcc544acc6e179f8c072c54778f663045ce6
+    .claude/skills/crafting-effective-readmes/README.md: sha256:f3be191de12d5f3ffb1293348830b28e067d181542f606e5efcbe5563ae106ca
+    .claude/skills/crafting-effective-readmes/SKILL.md: sha256:638b271fdc148249ed8896dbdcf15f9067a8d64ba7d2d82ec3e86f8d82831b51
+    .claude/skills/crafting-effective-readmes/references/art-of-readme.md: sha256:8ca299e44ce728bd5e15803b1414b893c52ff67aed1d395181a789a5b7c98123
+    .claude/skills/crafting-effective-readmes/references/make-a-readme.md: sha256:81b1d33bc39b53dd8444c627fb7a5424a6a1272507a3f03e1a13c4bc03761057
+    .claude/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md: sha256:75133e20217c8a431ab33d42c53e22a69bb5a57828cea6dfd2c93c1bc8693ba2
+    .claude/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md: sha256:1377439694911b257ed0ced67efd8b46212c9f05e1d831730fa3ff7180fcd162
+    .claude/skills/crafting-effective-readmes/references/standard-readme-spec.md: sha256:e1b5584f15ed13e60442ff78e4989af7b6934c42330faa6fe567e9757aafbb22
+    .claude/skills/crafting-effective-readmes/section-checklist.md: sha256:e9da988cb2f4ec9f9bb830e7e39e161ff7053c80d55f2c6f043fa2beaf4b777b
+    .claude/skills/crafting-effective-readmes/style-guide.md: sha256:9bc6308113d392d75bbd792799db1c4b12c852d45ec500e2d10f4e2b1230ce60
+    .claude/skills/crafting-effective-readmes/templates/internal.md: sha256:6d2d0ac208385fa97f5753608f3a941411f40daaa1901fb60021d29ed24c6ff0
+    .claude/skills/crafting-effective-readmes/templates/oss.md: sha256:4e92c24937dee83f1d7fe7b8265ddaf91e5f1b1ae6808e1863f704d94949fa74
+    .claude/skills/crafting-effective-readmes/templates/personal.md: sha256:2aea82c27a5f779b4cd4d67c3d5c08fc4c6ed476a18298ca7b3070f8a7ec6714
+    .claude/skills/crafting-effective-readmes/templates/xdg-config.md: sha256:129095375dedfc2856bf68b561d7968c57aae433721f5ac412442e51ff94abc5
+    .claude/skills/crafting-effective-readmes/using-references.md: sha256:de80ec04ef24a43fdb205d47883efcc544acc6e179f8c072c54778f663045ce6
+  content_hash: sha256:4c25d7a92895f4caa5d4800d2ce3ce2162a7150c469e63f1f74cd13863c5a60e
+- repo_url: softaworks/agent-toolkit
+  name: writing-clearly-and-concisely
+  host: github.com
+  resolved_commit: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  resolved_ref: 3027f20f3181758385a1bb8c022d4041dfb4de84
+  version: unknown
+  virtual_path: skills/writing-clearly-and-concisely
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/writing-clearly-and-concisely
+  - .agents/skills/writing-clearly-and-concisely/README.md
+  - .agents/skills/writing-clearly-and-concisely/SKILL.md
+  - .agents/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md
+  - .agents/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md
+  - .agents/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md
+  - .agents/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md
+  - .agents/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md
+  - .agents/skills/writing-clearly-and-concisely/signs-of-ai-writing.md
+  - .claude/skills/writing-clearly-and-concisely
+  - .claude/skills/writing-clearly-and-concisely/README.md
+  - .claude/skills/writing-clearly-and-concisely/SKILL.md
+  - .claude/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md
+  - .claude/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md
+  - .claude/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md
+  - .claude/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md
+  - .claude/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md
+  - .claude/skills/writing-clearly-and-concisely/signs-of-ai-writing.md
+  deployed_file_hashes:
+    .agents/skills/writing-clearly-and-concisely/README.md: sha256:cd8241146abf3e7514fdb07a6db2e06c8535a4f78dd1ab471901b2e7fe4db089
+    .agents/skills/writing-clearly-and-concisely/SKILL.md: sha256:c5f4ecc8bfa7984d0df70d30cea3bfeb824f7b24d31db111d5a1a9a959880575
+    .agents/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md: sha256:248b18596fa18cf63605182688565d25d115c859f602068185f6014c26addbfe
+    .agents/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md: sha256:8cead3fc56b54ab5fc22e52c14423182fdce2d9535d4c1dda1f8319cac542027
+    .agents/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md: sha256:3867f33512ff2f0e965386dbb558579aab43ca10f070bd48d732584b9b5119e0
+    .agents/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md: sha256:150feae0c201def056a96dd25fa5d23e015f53632b21f3bcd7b7266f8197c563
+    .agents/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md: sha256:60db286f5166b1b6f4d85a0cc39471b375fbd62d6057d3844533551fb09f2c2d
+    .agents/skills/writing-clearly-and-concisely/signs-of-ai-writing.md: sha256:06d135c200e1bbfdbe90f433dfbdffeb9c4ea07f028a9a880f4026622e5c10fd
+    .claude/skills/writing-clearly-and-concisely/README.md: sha256:cd8241146abf3e7514fdb07a6db2e06c8535a4f78dd1ab471901b2e7fe4db089
+    .claude/skills/writing-clearly-and-concisely/SKILL.md: sha256:c5f4ecc8bfa7984d0df70d30cea3bfeb824f7b24d31db111d5a1a9a959880575
+    .claude/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md: sha256:248b18596fa18cf63605182688565d25d115c859f602068185f6014c26addbfe
+    .claude/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md: sha256:8cead3fc56b54ab5fc22e52c14423182fdce2d9535d4c1dda1f8319cac542027
+    .claude/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md: sha256:3867f33512ff2f0e965386dbb558579aab43ca10f070bd48d732584b9b5119e0
+    .claude/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md: sha256:150feae0c201def056a96dd25fa5d23e015f53632b21f3bcd7b7266f8197c563
+    .claude/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md: sha256:60db286f5166b1b6f4d85a0cc39471b375fbd62d6057d3844533551fb09f2c2d
+    .claude/skills/writing-clearly-and-concisely/signs-of-ai-writing.md: sha256:06d135c200e1bbfdbe90f433dfbdffeb9c4ea07f028a9a880f4026622e5c10fd
+  content_hash: sha256:9b73ba1a84bb3e3857e81b92faa93f64ffb1b515f9f530f1cb155c50bc991b4e
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:e3fcab85719e96c9acf9eba3e5bdce6894b68b735ff1d64a6aa884d557539ee8
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:e27b4bac48f6da02183013f5ae8e35573774d96a3c5bf1ca24870a045135d1a6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture/references/advanced-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:d7cfb170acbb2b8ff31b36d67715ca8d0ef8123e4da9dde18c04c9f618acb650
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture/references/c4-syntax.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:8c9d1f3af34b4af66b395a7b731dbdeba912b08e5535c7cc471f7048b160b96c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/c4-architecture/references/common-mistakes.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review-and-quality
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review-and-quality/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-review/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:f3be191de12d5f3ffb1293348830b28e067d181542f606e5efcbe5563ae106ca
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:638b271fdc148249ed8896dbdcf15f9067a8d64ba7d2d82ec3e86f8d82831b51
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/references/art-of-readme.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:8ca299e44ce728bd5e15803b1414b893c52ff67aed1d395181a789a5b7c98123
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/references/make-a-readme.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:81b1d33bc39b53dd8444c627fb7a5424a6a1272507a3f03e1a13c4bc03761057
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:75133e20217c8a431ab33d42c53e22a69bb5a57828cea6dfd2c93c1bc8693ba2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:1377439694911b257ed0ced67efd8b46212c9f05e1d831730fa3ff7180fcd162
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/references/standard-readme-spec.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:e1b5584f15ed13e60442ff78e4989af7b6934c42330faa6fe567e9757aafbb22
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/section-checklist.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:e9da988cb2f4ec9f9bb830e7e39e161ff7053c80d55f2c6f043fa2beaf4b777b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/style-guide.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:9bc6308113d392d75bbd792799db1c4b12c852d45ec500e2d10f4e2b1230ce60
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/templates/internal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:6d2d0ac208385fa97f5753608f3a941411f40daaa1901fb60021d29ed24c6ff0
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/templates/oss.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:4e92c24937dee83f1d7fe7b8265ddaf91e5f1b1ae6808e1863f704d94949fa74
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/templates/personal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:2aea82c27a5f779b4cd4d67c3d5c08fc4c6ed476a18298ca7b3070f8a7ec6714
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/templates/xdg-config.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:129095375dedfc2856bf68b561d7968c57aae433721f5ac412442e51ff94abc5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/crafting-effective-readmes/using-references.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:de80ec04ef24a43fdb205d47883efcc544acc6e179f8c072c54778f663045ce6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/docs-sync-audit
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/docs-sync-audit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: sha256:c21b20dcc59ac43449ef02ed7f69bfa222a241cdf46b870675ac10aac736a203
+- kind: project-relative
+  target: claude
+  value: .claude/skills/docs-sync-audit/scripts/docs_drift.py
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: sha256:1af66a256a5ef8c86f30e3789c93eb609020d5cf2360871819df51fa99f27bfc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/documentation-and-adrs
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/documentation-and-adrs
+  active_owner: addyosmani/agent-skills/skills/documentation-and-adrs
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/documentation-and-adrs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/documentation-and-adrs
+  active_owner: addyosmani/agent-skills/skills/documentation-and-adrs
+  content_hash: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/documentation-writer
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/documentation-writer
+  active_owner: github/awesome-copilot/skills/documentation-writer
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/documentation-writer/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/documentation-writer
+  active_owner: github/awesome-copilot/skills/documentation-writer
+  content_hash: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-workflow-and-versioning
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-workflow-and-versioning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grill-me
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grill-me/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: sha256:caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grill-me/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: sha256:c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grilling
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grilling/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: sha256:befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15
+- kind: project-relative
+  target: claude
+  value: .claude/skills/grilling/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: sha256:1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ponytail
+  runtime: null
+  scope: project
+  owners:
+  - dietrichgebert/ponytail/skills/ponytail
+  active_owner: dietrichgebert/ponytail/skills/ponytail
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ponytail/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - dietrichgebert/ponytail/skills/ponytail
+  active_owner: dietrichgebert/ponytail/skills/ponytail
+  content_hash: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+- kind: project-relative
+  target: claude
+  value: .claude/skills/receiving-code-review
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/receiving-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+- kind: project-relative
+  target: claude
+  value: .claude/skills/spec-driven-development
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/spec-driven-development
+  active_owner: addyosmani/agent-skills/skills/spec-driven-development
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/spec-driven-development/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/spec-driven-development
+  active_owner: addyosmani/agent-skills/skills/spec-driven-development
+  content_hash: sha256:c4b97ce3d7f24be0e67fd612c7595f65504872e3a9f8d338d098b2363fdb66ef
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:cd8241146abf3e7514fdb07a6db2e06c8535a4f78dd1ab471901b2e7fe4db089
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:c5f4ecc8bfa7984d0df70d30cea3bfeb824f7b24d31db111d5a1a9a959880575
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:248b18596fa18cf63605182688565d25d115c859f602068185f6014c26addbfe
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:8cead3fc56b54ab5fc22e52c14423182fdce2d9535d4c1dda1f8319cac542027
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:3867f33512ff2f0e965386dbb558579aab43ca10f070bd48d732584b9b5119e0
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:150feae0c201def056a96dd25fa5d23e015f53632b21f3bcd7b7266f8197c563
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:60db286f5166b1b6f4d85a0cc39471b375fbd62d6057d3844533551fb09f2c2d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/writing-clearly-and-concisely/signs-of-ai-writing.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:06d135c200e1bbfdbe90f433dfbdffeb9c4ea07f028a9a880f4026622e5c10fd
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:e3fcab85719e96c9acf9eba3e5bdce6894b68b735ff1d64a6aa884d557539ee8
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:e27b4bac48f6da02183013f5ae8e35573774d96a3c5bf1ca24870a045135d1a6
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture/references/advanced-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:d7cfb170acbb2b8ff31b36d67715ca8d0ef8123e4da9dde18c04c9f618acb650
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture/references/c4-syntax.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:8c9d1f3af34b4af66b395a7b731dbdeba912b08e5535c7cc471f7048b160b96c
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/c4-architecture/references/common-mistakes.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/c4-architecture
+  active_owner: softaworks/agent-toolkit/skills/c4-architecture
+  content_hash: sha256:608b39dd6ece1c2d4367fb06f3bd7d190332291e279391bfedb82f4749ced414
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review-and-quality
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review-and-quality/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/code-review-and-quality
+  active_owner: addyosmani/agent-skills/skills/code-review-and-quality
+  content_hash: sha256:2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:09eb147f793e4647949edd32dbad278f0554dfb56e0d46b699cd4c2c55bf0357
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/code-review/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/engineering/code-review
+  active_owner: mattpocock/skills/skills/engineering/code-review
+  content_hash: sha256:8229ca854e11dc8e6aef2131ee03f31fb1561cf905fab9ccc325180cf3331352
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:f3be191de12d5f3ffb1293348830b28e067d181542f606e5efcbe5563ae106ca
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:638b271fdc148249ed8896dbdcf15f9067a8d64ba7d2d82ec3e86f8d82831b51
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/references/art-of-readme.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:8ca299e44ce728bd5e15803b1414b893c52ff67aed1d395181a789a5b7c98123
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/references/make-a-readme.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:81b1d33bc39b53dd8444c627fb7a5424a6a1272507a3f03e1a13c4bc03761057
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/references/standard-readme-example-maximal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:75133e20217c8a431ab33d42c53e22a69bb5a57828cea6dfd2c93c1bc8693ba2
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/references/standard-readme-example-minimal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:1377439694911b257ed0ced67efd8b46212c9f05e1d831730fa3ff7180fcd162
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/references/standard-readme-spec.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:e1b5584f15ed13e60442ff78e4989af7b6934c42330faa6fe567e9757aafbb22
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/section-checklist.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:e9da988cb2f4ec9f9bb830e7e39e161ff7053c80d55f2c6f043fa2beaf4b777b
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/style-guide.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:9bc6308113d392d75bbd792799db1c4b12c852d45ec500e2d10f4e2b1230ce60
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/templates/internal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:6d2d0ac208385fa97f5753608f3a941411f40daaa1901fb60021d29ed24c6ff0
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/templates/oss.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:4e92c24937dee83f1d7fe7b8265ddaf91e5f1b1ae6808e1863f704d94949fa74
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/templates/personal.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:2aea82c27a5f779b4cd4d67c3d5c08fc4c6ed476a18298ca7b3070f8a7ec6714
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/templates/xdg-config.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:129095375dedfc2856bf68b561d7968c57aae433721f5ac412442e51ff94abc5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/crafting-effective-readmes/using-references.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/crafting-effective-readmes
+  active_owner: softaworks/agent-toolkit/skills/crafting-effective-readmes
+  content_hash: sha256:de80ec04ef24a43fdb205d47883efcc544acc6e179f8c072c54778f663045ce6
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/docs-sync-audit
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/docs-sync-audit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: sha256:c21b20dcc59ac43449ef02ed7f69bfa222a241cdf46b870675ac10aac736a203
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/docs-sync-audit/scripts/docs_drift.py
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/docs-sync-audit
+  active_owner: github/awesome-copilot/skills/docs-sync-audit
+  content_hash: sha256:1af66a256a5ef8c86f30e3789c93eb609020d5cf2360871819df51fa99f27bfc
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/documentation-and-adrs
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/documentation-and-adrs
+  active_owner: addyosmani/agent-skills/skills/documentation-and-adrs
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/documentation-and-adrs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/documentation-and-adrs
+  active_owner: addyosmani/agent-skills/skills/documentation-and-adrs
+  content_hash: sha256:b60d503925bbaacee7fd63935db70b9ced5b2514ff5a56a672130e01b9690bc5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/documentation-writer
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/documentation-writer
+  active_owner: github/awesome-copilot/skills/documentation-writer
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/documentation-writer/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/documentation-writer
+  active_owner: github/awesome-copilot/skills/documentation-writer
+  content_hash: sha256:7e8244988c9f4eb63bf8c0edf160578544621eb96e5e51e2d848f1401c5de8f1
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/git-workflow-and-versioning
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/git-workflow-and-versioning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/git-workflow-and-versioning
+  active_owner: addyosmani/agent-skills/skills/git-workflow-and-versioning
+  content_hash: sha256:b7465d187935c52546d39fdc7bd6ac36d94eda25a9500ef8c18b767d2eb116ea
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grill-me
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grill-me/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: sha256:caaf8b8de1684f96e26b28f3c29189db5c89cce4b73e1c93d86164f66ef88637
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grill-me/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grill-me
+  active_owner: mattpocock/skills/skills/productivity/grill-me
+  content_hash: sha256:c061e39c3e0f9d865fb1b97556d485704af2a8a58f4b8221a8917a5c2074a32b
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grilling
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grilling/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: sha256:befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/grilling/agents/openai.yaml
+  runtime: null
+  scope: project
+  owners:
+  - mattpocock/skills/skills/productivity/grilling
+  active_owner: mattpocock/skills/skills/productivity/grilling
+  content_hash: sha256:1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/ponytail
+  runtime: null
+  scope: project
+  owners:
+  - dietrichgebert/ponytail/skills/ponytail
+  active_owner: dietrichgebert/ponytail/skills/ponytail
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/ponytail/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - dietrichgebert/ponytail/skills/ponytail
+  active_owner: dietrichgebert/ponytail/skills/ponytail
+  content_hash: sha256:9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/receiving-code-review
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/receiving-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - obra/superpowers/skills/receiving-code-review
+  active_owner: obra/superpowers/skills/receiving-code-review
+  content_hash: sha256:091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/spec-driven-development
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/spec-driven-development
+  active_owner: addyosmani/agent-skills/skills/spec-driven-development
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/spec-driven-development/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - addyosmani/agent-skills/skills/spec-driven-development
+  active_owner: addyosmani/agent-skills/skills/spec-driven-development
+  content_hash: sha256:c4b97ce3d7f24be0e67fd612c7595f65504872e3a9f8d338d098b2363fdb66ef
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/README.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:cd8241146abf3e7514fdb07a6db2e06c8535a4f78dd1ab471901b2e7fe4db089
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:c5f4ecc8bfa7984d0df70d30cea3bfeb824f7b24d31db111d5a1a9a959880575
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/elements-of-style/01-introductory.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:248b18596fa18cf63605182688565d25d115c859f602068185f6014c26addbfe
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/elements-of-style/02-elementary-rules-of-usage.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:8cead3fc56b54ab5fc22e52c14423182fdce2d9535d4c1dda1f8319cac542027
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/elements-of-style/03-elementary-principles-of-composition.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:3867f33512ff2f0e965386dbb558579aab43ca10f070bd48d732584b9b5119e0
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/elements-of-style/04-a-few-matters-of-form.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:150feae0c201def056a96dd25fa5d23e015f53632b21f3bcd7b7266f8197c563
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/elements-of-style/05-words-and-expressions-commonly-misused.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:60db286f5166b1b6f4d85a0cc39471b375fbd62d6057d3844533551fb09f2c2d
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/writing-clearly-and-concisely/signs-of-ai-writing.md
+  runtime: null
+  scope: project
+  owners:
+  - softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  active_owner: softaworks/agent-toolkit/skills/writing-clearly-and-concisely
+  content_hash: sha256:06d135c200e1bbfdbe90f433dfbdffeb9c4ea07f028a9a880f4026622e5c10fd
