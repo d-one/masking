@@ -1,6 +1,7 @@
 import datetime as dt
 
 import pytest
+from masking.mask_spark import pipeline
 from masking.mask_spark.pipeline import build_lookup_table, substitute_column
 from pyspark.sql import SparkSession
 
@@ -53,3 +54,17 @@ def test_temporary_names_ignore_case(spark: SparkSession, other: str) -> None:
     out = substitute_column(data, "c", {"a": "A"})
     assert out.columns == data.columns
     assert sorted(out.collect()) == [("A", "x"), ("b", "y")]
+
+
+@pytest.mark.parametrize(("max_bytes", "hinted"), [(10**9, True), (1, False)])
+def test_broadcast_only_below_byte_limit(
+    spark: SparkSession, monkeypatch, max_bytes: int, *, hinted: bool
+) -> None:
+    monkeypatch.setattr(pipeline, "BROADCAST_MAX_BYTES", max_bytes)
+    data = spark.createDataFrame([("a",), ("b",)], "c string")
+
+    out = substitute_column(data, "c", {"a": "A"})
+
+    plan = out._jdf.queryExecution().optimizedPlan().toString()
+    assert ("strategy=broadcast" in plan) is hinted
+    assert sorted(out.collect()) == [("A",), ("b",)]

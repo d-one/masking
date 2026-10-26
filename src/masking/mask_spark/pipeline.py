@@ -30,14 +30,15 @@ _JOIN_KEY_TYPES: dict[type[DataType], tuple[type, pa.DataType]] = {
     DateType: (date, pa.date32()),
 }
 
-# Above this size the lookup table is joined with a shuffle instead of broadcast
-BROADCAST_MAX_ROWS = 5_000_000
+# Above this in-memory size the lookup table is joined with a shuffle instead of
+# broadcast, since every executor holds a full copy of a broadcast table.
+BROADCAST_MAX_BYTES = 256 * 1024**2
 
 
 def build_lookup_table(
     data: DataFrame, c_name: str, table: dict, key_name: str, value_name: str
-) -> DataFrame | None:
-    """Create a Spark DataFrame from the concordance table.
+) -> pa.Table | None:
+    """Create an Arrow table from the concordance table.
 
     Args:
     ----
@@ -49,7 +50,7 @@ def build_lookup_table(
 
     Returns:
     -------
-        DataFrame | None: lookup table, None if the table cannot be joined with the
+        pa.Table | None: lookup table, None if the table cannot be joined with the
             column without changing the result (unsupported column type or keys of
             a different type).
 
@@ -63,14 +64,12 @@ def build_lookup_table(
         return None
 
     try:
-        arrow_table = pa.table({
+        return pa.table({
             key_name: pa.array(list(table), arrow_type),
             value_name: pa.array(list(table.values()), pa.string()),
         })
     except (pa.ArrowException, TypeError, OverflowError):
         return None
-
-    return data.sparkSession.createDataFrame(arrow_table)
 
 
 def substitute_column(data: DataFrame, c_name: str, table: dict) -> DataFrame:
@@ -96,8 +95,8 @@ def substitute_column(data: DataFrame, c_name: str, table: dict) -> DataFrame:
     key_name = generate_unique_name(f"{c_name}_clear".lower(), existing)
     value_name = generate_unique_name(f"{c_name}_masked".lower(), [*existing, key_name])
 
-    lookup = build_lookup_table(data, c_name, table, key_name, value_name)
-    if lookup is None:
+    arrow_table = build_lookup_table(data, c_name, table, key_name, value_name)
+    if arrow_table is None:
         # Arrow UDFs go through pandas, which turns integers into floats when a
         # batch contains nulls: keep the plain UDF to get the original values.
         masked = udf(lambda x: table.get(x, str(x)), StringType(), useArrow=False)(
@@ -105,7 +104,8 @@ def substitute_column(data: DataFrame, c_name: str, table: dict) -> DataFrame:
         )
         return data.withColumn(c_name, when(col(c_name).isNotNull(), masked))
 
-    if len(table) <= BROADCAST_MAX_ROWS:
+    lookup = data.sparkSession.createDataFrame(arrow_table)
+    if arrow_table.nbytes <= BROADCAST_MAX_BYTES:
         lookup = broadcast(lookup)
 
     return (

@@ -226,7 +226,7 @@ ______________________________________________________________________
    - Use unique temp column names (`generate_unique_name`) to avoid clashes with user columns.
    - `coalesce(..., cast("string"))` reproduces the current `tab.get(x, str(x))`. Verify that `str(x)` (Python) and `cast("string")` (Spark) match for the supported column types (string, int, date, timestamp, double). Add test cases. If they differ (e.g. timestamps or doubles), keep the original value via the cast and document the change. Values not in the table are unchanged values by construction, so in practice only types matter.
 
-1. **Threshold**: Spark's auto-broadcast limit is 10 MB by default, but the explicit `broadcast()` hint overrides it. For very large tables (> ~1–2 GB serialized), switch to a regular shuffle join. Add a module constant `BROADCAST_MAX_ROWS` (e.g. 5M) and fall back to a non-hinted join above it.
+1. **Threshold**: Spark's auto-broadcast limit is 10 MB by default, but the explicit `broadcast()` hint overrides it. For very large tables (> ~1–2 GB serialized), switch to a regular shuffle join. Add a module constant `BROADCAST_MAX_BYTES` (256 MB of Arrow memory; a row count does not bound the size of free-text values) and fall back to a non-hinted join above it.
 
 1. Row order: a join does not guarantee order. Ordering is not guaranteed for Spark DataFrames anyway. Note it in the docstring and make the equivalence tests order-independent (join on row id).
 
@@ -330,7 +330,7 @@ ______________________________________________________________________
 | Risk                                                                              | Mitigation                                                                             |
 | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `str(x)` vs Spark `cast("string")` mismatch for non-string columns (Phases 3b, 5) | Native/join paths limited to or tested per type; fall back to Python where they differ |
-| Broadcasting a very large concordance table OOMs executors                        | `BROADCAST_MAX_ROWS` threshold with shuffle-join fallback                              |
+| Broadcasting a very large concordance table OOMs executors                        | `BROADCAST_MAX_BYTES` threshold with shuffle-join fallback                             |
 | `_masked_values` set out of sync if `concordance_table` is reassigned externally  | Rebuilt in `_cast_concordance_table`, which runs at the start of every `__call__`      |
 | `toArrow()` requires PySpark ≥ 4.0                                                | Already pinned (`pyspark==4.0.0`); fall back to `toPandas()` if the pin is relaxed     |
 | Row order changes after join                                                      | Documented; tests compare by row id                                                    |
