@@ -10,7 +10,7 @@ Agent rules live in [AGENTS.md](../../AGENTS.md); `CLAUDE.md` and `.github/copil
 
 ## Agent Skills
 
-Skills for coding agents are declared in [apm.yml](../../apm.yml), pinned in `apm.lock.yaml`, and installed with [APM](https://github.com/microsoft/apm) into `.agents/` and `.claude/` (targets: GitHub Copilot, Claude Code).
+Skills for coding agents are declared in [apm.yml](../../apm.yml), pinned in `apm.lock.yaml`, and installed with [APM](https://github.com/microsoft/apm) into `.agents/` and `.claude/` (targets: GitHub Copilot, Claude Code). Both folders are generated and ignored by git.
 
 ```sh
 apm install   # install the pinned skills
