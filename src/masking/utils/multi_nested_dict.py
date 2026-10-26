@@ -212,7 +212,7 @@ class MultiNestedDictHandler:
         for allowed_key in keys_list:
             if not any([
                 allowed_key.startswith("*"),
-                allowed_key.startswith("[*]"),
+                "[*]" in allowed_key,
                 allowed_key.startswith(key_path),
             ]):
                 continue

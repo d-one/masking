@@ -806,11 +806,6 @@ class TestHasMatchStrExtra:
         assert handler._has_match_str("a") is False
         assert handler._has_match_str("a", mode="deny") is False
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: '[*]' wildcards not at the start of the key never match, as "
-        "the key must start with the current key path to be considered.",
-    )
     def test_inner_bracket_wildcard_skips_key(self):
         h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]{SEP}name"])
         data = {"items": [{"name": "Alice", "age": 30}]}
