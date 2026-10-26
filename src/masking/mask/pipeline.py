@@ -6,6 +6,30 @@ from masking.base_concordance_table.concordance_table import ConcordanceTableBas
 from masking.base_pipeline.pipeline import MaskDataFramePipelineBase
 
 
+def _as_nullable_integers(column: pd.Series) -> pd.Series:
+    """Restore an integer column that pandas stored as floats because of nulls.
+
+    Args:
+    ----
+        column (pd.Series): input column
+
+    Returns:
+    -------
+        pd.Series: the column as nullable integers, or unchanged if it is not a
+            float column with nulls and only integral values within the int64 range
+
+    """
+    if not pd.api.types.is_float_dtype(column) or not column.isna().any():
+        return column
+
+    values = column.dropna()
+    in_int64 = values.between(-(2**63), 2**63, inclusive="left")
+    if not (values.map(float.is_integer).all() and in_int64.all()):
+        return column
+
+    return column.astype("Int64")
+
+
 class ConcordanceTable(ConcordanceTableBase):
     def _build_concordance_table(self, data: pd.DataFrame | pd.Series) -> pd.DataFrame:
         """Apply the pipeline to the data.
@@ -81,12 +105,12 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             pd.DataFrame: dataframe with masked column
 
         """
+        # Mask integer columns with nulls as integers, as polars and Spark do
+        data = data[necessary_columns].copy()
+        data[col_name] = _as_nullable_integers(data[col_name])
+
         # Filter out all the row which have null valus on the col_name
-        return (
-            data[necessary_columns]
-            .dropna(subset=[col_name])
-            .drop_duplicates(keep="first")
-        )
+        return data.dropna(subset=[col_name]).drop_duplicates(keep="first")
 
     @staticmethod
     def _substitute_masked_values(
@@ -114,10 +138,16 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 else pipeline[0].column_name
             )
             if concordance_tables[c_name]:
-                data[c_name] = data[c_name].map(
-                    lambda x, col_name=c_name: concordance_tables[col_name].get(x, x)
-                    if not pd.isna(x)
-                    else x
+                table = concordance_tables[c_name]
+                # Values not in the table become strings, as in the other backends.
+                # astype(object) keeps nullable integers as int, unlike Series.map.
+                data[c_name] = pd.Series(
+                    [
+                        None if pd.isna(x) else table.get(x, str(x))
+                        for x in _as_nullable_integers(data[c_name]).astype(object)
+                    ],
+                    index=data.index,
+                    dtype=object,
                 )
 
         return data

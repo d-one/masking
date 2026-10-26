@@ -63,6 +63,36 @@ class TestStaticMethods:
 
 
 class TestPipeline:
+    def test_column_without_mappings_is_unchanged(self):
+        data = pd.DataFrame({"p": [99999.0, None]})
+        pipeline = MaskDataFramePipeline({
+            "p": {"masking_operation": MedStatsOperation(col_name="p")}
+        })
+        out = pipeline(data.copy())
+        pd.testing.assert_series_equal(out["p"], data["p"])
+
+    def test_floats_outside_int64_are_masked_as_floats(self):
+        data = pd.DataFrame({"p": [1e20, None, 1000.0]})
+        pipeline = MaskDataFramePipeline({
+            "p": {"masking_operation": MedStatsOperation(col_name="p")}
+        })
+        # MedStats sees "1000.0", not "1000", so nothing is mapped
+        assert values(pipeline(data)["p"]) == [1e20, None, 1000.0]
+
+    def test_int64_minimum_is_masked_as_integer(self):
+        data = pd.DataFrame({"p": [float(-(2**63)), None, 1000.0]})
+        pipeline = MaskDataFramePipeline({
+            "p": {"masking_operation": MedStatsOperation(col_name="p")}
+        })
+        assert values(pipeline(data)["p"]) == [str(-(2**63)), None, "VD02"]
+
+    def test_column_named_self(self):
+        data = pd.DataFrame({"self": ["1000", None]})
+        pipeline = MaskDataFramePipeline({
+            "self": {"masking_operation": MedStatsOperation(col_name="self")}
+        })
+        assert values(pipeline(data)["self"]) == ["VD02", None]
+
     def test_null_operation_is_rejected(self):
         with pytest.raises(TypeError, match="NullOperation cannot be used"):
             MaskDataFramePipeline({

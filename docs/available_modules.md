@@ -76,6 +76,8 @@ pipeline.concordance_tables
 ```
 
 - Only values whose masked value differs from the clear value are stored.
+- In the masked column, values missing from a non-empty table become strings (`2`, `2020-01-31`) and nulls stay null, in every backend. A column whose table is empty is left unchanged.
+- pandas stores an integer column with nulls as floats; the pandas pipeline masks such a column (all non-null values whole numbers within the int64 range) as integers, so `2` is masked as `"2"`, not `"2.0"`, as in polars and Spark.
 - Tables accumulate across calls on the same pipeline, so a value seen in an earlier DataFrame keeps its masked value in later ones.
 - `pipeline.clear_concordance_tables()` empties the tables. Operations keep a `concordance_table` passed to their constructor; a `concordance_table` passed in the pipeline configuration is dropped.
 

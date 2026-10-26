@@ -1,24 +1,34 @@
-"""Equivalence tests between the pandas and the Spark pipelines."""
+"""Equivalence tests between the pandas, polars, and Spark pipelines."""
 
+import datetime as dt
 from collections.abc import Callable, Iterator
 from types import SimpleNamespace
 
 import pandas as pd
+import polars as pl
 import pytest
 from masking.mask.operations.operation_fake_date import FakeDate as FakeDatePd
 from masking.mask.operations.operation_fake_name import FakeNameOperation as FakeNamePd
 from masking.mask.operations.operation_hash import HashOperation as HashPd
+from masking.mask.operations.operation_med_stats import MedStatsOperation as MedStatsPd
 from masking.mask.operations.operation_string_match import (
     StringMatchOperation as StringMatchPd,
 )
 from masking.mask.operations.operation_yyyy_hash import YYYYHashOperation as YYYYHashPd
 from masking.mask.pipeline import MaskDataFramePipeline as PandasPipeline
+from masking.mask_polars.operations.operation_hash import HashOperation as HashPl
+from masking.mask_polars.operations.operation_med_stats import (
+    MedStatsOperation as MedStatsPl,
+)
+from masking.mask_polars.pipeline import MaskDataFramePipeline as PolarsPipeline
 from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_fake_name import FakeNameOperation
 from masking.mask_spark.operations.operation_hash import HashOperation
+from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
 from masking.mask_spark.operations.operation_string_match import StringMatchOperation
 from masking.mask_spark.operations.operation_yyyy_hash import YYYYHashOperation
 from masking.mask_spark.pipeline import MaskDataFramePipeline as SparkPipeline
+from masking.utils.hash import hash_string
 from pyspark.sql import DataFrame, SparkSession
 
 from .conftest import normalize
@@ -237,3 +247,90 @@ def test_spark_fake_unique_with_existing_table(
     assert tables["date"][first] == second
     assert (out["date"] == second).sum() == 1
     _assert_fake_invariants(dense_dates["date"], out["date"])
+
+
+# MedStats maps known PLZs (1000 -> VD02) and keeps all other values, so the
+# concordance tables miss some values of every column.
+UNMAPPED_COLUMNS = ["row_id", "plz", "plz_null", "text", "day"]
+UNMAPPED_ROWS = [
+    (0, 1000, 1000, "1000", dt.date(2020, 1, 1)),
+    (1, 99999, None, "abc", dt.date(2021, 2, 3)),
+    (2, 1000, 99999, None, None),
+]
+UNMAPPED_EXPECTED = {
+    "plz": ["VD02", "99999", "VD02"],
+    "plz_null": ["VD02", None, "99999"],
+    "text": ["VD02", "abc", None],
+    "day": ["D1", "2021-02-03", None],
+}
+
+
+def _unmapped_config(med_stats: type) -> dict:
+    return {
+        **{
+            c: {"masking_operation": med_stats(col_name=c)}
+            for c in ("plz", "plz_null", "text")
+        },
+        "day": {
+            "masking_operation": med_stats(
+                col_name="day", concordance_table={dt.date(2020, 1, 1): "D1"}
+            )
+        },
+    }
+
+
+def test_backends_agree_on_values_missing_from_the_table(spark: SparkSession) -> None:
+    pandas_out = PandasPipeline(_unmapped_config(MedStatsPd))(
+        pd.DataFrame(UNMAPPED_ROWS, columns=UNMAPPED_COLUMNS)
+    )
+    polars_out = PolarsPipeline(_unmapped_config(MedStatsPl))(
+        pl.DataFrame(UNMAPPED_ROWS, schema=UNMAPPED_COLUMNS, orient="row")
+    ).sort("row_id")
+    # collect() keeps Spark's nulls; toPandas() turns null strings into NaN
+    spark_rows = (
+        SparkPipeline(_unmapped_config(MedStatsOperation))(
+            spark.createDataFrame(
+                UNMAPPED_ROWS,
+                "row_id long, plz long, plz_null long, text string, day date",
+            )
+        )
+        .orderBy("row_id")
+        .collect()
+    )
+
+    for c, expected in UNMAPPED_EXPECTED.items():
+        assert pandas_out[c].tolist() == expected, f"pandas column {c}"
+        assert polars_out[c].to_list() == expected, f"polars column {c}"
+        assert [row[c] for row in spark_rows] == expected, f"spark column {c}"
+
+
+def test_backends_agree_on_chained_operations(spark: SparkSession) -> None:
+    # MedStats keeps 99999, so the hash must apply to its string "99999"
+    rows = [(0, 1000), (1, 99999), (2, None)]
+    expected = [hash_string("VD02", SECRET), hash_string("99999", SECRET), None]
+
+    def config(med_stats: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {"masking_operation": med_stats(col_name="c")},
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+            ]
+        }
+
+    pandas_out = PandasPipeline(config(MedStatsPd, HashPd))(
+        pd.DataFrame(rows, columns=["row_id", "c"])
+    )
+    polars_out = PolarsPipeline(config(MedStatsPl, HashPl))(
+        pl.DataFrame(rows, schema=["row_id", "c"], orient="row")
+    ).sort("row_id")
+    spark_rows = (
+        SparkPipeline(config(MedStatsOperation, HashOperation))(
+            spark.createDataFrame(rows, "row_id long, c long")
+        )
+        .orderBy("row_id")
+        .collect()
+    )
+
+    assert pandas_out["c"].tolist() == expected
+    assert polars_out["c"].to_list() == expected
+    assert [row["c"] for row in spark_rows] == expected
