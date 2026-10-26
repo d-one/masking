@@ -82,10 +82,6 @@ class TestGetPiiValues:
     def test_no_pii_cols(self):
         assert Handler()._get_pii_values({"a": "John"}) == []
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: missing/None columns are stringified to the literal 'None'.",
-    )
     def test_missing_and_none_columns_are_skipped(self):
         h = Handler(pii_cols=["a", "b", "c"])
         assert h._get_pii_values({"a": "John", "b": None}) == ["John"]
@@ -128,14 +124,14 @@ class TestGetPatternDate:
         with pytest.raises(AttributeError):
             handler._get_pattern_date("definitely not a date")
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: datetime input is annotated as supported but dateparser.parse "
-        "only accepts strings, so no patterns are produced.",
+    @pytest.mark.parametrize(
+        "value",
+        [datetime.datetime(2023, 1, 5, tzinfo=datetime.UTC), datetime.date(2023, 1, 5)],
     )
-    def test_datetime_input(self, handler):
-        date = datetime.datetime(2023, 1, 5, tzinfo=datetime.UTC)
-        assert len(handler._get_pattern_date(date)) == 6
+    def test_date_input_matches_iso_string(self, handler, value):
+        assert escaped_values(handler._get_pattern_date(value)) == escaped_values(
+            handler._get_pattern_date("2023-01-05")
+        )
 
 
 # ---------------------------------------------------------------------------

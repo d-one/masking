@@ -55,16 +55,17 @@ class StringMatchHandler:
         return [
             pii_value
             for col in self.pii_cols
-            if (pii_value := str(line.get(col)).strip())
+            if (value := line.get(col)) is not None
+            and (pii_value := str(value).strip())
             and (pii_value not in self.allow_list)
         ]
 
-    def _get_pattern_date(self, line: str | datetime.datetime) -> str:
+    def _get_pattern_date(self, line: str | datetime.date) -> str:
         """Get the date pattern from a line.
 
         Args:
         ----
-            line (str | datetime.datetime): The line to extract the date from
+            line (str | datetime.date): The line to extract the date from
 
         Returns:
         -------
@@ -73,11 +74,14 @@ class StringMatchHandler:
         """
         patterns = []
 
-        try:
-            # Parse the line as a date
-            date = parse_date(line)
-        except Exception:
-            return patterns
+        if isinstance(line, datetime.date):
+            date = line
+        else:
+            try:
+                # Parse the line as a date
+                date = parse_date(line)
+            except Exception:
+                return patterns
 
         # Create patterns for different date formats
         patterns.extend([

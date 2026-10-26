@@ -208,6 +208,14 @@ class TestStringMatchOperations:
         out = StringMatchOperation(col_name="t", pii_cols=["first"])(data)
         assert out.tolist() == ["<PATIENT_DATA> here", "<PATIENT_DATA> here"]
 
+    def test_string_match_skips_null_pii_value(self):
+        data = pd.DataFrame({
+            "t": ["None of John", "None of Ann"],
+            "first": ["John", None],
+        })
+        out = StringMatchOperation(col_name="t", pii_cols=["first"])(data)
+        assert out.tolist() == ["None of <PATIENT_DATA>", "None of Ann"]
+
     def test_string_match_dict(self):
         data = pd.DataFrame({
             "j": [json.dumps({"n": "John here"}), json.dumps({"n": "Ann"})],
