@@ -5,6 +5,7 @@ import pandas as pd
 from pyspark.sql import DataFrame
 
 from masking.base_operations.operation import Operation
+from masking.utils.spark_utils import spark_df_to_dict
 
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
 AnyDataFrame = pd.DataFrame | DataFrame
@@ -76,20 +77,7 @@ class ConcordanceTableBase(ABC):
         if isinstance(self.concordance_table, DataFrame):
             # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
             try:
-                clear_values = (
-                    self.concordance_table.select("clear_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-                masked_values = (
-                    self.concordance_table.select("masked_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-
-                self.concordance_table = dict(
-                    zip(clear_values, masked_values, strict=False)
-                )
+                self.concordance_table = spark_df_to_dict(self.concordance_table)
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise ValueError(msg) from e

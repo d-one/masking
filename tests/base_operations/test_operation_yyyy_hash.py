@@ -6,10 +6,8 @@ from typing import Any
 import pandas as pd
 import pytest
 from dateparser import parse
-from masking.base_operations.operation_yyyy_hash import (
-    YYYYHashOperationBase,
-    hash_string,
-)
+from masking.base_operations.operation_yyyy_hash import YYYYHashOperationBase
+from masking.utils.hash import hash_string
 
 from .conftest import get_v_input_name_and_line_date
 

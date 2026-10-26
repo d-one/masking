@@ -40,6 +40,7 @@ Before you begin, ensure you have the following installed on your machine:
 ## Additional Information
 
 - Package management is done through [uv](https://docs.astral.sh/uv/).
+- Running the Spark pipeline and its tests requires Java 17 or later. See [Running Spark locally](spark.md#running-spark-locally) for the environment variables.
 
 ## Troubleshooting
 

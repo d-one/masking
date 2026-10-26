@@ -1,8 +1,10 @@
-from datetime import UTC, datetime
+import calendar
+from datetime import UTC, date, datetime
 from typing import TYPE_CHECKING, ClassVar
 
-from dateparser import parse
 from faker.generator import Generator
+
+from masking.utils.date_parsing import parse_date
 
 from .faker import FakeProvider
 
@@ -14,11 +16,13 @@ class FakeDateProvider(FakeProvider):
     """Generates fake dates."""
 
     _DATE_MAX_ITERATIONS: int = 10
+    _RANGES_MAX_ITERATIONS: int = 1000
     _PRESERVED: ClassVar[set[str]] = set()
     _ADMISSIBLE: ClassVar[set[str]] = {"day", "month", "year"}
 
     def __init__(self, preserve: str | tuple[str] | None = None) -> None:
         self.generator: Generator = self.get_generator()
+        self._current_year = str(datetime.now(tz=UTC).year)
 
         self._PRESERVED = set()
 
@@ -45,7 +49,7 @@ class FakeDateProvider(FakeProvider):
             datetime:
 
         """
-        return parse(date_str)
+        return parse_date(date_str)
 
     def get_preserved_ranges(self, real_date: datetime) -> dict[str, str]:
         """Get the preserved ranges for the real date.
@@ -65,7 +69,7 @@ class FakeDateProvider(FakeProvider):
             "month_start": "01",
             "month_end": "12",
             "year_start": "1800",
-            "year_end": str(datetime.now(tz=UTC).year),
+            "year_end": self._current_year,
         }
 
         # Update date_range with preserved values
@@ -144,10 +148,24 @@ class FakeDateProvider(FakeProvider):
         -------
             datetime: date generated from the given year.
 
-        """
-        start_date = f"{dates_ranges['year_start'].zfill(4)}-{dates_ranges['month_start'].zfill(2)}-{dates_ranges['day_start'].zfill(2)}"
-        end_date = f"{dates_ranges['year_end'].zfill(4)}-{dates_ranges['month_end'].zfill(2)}-{dates_ranges['day_end'].zfill(2)}"
+        Raises:
+        ------
+            ValueError: if no valid date exists within the ranges.
 
-        return self.generator.date_time_between_dates(
-            datetime.fromisoformat(start_date), datetime.fromisoformat(end_date)
-        ).date()
+        """
+        years, months, days = (
+            (int(dates_ranges[f"{part}_start"]), int(dates_ranges[f"{part}_end"]))
+            for part in ("year", "month", "day")
+        )
+
+        # Each part is drawn within its own (inclusive) range, so that preserved
+        # parts are kept even when the parts above them change.
+        randint = self.generator.random.randint
+        for _ in range(self._RANGES_MAX_ITERATIONS):
+            year, month = randint(*years), randint(*months)
+            last_day = calendar.monthrange(year, month)[1]
+            if days[0] <= last_day:
+                return date(year, month, randint(days[0], min(days[1], last_day)))
+
+        msg = f"Could not generate a valid date within the ranges {dates_ranges}."
+        raise ValueError(msg)

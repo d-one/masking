@@ -27,9 +27,13 @@ class MedStatsOperationBase(Operation):
         """
         super().__init__(col_name=col_name, **kwargs)
 
-        # Initialize the med_stats lookup table
-        if self._MEDSTATS_LOOKUP_TABLE is None:
-            self._MEDSTATS_LOOKUP_TABLE = self._get_medstats_lookup_table()
+        # Initialize the med_stats lookup table, shared by all instances
+        if MedStatsOperationBase._MEDSTATS_LOOKUP_TABLE is None:
+            MedStatsOperationBase._MEDSTATS_LOOKUP_TABLE = (
+                self._get_medstats_lookup_table()
+            )
+        # Instance reference, so that pickled operations (e.g. Spark tasks) keep it
+        self._MEDSTATS_LOOKUP_TABLE = MedStatsOperationBase._MEDSTATS_LOOKUP_TABLE
 
     @staticmethod
     def _get_medstats_lookup_table() -> dict[str, str]:

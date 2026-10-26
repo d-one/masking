@@ -1,14 +1,17 @@
 import random
+import threading
 from typing import ClassVar
 
 from masking.base_operations.operation_fake import FakerOperation
 from masking.faker.name import FakeNameProvider
+from masking.utils.random_set import RandomSet
 
 
 class FakeNameBase(FakerOperation):
     """Mask a column with fake name data."""
 
-    _SEEN_INPUTS: ClassVar[set[str]] = set()
+    _SEEN_INPUTS: ClassVar[RandomSet] = RandomSet()
+    _SEEN_INPUTS_LOCK: ClassVar[threading.Lock] = threading.Lock()
 
     def __init__(  # noqa: PLR0913
         self,
@@ -35,13 +38,11 @@ class FakeNameBase(FakerOperation):
             col_name=col_name, provider=FakeNameProvider(locale=locale), **kwargs
         )
 
-        self.gender = gender
+        self.gender = gender.lower().strip() if isinstance(gender, str) else gender
         valid_genders = {"male", "female", "m", "f", "nonbinary", "nb", None}
         if self.gender not in valid_genders:
             msg = f"Gender variable should be in the following valid values: {valid_genders}. Default is {None}"
             raise ValueError(msg)
-        if self.gender is not None:
-            self.gender = self.gender.lower().strip()
 
         self.name_type = name_type.lower().strip()
         valid_name_types = {"full", "first", "last"}
@@ -102,15 +103,16 @@ class FakeNameBase(FakerOperation):
         if not self.reuse_existing:
             return self._mask_line_generate()
 
-        # Add the line to the seen inputs
-        self._SEEN_INPUTS.add(line)
+        # The pool is shared by every column, which pipelines may mask in parallel threads
+        with self._SEEN_INPUTS_LOCK:
+            self._SEEN_INPUTS.add(line)
 
-        # Randomly decide whether to generate a new name or use a seen one
-        to_generate = random.choice([True, False])  # noqa: S311
+            # Randomly decide whether to generate a new name or use a seen one
+            to_generate = random.choice([True, False])  # noqa: S311
 
-        if to_generate or not self._SEEN_INPUTS:
-            return self._mask_line_generate()
+            if not to_generate and self._SEEN_INPUTS:
+                masked = self._SEEN_INPUTS.choice()
+                self._SEEN_INPUTS.remove(masked)
+                return masked
 
-        masked = random.choice(list(self._SEEN_INPUTS))  # noqa: S311
-        self._SEEN_INPUTS.remove(masked)
-        return masked
+        return self._mask_line_generate()

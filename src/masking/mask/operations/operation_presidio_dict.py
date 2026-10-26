@@ -1,6 +1,3 @@
-from collections import defaultdict
-from itertools import tee
-
 from pandas import DataFrame, Series
 
 from masking.base_operations.operation_presidio_dict import MaskDictOperationBase
@@ -22,28 +19,6 @@ class MaskDictOperation(PandasOperation, MaskDictOperationBase):
             DataFrame | Series: masked data
 
         """
-        gen_values_to_mask = (
-            (self._get_leaf(self._parse_line(line), leaf), line)
-            for line in (data if isinstance(data, Series) else data[self.col_name])
-            for leaf in self._find_leaf_path(self._parse_line(line))
-            if not self._is_denied_path(leaf)
-        )
-
-        gen1, gen2 = tee(gen_values_to_mask)
-        entities = defaultdict(lambda: defaultdict(set))
-
-        for lang in self.analyzer.supported_languages:
-            for line, (leaf, doc) in zip(
-                (line for _, line in gen1),
-                self.analyzer.nlp_engine.process_batch(
-                    (leaf for leaf, _ in gen2), language=lang
-                ),
-                strict=False,
-            ):
-                entities[line][leaf].update(
-                    self._get_language_entities(leaf, lang, doc)
-                )
-
-        return data[self.col_name].apply(
-            lambda line: self._check_mask_line(line, entities=entities[line])
-        )
+        series = data if isinstance(data, Series) else data[self.col_name]
+        entities = self._get_entities_of_lines(series)
+        return series.map(lambda line: self._check_mask_line(line, entities=entities))

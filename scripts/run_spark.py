@@ -193,5 +193,6 @@ config = {
     ],
 }
 
-times = [measure_execution_time(config) for _ in range(1)]
+times = [measure_execution_time(config) for _ in range(5)]
+print("Run times: %s" % [round(t, 2) for t in times])
 print("Execution time: %s seconds" % (sum(times) / len(times)))

@@ -2,6 +2,7 @@ from unittest.mock import ANY, Mock, call
 
 import pandas as pd
 import polars as pl
+import pyarrow as pa
 import pytest
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
 from masking.base_operations.operation import Operation
@@ -12,6 +13,7 @@ from masking.mask_polars.operations.operation import PolarsOperation
 from masking.mask_polars.pipeline import ConcordanceTable as PolarsConcordanceTable
 from masking.mask_polars.pipeline import MaskDataFramePipeline as PolarsPipeline
 from pyspark.sql import DataFrame as SparkDataFrame
+from pyspark.sql.types import StringType
 
 COL = "name"
 NAMES = ["Alice", "Bob", "Carol", "Alice", "Dave"]
@@ -127,16 +129,18 @@ class TestInit:
 # ---------------------------------------------------------------------------
 
 
-# Mock a Spark DataFrame supporting ct_frame.select(c).rdd.flatMap(f).collect().
+# Mock a Spark DataFrame supporting ct_frame.select(*cols).toArrow() with string columns.
 def spark_frame_mock(columns: dict[str, list]) -> Mock:
     ct_frame = Mock(spec=SparkDataFrame)
 
-    def select(name):
-        if name not in columns:
-            msg = f"Column {name} does not exist"
+    def select(*names):
+        missing = [n for n in names if n not in columns]
+        if missing:
+            msg = f"Columns {missing} do not exist"
             raise ValueError(msg)
         selected = Mock()
-        selected.rdd.flatMap.return_value.collect.return_value = columns[name]
+        selected.schema.fields = [Mock(dataType=StringType()) for _ in names]
+        selected.toArrow.return_value = pa.table({n: columns[n] for n in names})
         return selected
 
     ct_frame.select.side_effect = select
@@ -192,10 +196,7 @@ class TestCastConcordanceTable:
         table = DictConcordanceTable(mock_operation(), ct_frame)
         table._cast_concordance_table()
         assert table.concordance_table == PRESCRIBED
-        assert ct_frame.select.call_args_list == [
-            call("clear_values"),
-            call("masked_values"),
-        ]
+        ct_frame.select.assert_called_once_with("clear_values", "masked_values")
 
     def test_spark_dataframe_missing_columns_raises(self):
         ct_frame = spark_frame_mock({"clear_values": ["a"]})

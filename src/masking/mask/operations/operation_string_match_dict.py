@@ -29,12 +29,15 @@ class StringMatchDictOperation(PandasOperation, StringMatchDictOperationBase):
         if isinstance(data, Series):
             data = data.to_frame(name=self.col_name)
 
-        return data[self.serving_columns].apply(
-            lambda row: self._check_mask_line(
-                line=row[self.col_name],
-                additional_values=row.drop(self.col_name).to_dict(),
-                leaf_to_mask=paths[row[self.col_name]][0],
-                leaf_to_deny=paths[row[self.col_name]][1],
-            ),
-            axis=1,
+        return Series(
+            [
+                self._check_mask_line(
+                    line=line,
+                    additional_values=additional_values,
+                    leaf_to_mask=paths[line][0],
+                    leaf_to_deny=paths[line][1],
+                )
+                for line, additional_values in self._iter_serving_values(data)
+            ],
+            index=data.index,
         )

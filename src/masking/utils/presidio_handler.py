@@ -1,5 +1,6 @@
 import operator
-from collections.abc import Callable
+from collections import defaultdict
+from collections.abc import Callable, Iterable
 from functools import reduce
 from typing import ClassVar
 
@@ -34,6 +35,7 @@ class PresidioHandler:
         masking_function: Callable[[str], str] | None = None,
         allow_list: list[str] | None = None,
         pii_entities: list[str] | None = None,
+        batch_size: int = 32,
         **kwargs: dict,
     ) -> None:
         """Initialize the Presidio Handler.
@@ -46,11 +48,13 @@ class PresidioHandler:
             masking_function (Callable[[str], str]): function to mask the text
             allow_list (list[str]): list of allowed entities
             pii_entities (list[str]): list of entities to detect
+            batch_size (int): number of texts processed together by the NLP models
             **kwargs: keyword arguments
 
         """
         super().__init__(**kwargs)
 
+        self.batch_size = batch_size
         self.allow_list = allow_list or []
         self.allow_list = [a_clean for a in self.allow_list if (a_clean := a.strip())]
 
@@ -140,3 +144,33 @@ class PresidioHandler:
                 for lang in self.analyzer.supported_languages
             ),
         )
+
+    def _get_entities_batch(self, texts: Iterable) -> defaultdict[str, set]:
+        """Get entities of many texts, for each language.
+
+        Each distinct text is processed once per language, the NLP models running
+        on batches of texts: much faster than one text at a time.
+
+        Args:
+        ----
+            texts (Iterable): input texts, non-string values are ignored
+
+        Returns:
+        -------
+            defaultdict[str, set]: entities detected in each text, empty for others
+
+        """
+        unique = list(
+            dict.fromkeys(t for t in texts if isinstance(t, str) and t.strip())
+        )
+
+        entities = defaultdict(set)
+        for lang in self.analyzer.supported_languages:
+            processed = self.analyzer.nlp_engine.process_batch(
+                unique, language=lang, batch_size=self.batch_size
+            )
+            for text, (_, nlp_artifacts) in zip(unique, processed, strict=True):
+                entities[text].update(
+                    self._get_language_entities(text, lang, nlp_artifacts)
+                )
+        return entities

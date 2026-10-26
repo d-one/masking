@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from pyspark.sql import DataFrame
 
+from masking.utils.spark_utils import spark_df_to_dict
+
 # Define a new type to pass in typing: pd.DataFrame or DataFrame
 AnyDataFrame = pd.DataFrame | DataFrame
 
@@ -14,6 +16,18 @@ class Operation(ABC):
     concordance_table: dict | AnyDataFrame | None = None
 
     MAX_RETRY = 1000
+
+    # Set of the masked values in the concordance table, for O(1) uniqueness checks.
+    # It is rebuilt when the table is cast, updated, replaced or changes size; existing
+    # entries must be overwritten through update_concordance_table.
+    _masked_values: set | None = None
+    _masked_values_source: dict | None = None
+    _masked_values_size: int = -1
+    _MASKED_VALUES_CACHE = (
+        "_masked_values",
+        "_masked_values_source",
+        "_masked_values_size",
+    )
 
     def __init__(
         self,
@@ -66,6 +80,18 @@ class Operation(ABC):
         """
         self._col_name = col_name
 
+    def __getstate__(self) -> dict:
+        # The cache is rebuilt lazily: do not ship it, e.g. to every Spark task
+        state = self.__dict__.copy()
+        for name in self._MASKED_VALUES_CACHE:
+            state.pop(name, None)
+        return state
+
+    def _invalidate_masked_values(self) -> None:
+        """Drop the cached masked values and the reference to their table."""
+        for name in self._MASKED_VALUES_CACHE:
+            self.__dict__.pop(name, None)
+
     @staticmethod
     def cast_concordance_table(concordance_table: AnyDataFrame | dict | None) -> dict:
         """Cast the concordance table to a dictionary.
@@ -99,18 +125,7 @@ class Operation(ABC):
         if isinstance(concordance_table, DataFrame):
             # Make sure the dataframe has only two columns: 'clear_values' and 'masked_values'
             try:
-                clear_values = (
-                    concordance_table.select("clear_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-                masked_values = (
-                    concordance_table.select("masked_values")
-                    .rdd.flatMap(lambda x: x)
-                    .collect()
-                )
-
-                return dict(zip(clear_values, masked_values, strict=False))
+                return spark_df_to_dict(concordance_table)
             except Exception as e:
                 msg = f"Invalid concordance table, expected a Dataframe with columns ['clear_values','masked_values']: {e}"
                 raise TypeError(msg) from e
@@ -131,6 +146,7 @@ class Operation(ABC):
     def _cast_concordance_table(self) -> None:
         """Cast the concordance table to a dictionary."""
         self.concordance_table = self.cast_concordance_table(self.concordance_table)
+        self._invalidate_masked_values()
 
     def update_concordance_table(self, concordance_table: dict) -> None:
         """Update the concordance table.
@@ -154,6 +170,26 @@ class Operation(ABC):
 
         self._cast_concordance_table()
         self.concordance_table.update(concordance_table)
+        self._invalidate_masked_values()
+
+    def _get_masked_values(self) -> set:
+        """Return the set of masked values of the concordance table.
+
+        Returns
+        -------
+            set: masked values
+
+        """
+        table = self.concordance_table
+        if (
+            self._masked_values is None
+            or self._masked_values_source is not table
+            or self._masked_values_size != len(table)
+        ):
+            self._masked_values = set(table.values())
+            self._masked_values_source = table
+            self._masked_values_size = len(table)
+        return self._masked_values
 
     @abstractmethod
     def _mask_line(self, line: str) -> str:
@@ -189,20 +225,23 @@ class Operation(ABC):
             str: masked line
 
         """
-        if line is None:
+        if line is None or (pd.api.types.is_scalar(line) and pd.isna(line)):
             return None
 
         if line in self.concordance_table:
             return self.concordance_table[line]
 
+        masked_values = self._get_masked_values()
         masked = self._mask_line(
             line=line, additional_values=additional_values, **kwargs
         )
         for _ in range(self.MAX_RETRY):
-            if masked not in self.concordance_table.values():
+            if masked not in masked_values:
                 # Update the concordance table with the new value, if unique masked values are required
                 if self._needs_unique_values:
                     self.concordance_table[line] = masked
+                    masked_values.add(masked)
+                    self._masked_values_size = len(self.concordance_table)
                 return masked
 
             masked = self._mask_line(
