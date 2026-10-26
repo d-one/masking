@@ -24,6 +24,9 @@ select = ["ALL"]
 "scripts/*" = ["T201", "ANN2", "ERA001", "INP001", "S106", "ARG005"]
 "tests/*" = ["S101", "SLF0", "PLC0415", "ANN", "PLR6301", "PLR2004", "FBT003", "PLC1901"]
 
+[tool.uv.sources]
+agentic-engineering = { git = "https://github.com/petmarco7/agentic_engineering", subdirectory = "cli", rev = "v0.1.4" }
+
 ############################### UV ################################
 
 [build-system]
@@ -60,4 +63,5 @@ dev = [
     "argparse>=1.4.0",
     "spacy-lookups-data>=1.0.5",
     "click>=8.4.1",
+    "agentic-engineering",
 ]
