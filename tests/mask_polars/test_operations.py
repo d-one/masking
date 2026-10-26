@@ -247,6 +247,21 @@ class TestStringMatchOperations:
             {"items": [{"a": "John", "b": "<PATIENT_DATA>"}]}
         ]
 
+    def test_string_match_dict_denies_scalar_list_entries(self):
+        data = pl.DataFrame({
+            "j": [json.dumps({"items": [123, "John", None, True]})],
+            "first": ["John"],
+        })
+        op = StringMatchDictOperation(
+            col_name="j",
+            pii_cols=["first"],
+            deny_keys=["items.[$].[*]"],
+            masking_function=lambda s: f"<{s}>",
+        )
+        assert [json.loads(v) for v in op(data)] == [
+            {"items": ["<123>", "<John>", "<null>", "<true>"]}
+        ]
+
     def test_string_match_dict_series(self):
         line = json.dumps({"n": "John"})
         out = StringMatchDictOperation(col_name="j")(pl.Series([line]))

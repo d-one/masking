@@ -190,6 +190,21 @@ class TestServingColumns:
             {"items": [{"a": "John", "b": "<PATIENT_DATA>"}]}
         ]
 
+    def test_string_match_dict_denies_scalar_list_entries(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, json.dumps({"items": [123, "John", None, True]}), "John")],
+            "id int, j string, first string",
+        )
+        op = StringMatchDictOperation(
+            col_name="j",
+            pii_cols=["first"],
+            deny_keys=["items.[$].[*]"],
+            masking_function=lambda s: f"<{s}>",
+        )
+        assert [json.loads(v) for v in column(op(data), "j")] == [
+            {"items": ["<123>", "<John>", "<null>", "<true>"]}
+        ]
+
 
 class TestPresidio:
     def test_mask_presidio(self, spark: SparkSession, blank_analyzer):
