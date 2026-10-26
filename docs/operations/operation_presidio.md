@@ -77,6 +77,8 @@ op = MaskPresidio(
 )
 ```
 
+`PresidioMultilingualAnalyzer` uses Presidio's predefined recognizers for the model languages, without the US-, India-, Singapore-, and Australia-specific ones (for example `US_SSN`). Pass `registry=` a `RecognizerRegistry` whose `supported_languages` match the model languages to use your own recognizers instead.
+
 ### Pipeline Usage
 
 ```python

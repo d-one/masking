@@ -131,11 +131,6 @@ class TestPresidioRegistry:
         assert result is custom
         assert result.supported_languages == ["fr"]
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: remove_recognizer() expects a recognizer name, but the recognizer "
-        "object is passed, so no region-specific recognizer is removed.",
-    )
     def test_region_specific_recognizers_are_removed(self):
         registry = PresidioRegistry().registry
         names = [r.__class__.__name__ for r in registry.recognizers]
@@ -182,10 +177,24 @@ class TestPresidioMultilingualAnalyzer:
         with pytest.raises(ValueError, match="No matching recognizers"):
             blank_analyzer.analyze(text="bonjour", language="fr")
 
-    @pytest.mark.xfail(
-        strict=True,
-        reason="Bug: the registry is built but never passed to AnalyzerEngine.",
-    )
+    def test_default_registry_is_presidio_default_without_region_recognizers(
+        self, blank_models
+    ):
+        analyzer = PresidioMultilingualAnalyzer(models=blank_models).analyzer
+        presidio = AnalyzerEngine(
+            nlp_engine=analyzer.nlp_engine, supported_languages=list(blank_models)
+        )
+
+        def names(engine: AnalyzerEngine) -> list[tuple[str, str]]:
+            return sorted(
+                (r.__class__.__name__, r.supported_language)
+                for r in engine.registry.recognizers
+            )
+
+        removed = [n for n in names(presidio) if n[0].startswith(EXCLUDED_PREFIXES)]
+        assert removed
+        assert names(analyzer) == [n for n in names(presidio) if n not in removed]
+
     def test_custom_registry_is_used(self, blank_models):
         registry = RecognizerRegistry(supported_languages=list(blank_models))
         analyzer = PresidioMultilingualAnalyzer(
