@@ -27,12 +27,6 @@ The library processes personally identifiable information (PII). Masked output i
 - Analysis runs locally with the installed spaCy models; the library sends no data to external services.
 - `allow_list` keeps listed values in clear text; keep it to values that are not PII.
 
-## Known Issues
-
-| Issue                                                                                                                         | Mitigation until fixed       |
-| ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `FakeNameOperation` with `reuse_existing=True` can output clear input names ([#4](https://github.com/d-one/masking/issues/4)) | Pass `reuse_existing=False`. |
-
 ## Exceptions
 
 Exceptions raised by the library name the column, operation, or path and the reason for the failure, but contain no clear value, masked value, or part of the input document. Exceptions raised by third-party libraries (Presidio, dateparser, Spark) can still contain input values.

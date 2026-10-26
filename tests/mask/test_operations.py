@@ -170,6 +170,13 @@ class TestFakeOperations:
         assert all(o != v for o, v in zip(out, values, strict=True))
         assert len(set(out)) == len(values)
 
+    def test_fake_name_reuse_never_outputs_clear_values(self):
+        clear = [f"Clear{i}" for i in range(200)]
+        out = FakeNameOperation(col_name="c", reuse_existing=True)(
+            pd.DataFrame({"c": clear})
+        )
+        assert not set(out) & set(clear)
+
 
 class TestPresidioOperations:
     @pytest.mark.parametrize("as_series", [False, True])

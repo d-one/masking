@@ -142,6 +142,12 @@ class TestSparkOperation:
         op = NullOperation(col_name="c", condition=lambda v: v == "10")
         assert column(op(data), "c") == [None, "20"]
 
+    def test_fake_name_reuse_never_outputs_clear_values(self, spark: SparkSession):
+        clear = [f"Clear{i}" for i in range(200)]
+        data = spark.createDataFrame(list(enumerate(clear)), "id int, n string")
+        out = column(FakeNameOperation(col_name="n", reuse_existing=True)(data), "n")
+        assert not set(out) & set(clear)
+
 
 class TestServingColumns:
     def test_string_match(self, spark: SparkSession):
