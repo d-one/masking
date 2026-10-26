@@ -156,16 +156,13 @@ class Operation(ABC):
             concordance_table: dict with masked values
 
         """
-        msg = f"Invalid concordance table, expected a dictionary, got {type(concordance_table)}"
-
         if not isinstance(concordance_table, dict):
+            msg = f"Invalid concordance table, expected a dictionary, got {type(concordance_table)}"
             raise TypeError(msg)
 
-        # Check that all values are strings, and all keys are strings
-        if not all(
-            isinstance(value, str) and isinstance(k, str)
-            for k, value in concordance_table.items()
-        ):
+        # Keys keep the column's native type (e.g. int), as in pipeline concordance tables
+        if not all(isinstance(value, str) for value in concordance_table.values()):
+            msg = "Invalid concordance table, expected string masked values"
             raise TypeError(msg)
 
         self._cast_concordance_table()

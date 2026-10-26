@@ -2,6 +2,7 @@ import itertools
 import pickle  # noqa: S403
 import time
 
+import pytest
 from masking.base_operations.operation import Operation
 from masking.utils.random_set import RandomSet
 
@@ -79,6 +80,19 @@ def test_update_concordance_table_is_respected() -> None:
     op._get_masked_values()
     op.update_concordance_table({"k": "a"})
     assert op._check_mask_line("x") == "b"
+
+
+def test_update_concordance_table_accepts_native_keys() -> None:
+    op = _UniqueOp(["a", "b"])
+    op.update_concordance_table({1000: "a"})
+    assert op._check_mask_line(1000) == "a"
+    assert op._check_mask_line(2000) == "b"
+
+
+def test_update_concordance_table_rejects_non_string_values() -> None:
+    op = _UniqueOp(["a"])
+    with pytest.raises(TypeError, match="expected string masked values"):
+        op.update_concordance_table({"k": 1})
 
 
 def test_external_modification_is_respected() -> None:

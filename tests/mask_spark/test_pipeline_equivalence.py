@@ -334,3 +334,47 @@ def test_backends_agree_on_chained_operations(spark: SparkSession) -> None:
     assert pandas_out["c"].tolist() == expected
     assert polars_out["c"].to_list() == expected
     assert [row["c"] for row in spark_rows] == expected
+
+
+@pytest.mark.parametrize("operation", ["med_stats", "hash"])
+def test_backends_repeat_calls_on_integer_columns(
+    spark: SparkSession, operation: str
+) -> None:
+    # The first call stores integer keys; the second call must reuse them
+    ops = {
+        "med_stats": (MedStatsPd, MedStatsPl, MedStatsOperation, {}),
+        "hash": (HashPd, HashPl, HashOperation, {"secret": SECRET}),
+    }
+    pd_op, pl_op, spark_op, kwargs = ops[operation]
+    pipelines = {
+        "pandas": PandasPipeline({
+            "c": {"masking_operation": pd_op(col_name="c", **kwargs)}
+        }),
+        "polars": PolarsPipeline({
+            "c": {"masking_operation": pl_op(col_name="c", **kwargs)}
+        }),
+        "spark": SparkPipeline({
+            "c": {"masking_operation": spark_op(col_name="c", **kwargs)}
+        }),
+    }
+    rows = [(0, 1000), (1, 2000), (2, None)]
+
+    def run(backend: str) -> list:
+        if backend == "pandas":
+            return pipelines[backend](pd.DataFrame(rows, columns=["row_id", "c"]))[
+                "c"
+            ].tolist()
+        if backend == "polars":
+            out = pipelines[backend](
+                pl.DataFrame(rows, schema=["row_id", "c"], orient="row")
+            )
+            return out.sort("row_id")["c"].to_list()
+        out = pipelines[backend](spark.createDataFrame(rows, "row_id long, c long"))
+        return [row["c"] for row in out.orderBy("row_id").collect()]
+
+    first = {backend: run(backend) for backend in pipelines}
+    second = {backend: run(backend) for backend in pipelines}
+
+    assert first == second
+    assert first["pandas"] == first["polars"] == first["spark"]
+    assert first["pandas"][2] is None
