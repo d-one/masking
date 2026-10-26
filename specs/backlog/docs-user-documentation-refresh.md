@@ -9,12 +9,11 @@ affected_components:
   - README.md
   - docs/
 assumptions:
-  - Documentation targets `main` at 865d3b2; open PR #2 (perf/spark-arrow) is reconciled with these changes when either merges.
+  - Documentation targets `main` at 36b5559, which includes PR #2 (Spark performance work, Presidio `batch_size`, `docs/spark.md`).
   - Existing doc paths (`docs/installation.md`, `docs/available_modules.md`, `docs/operations/*.md`) stay in place so external links keep working.
   - "`docs/operations/` stays the operation reference; the template's runbook folder is not used because the library has no deployed environment."
 out_of_scope:
   - Source code changes, including adding `NullOperation` to the backends (see `operations-null-backends.md`).
-  - Documenting changes that only exist on PR #2 (Spark performance work, `batch_size`, `docs/spark.md`).
   - A generated docs site, API reference generated from docstrings, or translations.
   - Automated doc tests in CI.
 ---
@@ -54,7 +53,8 @@ After this change the documentation describes the code on `main` and nothing els
 | `docs/installation.md`        | Local setup: `make install`, spaCy models, Java for Spark, tests, pre-commit, optional `apm install` for agent tooling.                                                |
 | `docs/available_modules.md`   | The three backends, the pipeline configuration format, chaining, and concordance tables.                                                                               |
 | `docs/architecture/README.md` | Layers (`base_*`, backends, `faker`, `utils`), how backend operations combine a `*Base` class with a backend mixin, and the pipeline data flow, with Mermaid diagrams. |
-| `docs/security/README.md`     | Handling of PII: concordance tables hold clear values, hash secrets, synthetic test data.                                                                              |
+| `docs/security/README.md`     | Handling of PII: concordance tables hold clear values, hash secrets, synthetic test data, and known issues that expose clear values.                                   |
+| `docs/spark.md`               | How the Spark backend runs, its configuration, limits, and local setup; replaces the plan-style `docs/spark_performance_plan.md`, which is deleted.                    |
 | `docs/operations/*.md`        | Correct import paths for every backend and an accurate status for the `null` operation.                                                                                |
 
 ## Acceptance Criteria
@@ -69,22 +69,23 @@ After this change the documentation describes the code on `main` and nothing els
 1. **AC8** — `docs/README.md` links every Markdown page under `docs/`, and every relative link in `README.md` and `docs/` resolves to an existing file.
 1. **AC9** — `README.md` has a Contributing section linking `AGENTS.md`, the spec-driven workflow, and the PR template.
 1. **AC10** — The `null` operation docs state that no backend provides `NullOperation` yet and do not show an import that fails; they link the bugfix spec.
+1. **AC11** — `docs/spark.md` describes the current substitution (join, broadcast only up to `BROADCAST_MAX_BYTES`) and the driver and serialization limits; no page under `docs/` is a coding-session plan.
 
 ## Design Notes
 
-- Keep existing file paths; add only `docs/README.md`, `docs/architecture/README.md`, and `docs/security/README.md`.
+- Keep existing file paths; add only `docs/README.md`, `docs/architecture/README.md`, and `docs/security/README.md`; delete `docs/spark_performance_plan.md` after moving its enduring content to `docs/spark.md`.
 - Follow the repo's Markdown style enforced by mdformat and markdownlint.
 - Use the `docs-sync-audit` skill to check README and docs against the code before review.
 
 ## Tests
 
-| AC                  | Test type                                                              | Location                                            |
-| ------------------- | ---------------------------------------------------------------------- | --------------------------------------------------- |
-| AC1                 | Manual check: import every `from masking` line with `uv run python -c` | `README.md`, `docs/`                                |
-| AC2                 | Manual check: run each quick-start example                             | `README.md`                                         |
-| AC3, AC4, AC7, AC10 | Review against code; `docs-sync-audit` reports no P0–P2 drift          | `docs/`                                             |
-| AC5, AC6, AC9       | Review                                                                 | `docs/architecture/`, `docs/security/`, `README.md` |
-| AC8                 | `docs-sync-audit` link check (`scripts/docs_drift.py`)                 | `README.md`, `docs/`                                |
+| AC                        | Test type                                                              | Location                                            |
+| ------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------- |
+| AC1                       | Manual check: import every `from masking` line with `uv run python -c` | `README.md`, `docs/`                                |
+| AC2                       | Manual check: run each quick-start example                             | `README.md`                                         |
+| AC3, AC4, AC7, AC10, AC11 | Review against code; `docs-sync-audit` reports no P0–P2 drift          | `docs/`                                             |
+| AC5, AC6, AC9             | Review                                                                 | `docs/architecture/`, `docs/security/`, `README.md` |
+| AC8                       | `docs-sync-audit` link check (`scripts/docs_drift.py`)                 | `README.md`, `docs/`                                |
 
 ## Open Questions
 

@@ -18,7 +18,14 @@ For every configured column the pipeline:
 1. masks the distinct values with `mapInPandas` (Arrow), or with native Spark functions when possible (see [hash](operations/operation_hash.md));
 1. collects the concordance table `{clear_value: masked_value}` to the driver through Arrow;
 1. for operations requiring unique values (`fake_*`), masks again on the driver the values that collide across Spark partitions;
-1. replaces the values in the full dataframe with a **broadcast join** against the concordance table. A python UDF is only used for column types whose Spark string representation differs from python's (e.g. booleans, doubles, timestamps).
+1. replaces the values in the full dataframe with a join against the concordance table. The table is broadcast when its Arrow representation is at most 256 MB (`BROADCAST_MAX_BYTES`), because every executor holds a copy of a broadcast table; larger tables use a shuffle join. A python UDF is only used for column types whose Spark string representation differs from python's (e.g. booleans, doubles, timestamps).
+
+## Limits
+
+| Limit                                          | Effect                                                                                                                                                                                                  |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Concordance tables are collected to the driver | The distinct values of each masked column, with their masked values, must fit in driver memory.                                                                                                         |
+| Each task unpickles its masking operation      | Operations that hold a Presidio analyzer ship the spaCy models with every task (about 1 GB with `en_core_web_trf` and `de_core_news_lg`). Tracked in [#12](https://github.com/d-one/masking/issues/12). |
 
 ## Spark configuration
 
@@ -46,5 +53,3 @@ python scripts/benchmark_spark.py --rows 2000 --distinct 1000 --repeat 2
 python scripts/benchmark_spark.py --rows 1000000 --distinct 200000 --ops hash_secret fake_name \
     --conf spark.sql.shuffle.partitions=8 --output results.json
 ```
-
-See [spark_performance_plan.md](spark_performance_plan.md) for the optimizations and their measured effect.

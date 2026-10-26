@@ -2,7 +2,7 @@
 
 Replaces entries with `None` values. This is the simplest masking operation — it removes data entirely. An optional condition function allows selective nullification based on the cell value.
 
-> **Status:** only the backend-agnostic `NullOperationBase` exists. No backend provides a `NullOperation` class yet, so the operation cannot be used in a pipeline. Adding it to the pandas, polars, and Spark backends is tracked in [specs/backlog/operations-null-backends.md](../../specs/backlog/operations-null-backends.md).
+> **Status:** only the backend-agnostic `NullOperationBase` exists. No backend provides a `NullOperation` class yet, so the operation cannot be used in a pipeline. Adding it to the pandas, polars, and Spark backends is tracked in [#14](https://github.com/d-one/masking/issues/14) and [specs/backlog/operations-null-backends.md](../../specs/backlog/operations-null-backends.md).
 
 ______________________________________________________________________
 

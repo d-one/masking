@@ -2,14 +2,17 @@
 
 Reference documentation for users and contributors. Start with the [README](../README.md) for installation and a quick start.
 
-| Page                                                 | Content                                                            |
-| ---------------------------------------------------- | ------------------------------------------------------------------ |
-| [installation.md](installation.md)                   | Development setup, commands, troubleshooting                       |
-| [available_modules.md](available_modules.md)         | Backends, pipeline configuration, chaining, concordance tables     |
-| [operations/operations.md](operations/operations.md) | Overview of every masking operation and the `Operation` base class |
-| [architecture/README.md](architecture/README.md)     | Package layers, class structure, pipeline data flow, bundled data  |
-| [security/README.md](security/README.md)             | Handling PII, hash secrets, concordance tables                     |
-| [development/README.md](development/README.md)       | Spec-driven development and the coding-agent workflow              |
+| Page                                                                             | Content                                                            |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [installation.md](installation.md)                                               | Development setup, commands, troubleshooting                       |
+| [available_modules.md](available_modules.md)                                     | Backends, pipeline configuration, chaining, concordance tables     |
+| [spark.md](spark.md)                                                             | How the Spark backend runs, configuration, limits, local setup     |
+| [operations/operations.md](operations/operations.md)                             | Overview of every masking operation and the `Operation` base class |
+| [architecture/README.md](architecture/README.md)                                 | Package layers, class structure, pipeline data flow, bundled data  |
+| [security/README.md](security/README.md)                                         | Handling PII, hash secrets, concordance tables, known issues       |
+| [development/README.md](development/README.md)                                   | Spec-driven development and the coding-agent workflow              |
+| [development/spec-driven-development.md](development/spec-driven-development.md) | How a spec moves from draft to implemented                         |
+| [development/coding-agent-workflow.md](development/coding-agent-workflow.md)     | Roles and steps when working with coding agents                    |
 
 ## Operation Reference
 
