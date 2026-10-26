@@ -3,3 +3,4 @@
 .venv
 */build/
 *.DS_Store
+apm_modules/
