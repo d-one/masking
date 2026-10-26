@@ -133,11 +133,22 @@ class TestReuseExisting:
         masked = [op._mask_line(name) for name in clear for op in ops]
         assert not set(masked) & set(clear)
 
-    def test_generated_names_are_reused_across_columns(self):
+    @pytest.mark.usefixtures("_force_reuse")
+    def test_generated_names_are_reused_across_columns(self, generated_names):
         first, second = FakeName(col_name="a"), FakeName(col_name="b")
-        names_a = {first._mask_line(f"A{i}") for i in range(200)}
-        names_b = {second._mask_line(f"B{i}") for i in range(200)}
-        assert names_a & names_b
+        name = first._mask_line("Anna")
+        assert name in generated_names
+        assert second._mask_line("Bob") == name
+
+    def test_rejected_clear_value_is_not_pooled(self, monkeypatch, generated_names):
+        monkeypatch.setattr(operation_fake_name.random, "choice", lambda _: True)
+        op = make(name_type="last")
+        op.reuse_existing = True
+        names = iter(["Anna", "Clara"])
+        op.faker.get_last_name = lambda: next(names)
+
+        assert op._mask_line("Anna") == "Clara"
+        assert "Anna" not in generated_names
 
     def test_pool_is_shared_between_instances(self, generated_names):
         assert FakeName(col_name="a")._GENERATED_NAMES is generated_names

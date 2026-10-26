@@ -88,7 +88,7 @@ class FakeNameBase(FakerOperation):
         msg = "Cannot generate new fake name."
         raise ValueError(msg)
 
-    def _mask_like_faker(self, line: str) -> str:  # noqa: ARG002
+    def _mask_like_faker(self, line: str) -> str:
         """Mask a single line.
 
         Args:
@@ -114,6 +114,8 @@ class FakeNameBase(FakerOperation):
                 return masked
 
         masked = self._mask_line_generate()
-        with self._GENERATED_NAMES_LOCK:
-            self._GENERATED_NAMES.add(masked)
+        # A name equal to the clear input is rejected by the caller and must not be reused
+        if masked != line:
+            with self._GENERATED_NAMES_LOCK:
+                self._GENERATED_NAMES.add(masked)
         return masked
