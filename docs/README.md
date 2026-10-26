@@ -16,21 +16,21 @@ Reference documentation for users and contributors. Start with the [README](../R
 
 ## Operation Reference
 
-| Page                                                                        | Operation                                  |
-| --------------------------------------------------------------------------- | ------------------------------------------ |
-| [operation_hash.md](operations/operation_hash.md)                           | `HashOperation`                            |
-| [operation_yyyy_hash.md](operations/operation_yyyy_hash.md)                 | `YYYYHashOperation`                        |
-| [operation_null.md](operations/operation_null.md)                           | `NullOperationBase` (no backend class yet) |
-| [operation_fake_name.md](operations/operation_fake_name.md)                 | `FakeNameOperation`                        |
-| [operation_fake_date.md](operations/operation_fake_date.md)                 | `FakeDate`                                 |
-| [operation_fake_plz.md](operations/operation_fake_plz.md)                   | `FakePLZ`                                  |
-| [operation_med_stats.md](operations/operation_med_stats.md)                 | `MedStatsOperation`                        |
-| [operation_presidio.md](operations/operation_presidio.md)                   | `MaskPresidio`                             |
-| [operation_presidio_dict.md](operations/operation_presidio_dict.md)         | `MaskDictOperation`                        |
-| [operation_string_match.md](operations/operation_string_match.md)           | `StringMatchOperation`                     |
-| [operation_string_match_dict.md](operations/operation_string_match_dict.md) | `StringMatchDictOperation`                 |
-| [operation_fake.md](operations/operation_fake.md)                           | `FakerOperation` (base class)              |
-| [operation_dict.md](operations/operation_dict.md)                           | `DictOperationBase` (base class)           |
+| Page                                                                        | Operation                              |
+| --------------------------------------------------------------------------- | -------------------------------------- |
+| [operation_hash.md](operations/operation_hash.md)                           | `HashOperation`                        |
+| [operation_yyyy_hash.md](operations/operation_yyyy_hash.md)                 | `YYYYHashOperation`                    |
+| [operation_null.md](operations/operation_null.md)                           | `NullOperation` (not in pipelines yet) |
+| [operation_fake_name.md](operations/operation_fake_name.md)                 | `FakeNameOperation`                    |
+| [operation_fake_date.md](operations/operation_fake_date.md)                 | `FakeDate`                             |
+| [operation_fake_plz.md](operations/operation_fake_plz.md)                   | `FakePLZ`                              |
+| [operation_med_stats.md](operations/operation_med_stats.md)                 | `MedStatsOperation`                    |
+| [operation_presidio.md](operations/operation_presidio.md)                   | `MaskPresidio`                         |
+| [operation_presidio_dict.md](operations/operation_presidio_dict.md)         | `MaskDictOperation`                    |
+| [operation_string_match.md](operations/operation_string_match.md)           | `StringMatchOperation`                 |
+| [operation_string_match_dict.md](operations/operation_string_match_dict.md) | `StringMatchDictOperation`             |
+| [operation_fake.md](operations/operation_fake.md)                           | `FakerOperation` (base class)          |
+| [operation_dict.md](operations/operation_dict.md)                           | `DictOperationBase` (base class)       |
 
 ## Conventions
 

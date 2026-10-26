@@ -2,15 +2,21 @@
 
 Replaces entries with `None` values. This is the simplest masking operation — it removes data entirely. An optional condition function allows selective nullification based on the cell value.
 
-> **Status:** only the backend-agnostic `NullOperationBase` exists. No backend provides a `NullOperation` class yet, so the operation cannot be used in a pipeline. Adding it to the pandas, polars, and Spark backends is tracked in [#14](https://github.com/d-one/masking/issues/14) and [specs/backlog/operations-null-backends.md](../../specs/backlog/operations-null-backends.md).
+> **Status:** `NullOperation` works when called on a DataFrame directly. Pipelines (`MaskDataFramePipeline`) reject it with a `TypeError` until pipeline support lands ([#24](https://github.com/d-one/masking/issues/24)).
 
 ______________________________________________________________________
 
-## Class: `NullOperationBase`
+## Class: `NullOperation`
+
+| Backend | Import                                                                    |
+| ------- | ------------------------------------------------------------------------- |
+| pandas  | `from masking.mask.operations.operation_null import NullOperation`        |
+| polars  | `from masking.mask_polars.operations.operation_null import NullOperation` |
+| Spark   | `from masking.mask_spark.operations.operation_null import NullOperation`  |
 
 ### Inherits from
 
-`masking.base_operations.operation.Operation`
+`masking.base_operations.operation_null.NullOperationBase`, which inherits from `masking.base_operations.operation.Operation`
 
 ______________________________________________________________________
 
@@ -57,3 +63,20 @@ ______________________________________________________________________
 ## Dependencies
 
 - `Operation` (from `masking.base_operations.operation`)
+
+______________________________________________________________________
+
+## Example
+
+```python
+import pandas as pd
+from masking.mask.operations.operation_null import NullOperation
+
+df = pd.DataFrame({"ssn": ["123-45-6789", "n/a"]})
+
+# Null every value
+df["ssn"] = NullOperation(col_name="ssn")(df)
+
+# Null only values matching a condition; other values are kept as strings
+df["ssn"] = NullOperation(col_name="ssn", condition=lambda v: v != "n/a")(df)
+```

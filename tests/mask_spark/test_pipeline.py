@@ -4,6 +4,7 @@ import pytest
 from masking.mask_spark.operations.operation_fake_date import FakeDate
 from masking.mask_spark.operations.operation_hash import HashOperation
 from masking.mask_spark.operations.operation_med_stats import MedStatsOperation
+from masking.mask_spark.operations.operation_null import NullOperation
 from masking.mask_spark.operations.operation_string_match import StringMatchOperation
 from masking.mask_spark.pipeline import ConcordanceTable, MaskDataFramePipeline
 from pyspark.sql import SparkSession
@@ -130,6 +131,12 @@ class TestStaticMethods:
 
 
 class TestPipeline:
+    def test_null_operation_is_rejected(self):
+        with pytest.raises(TypeError, match="NullOperation cannot be used"):
+            MaskDataFramePipeline({
+                "c": {"masking_operation": NullOperation(col_name="c")}
+            })
+
     def test_end_to_end(self, spark: SparkSession):
         data = spark.createDataFrame(
             [(1, "1000"), (2, "0000"), (3, None), (4, "1000")], "id int, p string"

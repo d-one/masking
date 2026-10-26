@@ -4,6 +4,7 @@ import polars as pl
 import pytest
 from masking.mask_polars.operations.operation_hash import HashOperation
 from masking.mask_polars.operations.operation_med_stats import MedStatsOperation
+from masking.mask_polars.operations.operation_null import NullOperation
 from masking.mask_polars.pipeline import ConcordanceTable, MaskDataFramePipeline
 
 
@@ -63,6 +64,12 @@ class TestStaticMethods:
 
 
 class TestPipeline:
+    def test_null_operation_is_rejected(self):
+        with pytest.raises(TypeError, match="NullOperation cannot be used"):
+            MaskDataFramePipeline({
+                "c": {"masking_operation": NullOperation(col_name="c")}
+            })
+
     def test_end_to_end(self):
         data = pl.DataFrame({"p": ["1000", "0000", None, "1000"], "o": [1, 2, 3, 4]})
         pipeline = MaskDataFramePipeline({

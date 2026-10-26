@@ -21,7 +21,7 @@ ______________________________________________________________________
 Use when a value must be removed entirely.
 
 - [`null`](./operation_null.md):
-  Replace any entry with a null value. Not yet available in any backend; see the operation page.
+  Replace any entry with a null value. Call it on the data directly; pipelines do not support it yet.
 
 ______________________________________________________________________
 
