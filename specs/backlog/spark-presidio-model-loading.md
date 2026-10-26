@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#12"
 links:
   - src/masking/mask_spark/operations/operation.py
   - src/masking/utils/entity_detection.py
@@ -23,7 +23,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#12](https://github.com/d-one/masking/issues/12)
 - Related specs: none
 - Related ADRs: none yet; the choice of loading strategy is architecture-relevant.
 

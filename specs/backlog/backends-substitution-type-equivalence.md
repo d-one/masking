@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#6"
 links:
   - src/masking/mask/pipeline.py
   - src/masking/mask_polars/pipeline.py
@@ -24,7 +24,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#6](https://github.com/d-one/masking/issues/6)
 - Related specs: none
 
 ## Behavior

@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#13"
 links:
   - AGENTS.md
 owner: petmarco7
@@ -20,7 +20,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#13](https://github.com/d-one/masking/issues/13)
 - Related specs: [backends-substitution-type-equivalence.md](backends-substitution-type-equivalence.md)
 
 ## Problem

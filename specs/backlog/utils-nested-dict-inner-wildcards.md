@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#9"
 links:
   - src/masking/utils/multi_nested_dict.py
   - docs/operations/operation_dict.md
@@ -19,7 +19,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#9](https://github.com/d-one/masking/issues/9)
 - Related specs: none
 
 ## Behavior

@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#7"
 links:
   - src/masking/utils/entity_detection.py
   - tests/utils/test_entity_detection.py
@@ -19,7 +19,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#7](https://github.com/d-one/masking/issues/7)
 - Related specs: none
 
 ## Behavior

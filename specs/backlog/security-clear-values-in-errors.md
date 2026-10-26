@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#5"
 links:
   - docs/security/README.md
 owner: petmarco7
@@ -22,7 +22,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#5](https://github.com/d-one/masking/issues/5)
 - Related specs: none
 
 ## Behavior

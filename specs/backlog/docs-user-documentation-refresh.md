@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#3"
 links:
   - README.md
   - docs/
@@ -25,7 +25,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#3](https://github.com/d-one/masking/issues/3)
 - Related specs: [operations-null-backends.md](operations-null-backends.md)
 - Related ADRs: [0002](../../decisions/0002-spec-driven-agentic-development.md)
 

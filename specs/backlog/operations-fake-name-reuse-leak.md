@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#4"
 links:
   - src/masking/base_operations/operation_fake_name.py
   - docs/operations/operation_fake_name.md
@@ -21,7 +21,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#4](https://github.com/d-one/masking/issues/4)
 - Related specs: none
 
 ## Behavior

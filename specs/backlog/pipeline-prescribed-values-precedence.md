@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#10"
 links:
   - src/masking/base_concordance_table/concordance_table.py
   - docs/available_modules.md
@@ -20,7 +20,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#10](https://github.com/d-one/masking/issues/10)
 - Related specs: none
 
 ## Behavior

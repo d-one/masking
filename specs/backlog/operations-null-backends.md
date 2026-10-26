@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#14"
 links:
   - docs/operations/operation_null.md
   - src/masking/base_operations/operation_null.py
@@ -23,7 +23,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#14](https://github.com/d-one/masking/issues/14)
 - Related specs: [docs-user-documentation-refresh.md](docs-user-documentation-refresh.md)
 
 ## Behavior

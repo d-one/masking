@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#8"
 links:
   - src/masking/utils/string_match_handler.py
   - tests/utils/test_string_match_handler.py
@@ -19,7 +19,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#8](https://github.com/d-one/masking/issues/8)
 - Related specs: none
 
 ## Behavior

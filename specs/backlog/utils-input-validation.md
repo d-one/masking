@@ -1,5 +1,5 @@
 ---
-ticket: TBD
+ticket: "#11"
 links: []
 owner: petmarco7
 status: draft
@@ -20,7 +20,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: TBD
+- Ticket: [#11](https://github.com/d-one/masking/issues/11)
 - Related specs: none
 
 ## Behavior
