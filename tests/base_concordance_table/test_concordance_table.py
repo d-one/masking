@@ -362,7 +362,7 @@ class TestPrescribedValuesOverrideMasking:
     def test_non_string_prescription_raises(self, backend):
         op = make_operation(backend)
         with pytest.raises(TypeError, match="Invalid concordance table"):
-            BACKENDS[backend][0](op, {1: "one"})(frame(backend))
+            BACKENDS[backend][0](op, {"Alice": 1})(frame(backend))
         op.mask_line.assert_not_called()
 
 

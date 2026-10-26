@@ -92,10 +92,15 @@ class TestUpdateConcordanceTable:
         op.update_concordance_table({"a": "Z"})
         assert op.concordance_table == {"a": "Z"}
 
-    @pytest.mark.parametrize("bad", [{1: "A"}, {"a": 1}, {"a": None}])
-    def test_non_string_entries_raise(self, bad):
+    @pytest.mark.parametrize("bad", [{"a": 1}, {"a": None}])
+    def test_non_string_masked_values_raise(self, bad):
         with pytest.raises(TypeError):
             make().update_concordance_table(bad)
+
+    def test_non_string_clear_values_are_accepted(self):
+        op = make()
+        op.update_concordance_table({1: "A"})
+        assert op.concordance_table == {1: "A"}
 
 
 class TestCheckMaskLine:

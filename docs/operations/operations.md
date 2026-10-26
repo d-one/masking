@@ -139,7 +139,7 @@ ______________________________________________________________________
 
 ### `cast_concordance_table(concordance_table) -> dict`
 
-Static method to convert different formats of concordance tables into a standard `dict[str, str]` of the form:
+Static method to convert different formats of concordance tables into a dictionary of the form below. Masked values must be strings; clear values keep their type, e.g. `int` for an integer column.
 
 ```python
 concordance_table = {
@@ -157,7 +157,7 @@ ______________________________________________________________________
 
 ### `update_concordance_table(concordance_table: dict) -> None`
 
-Merges new entries into the existing concordance table after validating input.
+Merges new entries into the existing concordance table. Raises `TypeError` unless the table is a dictionary with string masked values; clear values may have any type.
 
 ______________________________________________________________________
 
