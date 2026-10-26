@@ -219,7 +219,7 @@ def test_hash_string_none_returns_none() -> None:
 
 @pytest.mark.parametrize("data", [123, 1.5, b"line", ["line"], {"a": "b"}])
 def test_hash_string_non_string_raises(data) -> None:
-    with pytest.raises(AssertionError, match="Make sure the type is str"):
+    with pytest.raises(TypeError, match="Make sure the type is str"):
         hash_string(data, "secret")
 
 

@@ -49,11 +49,11 @@ def test_preserving_everything_cannot_mask():
 
 
 def test_invalid_preserve_raises():
-    with pytest.raises(AssertionError, match="Preserve values"):
+    with pytest.raises(ValueError, match="Preserve values"):
         FakePLZ(col_name="p", preserve="canton")
 
 
 @pytest.mark.parametrize("line", ["123", "12345"])
 def test_invalid_plz_length_raises(line):
-    with pytest.raises(AssertionError, match="4 digits"):
+    with pytest.raises(ValueError, match="4 digits"):
         FakePLZ(col_name="p")._mask_line(line)

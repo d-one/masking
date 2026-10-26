@@ -59,7 +59,7 @@ def test_datetime_input():
 
 
 def test_invalid_preserve_raises():
-    with pytest.raises(AssertionError, match="Preserve values"):
+    with pytest.raises(ValueError, match="Preserve values"):
         FakeDate(col_name="d", preserve="hour")
 
 

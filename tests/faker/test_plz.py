@@ -24,7 +24,7 @@ class TestInit:
         assert expected == FakePLZProvider(preserve)._PRESERVED
 
     def test_invalid_preserve_raises(self):
-        with pytest.raises(AssertionError, match="Preserve values"):
+        with pytest.raises(ValueError, match="Preserve values"):
             FakePLZProvider("canton")
 
 
@@ -39,7 +39,7 @@ class TestParsing:
 
     @pytest.mark.parametrize("plz", ["", "123", "12345"])
     def test_invalid_length_raises(self, plz):
-        with pytest.raises(AssertionError, match="4 digits"):
+        with pytest.raises(ValueError, match="4 digits"):
             FakePLZProvider().parse_plz(plz)
 
     @pytest.mark.parametrize(

@@ -28,7 +28,7 @@ class TestInit:
 
     @pytest.mark.parametrize("preserve", ["hour", ("year", "week")])
     def test_invalid_preserve_raises(self, preserve):
-        with pytest.raises(AssertionError, match="Preserve values"):
+        with pytest.raises(ValueError, match="Preserve values"):
             FakeDateProvider(preserve)
 
 

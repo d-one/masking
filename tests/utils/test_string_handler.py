@@ -79,9 +79,5 @@ def test_generate_unique_name_max_iter_zero_unused_when_seed_unique() -> None:
     assert generate_unique_name("a", [], max_iter=0) == "a"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Bug: off-by-one, raises when a unique name is found on the last allowed iteration.",
-)
 def test_generate_unique_name_succeeds_on_last_iteration() -> None:
     assert generate_unique_name("a", ["a"], max_iter=1) == "a_"

@@ -58,7 +58,7 @@ def generate_unique_name(
         seed += sep
         iteration += 1
 
-    if iteration >= max_iter:
+    if seed in existing_names:
         msg = "The maximum number of iterations has been reached."
         raise ValueError(msg)
 

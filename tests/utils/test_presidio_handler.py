@@ -34,6 +34,10 @@ class TestInit:
         assert h.allow_list == []
         assert h._PII_ENTITIES == DEFAULT_ENTITIES
 
+    def test_class_defaults_match_annotations(self):
+        assert PresidioHandler.allow_list is None
+        assert PresidioHandler.deny_list is None
+
     def test_default_operators_replace_with_entity_tag(self):
         h = PresidioHandler()
         assert set(h.operators) == DEFAULT_ENTITIES
