@@ -811,6 +811,14 @@ class TestHasMatchStrExtra:
         data = {"items": [{"name": "Alice", "age": 30}]}
         assert list(h._find_leaf_path(data)) == [f"items{SEP}[0]{SEP}age"]
 
+    def test_bracket_wildcard_matches_whole_path_parts_only(self):
+        h = MultiNestedDictHandler(allow_keys=[f"items{SEP}[*]{SEP}name"])
+        assert h._has_match_str("name", parent=f"items{SEP}[3]") is True
+        assert h._has_match_str("surname", parent=f"items{SEP}[0]") is False
+        assert h._has_match_str("name", parent=f"archived_items{SEP}[0]") is False
+        assert h._has_match_str("name", parent="items") is False
+        assert h._has_match_str("name", parent=f"items{SEP}x") is False
+
 
 # ---------------------------------------------------------------------------
 # _has_match_callable: additional cases

@@ -187,8 +187,8 @@ class MultiNestedDictHandler:
           by the end of the key.
         - If the key ends with "*", the key is a wildcard and the match is done
             by the start of the key.
-        - If the key contains "[*]", the key is a wildcard and the match is done
-            by ignoring the index of the list.
+        - If the key contains "[*]", each "[*]" matches any list index at its
+            position; all other path parts must match exactly.
         - If the key contains "[k]" where k is a number, the key is a wildcard and the
             match is done by ignoring the index of the list that is different from k.
 
@@ -239,13 +239,10 @@ class MultiNestedDictHandler:
 
             # Handle the case where the key is a wildcard containing "[*]"
             if "[*]" in allowed_key:
-                allowed_parts_no_index = [
-                    part_clean
-                    for part in allowed_key.split("[*]")
-                    if (part_clean := strip_key(part, self.path_separator))
-                ]
-
-                if all(key_part in key_path for key_part in allowed_parts_no_index):
+                if len(allowed_parts) == len(key_path_parts) and all(
+                    allowed == part or (allowed == "[*]" and self._is_list_index(part))
+                    for allowed, part in zip(allowed_parts, key_path_parts, strict=True)
+                ):
                     return True
                 continue
 
