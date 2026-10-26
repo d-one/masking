@@ -2,7 +2,7 @@ from collections.abc import Iterator
 
 import pandas as pd
 from pyspark.sql import Column, DataFrame
-from pyspark.sql.types import StringType, StructField, StructType
+from pyspark.sql.types import IntegralType, StringType, StructField, StructType
 
 from masking.base_operations.operation import Operation
 
@@ -48,13 +48,21 @@ class SparkOperation(Operation):
         if native is not None:
             return data.withColumn(self.col_name, native)
 
+        # Arrow turns integer columns with nulls into floats (1000 -> 1000.0)
+        integral = {
+            field.name: "Int64"
+            for field in data.schema
+            if field.name in self.serving_columns
+            and isinstance(field.dataType, IntegralType)
+        }
+
         # Map every partition of the dataframe to the _mask_data_pandas_ function
         def mask_data_partition(
             iterator: Iterator[pd.Series | pd.DataFrame],
         ) -> Iterator[pd.Series | pd.DataFrame]:
             for partition in iterator:
                 partition[self.col_name] = self._mask_data_pandas(
-                    partition[self.serving_columns]
+                    partition[self.serving_columns].astype(integral)
                 )
 
                 yield partition

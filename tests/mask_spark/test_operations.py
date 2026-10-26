@@ -75,11 +75,22 @@ class TestSparkOperation:
         assert column(out, "c") == [hash_string("a", SECRET), hash_string("b", SECRET)]
         assert column(out, "other") == ["x", None]
 
-    @pytest.mark.parametrize("schema", ["id int, p string", "id int, p bigint"])
-    def test_python_masking_keeps_nulls(self, spark: SparkSession, schema):
-        data = spark.createDataFrame([(1, 1000), (2, None)], schema)
+    @pytest.mark.parametrize("spark_type", ["string", "tinyint", "int", "bigint"])
+    def test_python_masking_keeps_nulls(self, spark: SparkSession, spark_type):
+        # A single partition puts integers and nulls in the same Arrow batch
+        data = spark.createDataFrame(
+            [(1, 100), (2, None)], f"id int, p {spark_type}"
+        ).repartition(1)
         out = HashOperation(col_name="p", secret=SECRET)(data)
-        assert column(out, "p") == [hash_string("1000", SECRET), None]
+        assert column(out, "p") == [hash_string("100", SECRET), None]
+
+    def test_nullable_integer_serving_column(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, "id 1000", 1000), (2, "no id", None)], "id int, t string, n bigint"
+        ).repartition(1)
+        out = StringMatchOperation(col_name="t", pii_cols=["n"])(data)
+        assert column(out, "t") == ["id <PATIENT_DATA>", "no id"]
+        assert column(out, "n") == [1000, None]
 
     def test_masked_column_becomes_string(self, spark: SparkSession):
         data = spark.createDataFrame([(1, 10), (2, 20)], "id int, c bigint")
