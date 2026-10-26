@@ -91,8 +91,10 @@ def substitute_column(data: DataFrame, c_name: str, table: dict) -> DataFrame:
         DataFrame: dataframe with the substituted column
 
     """
-    key_name = generate_unique_name(f"{c_name}_clear", data.columns)
-    value_name = generate_unique_name(f"{c_name}_masked", [*data.columns, key_name])
+    # Spark resolves column names case-insensitively by default
+    existing = [c.lower() for c in data.columns]
+    key_name = generate_unique_name(f"{c_name}_clear".lower(), existing)
+    value_name = generate_unique_name(f"{c_name}_masked".lower(), [*existing, key_name])
 
     lookup = build_lookup_table(data, c_name, table, key_name, value_name)
     if lookup is None:
@@ -312,8 +314,9 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             DataFrame: dataframe with renamed columns
 
         """
+        existing = [c.lower() for c in data.columns]
         temp_names = {
-            k: generate_unique_name(seed=f"___temp_{i}___", existing_names=data.columns)
+            k: generate_unique_name(seed=f"___temp_{i}___", existing_names=existing)
             for i, k in enumerate(column_mapping.keys())
         }
         for old_name, new_name in temp_names.items():

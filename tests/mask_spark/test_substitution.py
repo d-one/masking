@@ -45,3 +45,11 @@ def test_substitute_column(spark: SparkSession, case: str, partitions: int) -> N
     }
     assert out.columns == data.columns
     assert result == expected
+
+
+@pytest.mark.parametrize("other", ["C_CLEAR", "c_Masked", "c_clear"])
+def test_temporary_names_ignore_case(spark: SparkSession, other: str) -> None:
+    data = spark.createDataFrame([("a", "x"), ("b", "y")], f"c string, {other} string")
+    out = substitute_column(data, "c", {"a": "A"})
+    assert out.columns == data.columns
+    assert sorted(out.collect()) == [("A", "x"), ("b", "y")]

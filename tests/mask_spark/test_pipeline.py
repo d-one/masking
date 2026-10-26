@@ -122,6 +122,12 @@ class TestStaticMethods:
         assert out.columns == expected
         assert rows(out) == [(1, 2, 3)]
 
+    def test_rename_columns_ignores_case_of_temporary_names(self, spark: SparkSession):
+        data = spark.createDataFrame([(1, 2)], "a int, ___TEMP_0___ int")
+        out = MaskDataFramePipeline._rename_columns(data, {"a": "b"})
+        assert out.columns == ["b", "___TEMP_0___"]
+        assert rows(out) == [(1, 2)]
+
 
 class TestPipeline:
     def test_end_to_end(self, spark: SparkSession):
