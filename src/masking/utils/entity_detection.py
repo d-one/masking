@@ -8,7 +8,30 @@ from presidio_analyzer.recognizer_registry import RecognizerRegistryProvider
 # Class name prefixes of the region-specific recognizers left out of the default registry
 EXCLUDED_RECOGNIZER_PREFIXES = ("Us", "In", "Sg", "Au")
 
+# spaCy models loaded while unpickling, by name: each Spark executor process loads a model once
+_UNPICKLED_MODELS: dict[str, spacy.language.Language] = {}
+
+
+def _load_model_once(name: str) -> spacy.language.Language:
+    """Return the spaCy model with this name, loading it at most once per process.
+
+    Args:
+    ----
+        name (str): spaCy model name or path
+
+    Returns:
+    -------
+        spacy.language.Language: loaded spaCy model
+
+    """
+    if name not in _UNPICKLED_MODELS:
+        _UNPICKLED_MODELS[name] = spacy.load(name, disable=[])
+    return _UNPICKLED_MODELS[name]
+
+
 # Ignore the specific FutureWarnings from torch.load
+
+
 warnings.filterwarnings(
     "ignore", message=".*weights_only=False.*", category=FutureWarning
 )
@@ -34,11 +57,32 @@ class MultilingualSpacyNlpEngine(SpacyNlpEngine):
         """
         super().__init__()
         self.nlp = self._get_models(models)
+        self._model_names = {
+            lang: model for lang, model in models.items() if isinstance(model, str)
+        }
 
         if ner_model_mapping:
             self.ner_model_configuration = NerModelConfiguration(
                 model_to_presidio_entity_mapping=ner_model_mapping
             )
+
+    def __getstate__(self) -> dict:
+        # Models given by name are pickled as their name, e.g. for every Spark task
+        state = self.__dict__.copy()
+        state["nlp"] = {
+            lang: None if lang in self._model_names else model
+            for lang, model in self.nlp.items()
+        }
+        return state
+
+    def __setstate__(self, state: dict) -> None:
+        self.__dict__.update(state)
+        self.nlp = {
+            lang: _load_model_once(self._model_names[lang])
+            if lang in self._model_names
+            else model
+            for lang, model in state["nlp"].items()
+        }
 
     @staticmethod
     def _get_models(models: dict) -> dict[str, spacy.language.Language]:

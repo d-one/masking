@@ -1,5 +1,8 @@
+import pickle  # noqa: S403
+
 import pytest
 import spacy
+from masking.mask.operations.operation_presidio import MaskPresidio
 from masking.utils import entity_detection
 from masking.utils.entity_detection import (
     MultilingualSpacyNlpEngine,
@@ -87,6 +90,38 @@ class TestMultilingualSpacyNlpEngine:
         assert (
             engine.ner_model_configuration.model_to_presidio_entity_mapping == mapping
         )
+
+    def test_pickle_carries_model_names(self, fake_spacy_load, monkeypatch):
+        monkeypatch.setattr(entity_detection, "_UNPICKLED_MODELS", {})
+        by_name = MultilingualSpacyNlpEngine(models={"en": "en_fake"})
+        by_object = MultilingualSpacyNlpEngine(models={"en": by_name.nlp["en"]})
+        assert len(pickle.dumps(by_name)) < len(pickle.dumps(by_object))
+
+        fake_spacy_load.clear()
+        engine = pickle.loads(pickle.dumps(by_name))  # noqa: S301
+        assert [name for name, _ in fake_spacy_load] == ["en_fake"]
+        assert engine.nlp["en"].lang == "en"
+
+    def test_unpickling_loads_each_model_once(self, fake_spacy_load, monkeypatch):
+        monkeypatch.setattr(entity_detection, "_UNPICKLED_MODELS", {})
+        data = pickle.dumps(MultilingualSpacyNlpEngine(models={"en": "en_fake"}))
+        fake_spacy_load.clear()
+
+        first, second = pickle.loads(data), pickle.loads(data)  # noqa: S301
+        assert [name for name, _ in fake_spacy_load] == ["en_fake"]
+        assert first.nlp["en"] is second.nlp["en"]
+
+    def test_pickle_keeps_model_objects(self, blank_models):
+        engine = pickle.loads(  # noqa: S301
+            pickle.dumps(MultilingualSpacyNlpEngine(models=blank_models))
+        )
+        assert sorted(engine.nlp) == ["de", "en"]
+        assert engine.nlp["de"].lang == "de"
+
+    def test_pickled_presidio_operation_is_small(self):
+        models = {"de": "de_core_news_lg"}
+        analyzer = PresidioMultilingualAnalyzer(models=models).analyzer
+        assert len(pickle.dumps(MaskPresidio(col_name="t", analyzer=analyzer))) < 1e6
 
     def test_process_text_per_language(self, blank_models):
         engine = MultilingualSpacyNlpEngine(models=blank_models)
