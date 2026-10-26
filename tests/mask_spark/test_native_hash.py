@@ -1,4 +1,5 @@
 import hashlib
+from dataclasses import dataclass
 
 import pytest
 from masking.mask_spark.operations.operation_hash import HashOperation
@@ -54,3 +55,19 @@ def test_python_fallback(
     assert op._native_mask_expression(data) is None
     result = [row.c for row in op(data).collect()]
     assert result == [op._check_mask_line(v) for v in values]
+
+
+def test_unhashable_hash_function_falls_back(spark: SparkSession) -> None:
+    # Defined locally so that Spark workers receive the class by value
+    @dataclass
+    class PepperedSha256:
+        pepper: bytes = b"pepper"
+
+        def __call__(self, data: bytes = b""):
+            return hashlib.sha256(self.pepper + data)
+
+    data = spark.createDataFrame([("abc",)], "c string")
+    op = HashOperation(col_name="c", hash_function=PepperedSha256())
+
+    assert op._native_mask_expression(data) is None
+    assert [row.c for row in op(data).collect()] == [op._check_mask_line("abc")]

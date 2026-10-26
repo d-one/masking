@@ -9,8 +9,8 @@ from masking.mask.operations.operation_hash import HashOperation as HashOperatio
 from masking.mask_spark.operations.operation import SparkOperation
 
 # Spark functions equivalent to hashlib's hexdigest of the UTF-8 encoded string.
-# Keyed by the hashlib constructors themselves: custom callables (e.g. wrapping a
-# constructor to add a pepper) must keep using python.
+# Matched by identity with the hashlib constructors: custom callables (e.g. wrapping
+# a constructor to add a pepper, possibly unhashable) must keep using python.
 _NATIVE_HASHES: dict[Callable, Callable[[Column], Column]] = {
     hashlib.md5: F.md5,
     hashlib.sha1: F.sha1,
@@ -45,5 +45,8 @@ class HashOperation(SparkOperation, HashOperationPandas):
         if not isinstance(data.schema[self.col_name].dataType, StringType):
             return None
 
-        native = _NATIVE_HASHES.get(self.hash_function)
+        native = next(
+            (f for ctor, f in _NATIVE_HASHES.items() if ctor is self.hash_function),
+            None,
+        )
         return None if native is None else native(F.col(self.col_name))
