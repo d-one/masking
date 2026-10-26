@@ -75,8 +75,9 @@ from masking.mask.operations.operation_null import NullOperation
 df = pd.DataFrame({"ssn": ["123-45-6789", "n/a"]})
 
 # Null every value
-df["ssn"] = NullOperation(col_name="ssn")(df)
+df["ssn_all_null"] = NullOperation(col_name="ssn")(df)
 
 # Null only values matching a condition; other values are kept as strings
-df["ssn"] = NullOperation(col_name="ssn", condition=lambda v: v != "n/a")(df)
+df["ssn_known_null"] = NullOperation(col_name="ssn", condition=lambda v: v != "n/a")(df)
+# ssn_known_null: [None, "n/a"]
 ```
