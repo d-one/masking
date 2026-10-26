@@ -11,8 +11,7 @@ ADRs record repository-relevant technical decisions and the reasoning behind the
 
 ## Index
 
-| ADR                                             | Title                                                        | Status   |
-| ----------------------------------------------- | ------------------------------------------------------------ | -------- |
-| [0001](0001-record-architecture-decisions.md)   | Record architecture decisions                                | Accepted |
-| [0002](0002-spec-driven-agentic-development.md) | Spec-driven agentic development                              | Accepted |
-| [0003](0003-distribute-template-with-copier.md) | Distribute the template with Copier and a uv-installable CLI | Accepted |
+| ADR                                             | Title                           | Status   |
+| ----------------------------------------------- | ------------------------------- | -------- |
+| [0001](0001-record-architecture-decisions.md)   | Record architecture decisions   | Accepted |
+| [0002](0002-spec-driven-agentic-development.md) | Spec-driven agentic development | Accepted |
