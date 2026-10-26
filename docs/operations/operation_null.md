@@ -2,6 +2,8 @@
 
 Replaces entries with `None` values. This is the simplest masking operation — it removes data entirely. An optional condition function allows selective nullification based on the cell value.
 
+> **Status:** only the backend-agnostic `NullOperationBase` exists. No backend provides a `NullOperation` class yet, so the operation cannot be used in a pipeline. Adding it to the pandas, polars, and Spark backends is tracked in [specs/backlog/operations-null-backends.md](../../specs/backlog/operations-null-backends.md).
+
 ______________________________________________________________________
 
 ## Class: `NullOperationBase`
@@ -31,34 +33,7 @@ ______________________________________________________________________
 - Converts the input value to a string.
 - Evaluates the `condition` function on the string value.
 - If the condition returns `True`, replaces the value with `None`.
-- If the condition returns `False`, the original value is kept unchanged.
-
-______________________________________________________________________
-
-## Configuration Example
-
-```python
-from masking.mask.operations.operation_null import NullOperation
-
-# Replace all values with None
-op = NullOperation(col_name="SensitiveColumn")
-
-# Replace only values that start with "PRIVATE"
-op = NullOperation(
-    col_name="Notes",
-    condition=lambda x: x.startswith("PRIVATE"),
-)
-```
-
-### Pipeline Usage
-
-```python
-config = {
-    "SensitiveColumn": [
-        {"masking_operation": NullOperation(col_name="SensitiveColumn")},
-    ],
-}
-```
+- If the condition returns `False`, the value is kept, converted to a string.
 
 ______________________________________________________________________
 

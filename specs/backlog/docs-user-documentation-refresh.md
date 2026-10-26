@@ -4,7 +4,7 @@ links:
   - README.md
   - docs/
 owner: petmarco7
-status: draft
+status: in progress
 affected_components:
   - README.md
   - docs/
@@ -25,7 +25,7 @@ out_of_scope:
 
 ## References
 
-- Ticket: [NEEDS CLARIFICATION: GitHub issue for this work?]
+- Ticket: TBD
 - Related specs: [operations-null-backends.md](operations-null-backends.md)
 - Related ADRs: [0002](../../decisions/0002-spec-driven-agentic-development.md)
 
@@ -88,11 +88,11 @@ After this change the documentation describes the code on `main` and nothing els
 
 ## Open Questions
 
-- None beyond the ticket reference.
+- None.
 
 ## Spec Quality
 
-- [ ] No `[NEEDS CLARIFICATION]` markers or open questions remain
+- [x] No `[NEEDS CLARIFICATION]` markers or open questions remain
 - [x] Every acceptance criterion is testable and observable from outside the code
 - [x] `out_of_scope` and `assumptions` are explicit
 - [x] No speculative or "might need" features; nothing future-proofed
