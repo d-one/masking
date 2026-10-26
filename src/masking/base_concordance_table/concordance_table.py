@@ -118,6 +118,7 @@ class ConcordanceTableBase(ABC):
 
         """
         self._cast_concordance_table()
+        prescribed = dict(self.concordance_table)
 
         # Update the concordance table with the masked values
         self.masking_operation.update_concordance_table(self.concordance_table)
@@ -126,4 +127,5 @@ class ConcordanceTableBase(ABC):
         new_values = self._build_concordance_table(data)
 
         self.concordance_table.update(new_values)
+        self.concordance_table.update(prescribed)
         return self.concordance_table
