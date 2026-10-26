@@ -3,7 +3,7 @@ ticket: "#13"
 links:
   - AGENTS.md
 owner: petmarco7
-status: draft
+status: in progress
 affected_components:
   - tests/base_operations/test_operation_unique_values.py
   - tests/generate_hashed_tests.py
@@ -21,7 +21,7 @@ out_of_scope:
 ## References
 
 - Ticket: [#13](https://github.com/d-one/masking/issues/13)
-- Related specs: [backends-substitution-type-equivalence.md](backends-substitution-type-equivalence.md)
+- Related specs: none
 
 ## Problem
 
@@ -34,7 +34,7 @@ out_of_scope:
 ## Proposed Behavior
 
 - The linearity test compares the time for n and 4n calls (ratio well below quadratic) instead of an absolute limit.
-- The generator script lives in `scripts/` and the expected hashes in `test_operation_hash.py` stay unchanged.
+- The generator script lives in `scripts/` and the expected hashes in `tests/utils/test_hash.py` stay unchanged.
 - The equivalence test runs the same configurations on pandas, polars, and Spark.
 
 ## Acceptance Criteria
