@@ -205,6 +205,13 @@ class TestServingColumns:
             {"items": ["<123>", "<John>", "<null>", "<true>"]}
         ]
 
+    def test_string_match_dict_deny_keys_need_masking_function(self):
+        with pytest.raises(ValueError, match="deny_keys require a masking_function"):
+            StringMatchDictOperation(col_name="j", deny_keys=["a"])
+
+    def test_string_match_dict_accepts_positional_col_name(self):
+        assert StringMatchDictOperation("j").col_name == "j"
+
 
 class TestPresidio:
     def test_mask_presidio(self, spark: SparkSession, blank_analyzer):

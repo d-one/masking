@@ -87,7 +87,7 @@ class TestEntitiesOfLines:
         assert list(make()._iter_values_to_mask(lines)) == ["x", "y", "z", "w", 1]
 
     def test_denied_and_missing_lines_are_skipped(self, make):
-        op = make(deny_keys=["secret"])
+        op = make(deny_keys=["secret"], masking_function=lambda _: "<MASKED>")
         lines = [json.dumps({"a": "x", "secret": "s"}), None, float("nan")]
         assert list(op._iter_values_to_mask(lines)) == ["x"]
 
