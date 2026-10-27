@@ -1,3 +1,4 @@
+import datetime as dt
 import hashlib
 
 import pytest
@@ -131,11 +132,64 @@ class TestStaticMethods:
 
 
 class TestPipeline:
-    def test_null_operation_is_rejected(self):
-        with pytest.raises(TypeError, match="NullOperation cannot be used"):
-            MaskDataFramePipeline({
-                "c": {"masking_operation": NullOperation(col_name="c")}
-            })
+    def test_null_operation_nulls_the_column(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, "a"), (2, None), (3, "b")], "o long, c string"
+        )
+        pipeline = MaskDataFramePipeline({
+            "c": {"masking_operation": NullOperation(col_name="c")}
+        })
+        rows = pipeline(data).orderBy("o").collect()
+        assert [r["c"] for r in rows] == [None, None, None]
+        assert [r["o"] for r in rows] == [1, 2, 3]
+        assert pipeline.concordance_tables == {"c": {}}
+
+    def test_null_operation_concordance_table_is_empty(self, spark: SparkSession):
+        table = ConcordanceTable(masking_operation=NullOperation(col_name="c"))
+        assert table(spark.createDataFrame([("a",)], "c string")) == {}
+
+    def test_null_operation_in_new_column_keeps_input(self, spark: SparkSession):
+        data = spark.createDataFrame([(1, "a"), (2, "b")], "o long, c string")
+        pipeline = MaskDataFramePipeline({
+            "out": {
+                "masking_operation": NullOperation(
+                    col_name="c", condition=lambda v: v == "a"
+                )
+            }
+        })
+        for _ in range(2):
+            rows = pipeline(data).orderBy("o").collect()
+            assert [r["c"] for r in rows] == ["a", "b"]
+            assert [r["out"] for r in rows] == [None, "b"]
+
+    def test_conditional_null_on_timestamp_ntz(self, spark: SparkSession):
+        data = spark.createDataFrame(
+            [(1, dt.datetime(2024, 1, 1, 12)), (2, dt.datetime(2000, 1, 1))],  # noqa: DTZ001
+            "o long, c timestamp_ntz",
+        )
+        pipeline = MaskDataFramePipeline({
+            "c": {
+                "masking_operation": NullOperation(
+                    col_name="c", condition=lambda v: v == "2024-01-01 12:00:00"
+                )
+            }
+        })
+        # A session time zone other than the driver's local one
+        local_offset = dt.datetime.now().astimezone().utcoffset()
+        session_tz = (
+            "Etc/GMT+12" if local_offset != dt.timedelta(hours=-12) else "Etc/GMT-14"
+        )
+        previous_tz = spark.conf.get("spark.sql.session.timeZone")
+        spark.conf.set("spark.sql.session.timeZone", session_tz)
+        try:
+            out = pipeline(data)
+            assert [r["c"] for r in out.orderBy("o").collect()] == [
+                None,
+                dt.datetime(2000, 1, 1),  # noqa: DTZ001
+            ]
+            assert out.schema["c"].dataType == data.schema["c"].dataType
+        finally:
+            spark.conf.set("spark.sql.session.timeZone", previous_tz)
 
     def test_end_to_end(self, spark: SparkSession):
         data = spark.createDataFrame(

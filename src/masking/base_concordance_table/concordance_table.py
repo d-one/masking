@@ -35,10 +35,6 @@ class ConcordanceTableBase(ABC):
             concordance_table (pd.DataFrame or None): unique values in the column
 
         """
-        if isinstance(masking_operation, NullOperationBase):
-            msg = "NullOperation cannot be used in a pipeline yet; call it on the data directly (see issue #24)."
-            raise TypeError(msg)
-
         self.masking_operation = masking_operation
 
         # Snapshot of the operation's own table, restored when clearing
@@ -60,6 +56,11 @@ class ConcordanceTableBase(ABC):
     def serving_columns(self) -> list[str]:
         """Return the columns needed for serving the operation."""
         return self.masking_operation.serving_columns
+
+    @property
+    def nulls_values(self) -> bool:
+        """Return whether the operation masks values to null (see ADR 0003)."""
+        return isinstance(self.masking_operation, NullOperationBase)
 
     def _cast_concordance_table(self) -> None:
         """Cast the concordance table to a dictionary."""
@@ -122,6 +123,10 @@ class ConcordanceTableBase(ABC):
             DataFrame: dataframe or series with masked column
 
         """
+        # A null mapping cannot be stored or reversed: pipelines null the values directly
+        if self.nulls_values:
+            return {}
+
         self._cast_concordance_table()
         prescribed = dict(self.concordance_table)
 

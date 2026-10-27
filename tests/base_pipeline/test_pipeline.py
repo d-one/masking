@@ -94,6 +94,7 @@ class StubPipeline(MaskDataFramePipelineBase):
     _get_unique_values = staticmethod(Mock())
     _filter_data = staticmethod(Mock())
     _substitute_masked_values = staticmethod(Mock())
+    _null_values = staticmethod(Mock())
     _copy_column = staticmethod(Mock())
     _rename_columns = staticmethod(Mock())
 
@@ -102,6 +103,7 @@ def mock_table(col_name: str = COL, serving: list[str] | None = None) -> Mock:
     table = Mock(spec=ConcordanceTableBase)
     table.column_name = col_name
     table.serving_columns = serving or [col_name]
+    table.nulls_values = False
     table.masking_operation = Mock()
     table.masking_operation.col_name = col_name
     table.masking_operation.serving_columns = serving or [col_name]
@@ -307,6 +309,18 @@ class TestRunPipeline:
 
         table.assert_called_once_with("data")
         assert result == {"a": "b"}
+
+    def test_list_with_unconditional_null_collects_no_values(self):
+        hash_stage, null_stage = mock_table(), mock_table()
+        null_stage.nulls_values = True
+        null_stage.masking_operation.nulls_every_value = True
+        pipeline = StubPipeline({})
+        pipeline._get_unique_values.reset_mock()
+
+        assert pipeline._run_pipeline([hash_stage, null_stage], "data") == {}
+        assert pipeline._nulled_values == {COL: None}
+        pipeline._get_unique_values.assert_not_called()
+        hash_stage.assert_not_called()
 
     def test_run_pipelines_dispatches_on_workers(self):
         serial = StubPipeline({}, workers=1)

@@ -26,6 +26,8 @@ class MaskDataFramePipelineBase(ABC):
         dtype: ConcordanceTableBase = ConcordanceTableBase,
     ) -> None:
         self.concordance_tables = {}
+        # Clear values masked to null in the current call, per column; None means all
+        self._nulled_values: dict[str, set | None] = {}
 
         # Mapping of output columns to their input columns and serving columns
         self.output_columns_mapping = defaultdict(
@@ -103,6 +105,44 @@ class MaskDataFramePipelineBase(ABC):
         concordance_tables: dict[str, dict[str, str]],
     ) -> AnyDataFrame:
         """Substitute the masked values in the original dataframe using the concordance table."""
+
+    @staticmethod
+    @abstractmethod
+    def _null_values(
+        data: AnyDataFrame, col_name: str, values: set | None
+    ) -> AnyDataFrame:
+        """Replace values of a column with null.
+
+        Args:
+        ----
+            data: input dataframe
+            col_name (str): column name
+            values (set | None): values to replace, or None to replace every value
+
+        Returns:
+        -------
+            AnyDataFrame: dataframe with the values replaced by null
+
+        """
+
+    @staticmethod
+    def _nulled_by(pipe: ConcordanceTableBase, values: list) -> set | None:
+        """Return the values a NullOperation stage masks to null.
+
+        Args:
+        ----
+            pipe (ConcordanceTableBase): pipeline stage with a NullOperation
+            values (list): distinct non-null input values of the stage
+
+        Returns:
+        -------
+            set | None: values masked to null, or None if every value is
+
+        """
+        operation = pipe.masking_operation
+        if operation.nulls_every_value:
+            return None
+        return {v for v in values if operation._mask_line(v) is None}  # noqa: SLF001
 
     @staticmethod
     @abstractmethod
@@ -194,14 +234,47 @@ class MaskDataFramePipelineBase(ABC):
 
         """
         if not isinstance(pipeline, list):
+            if pipeline.nulls_values:
+                values = (
+                    []
+                    if pipeline.masking_operation.nulls_every_value
+                    else self._get_unique_values(col_data, pipeline.column_name)
+                )
+                self._nulled_values[pipeline.column_name] = self._nulled_by(
+                    pipeline, values
+                )
             return pipeline(col_data)
 
         col_name = pipeline[0].column_name
+        if any(
+            p.nulls_values and p.masking_operation.nulls_every_value for p in pipeline
+        ):
+            # Every value ends up null: no distinct values to collect, no mappings
+            self._nulled_values[col_name] = None
+            return {}
+
         current_values = {
             v: v for v in self._get_unique_values(col_data, col_name=col_name)
         }
 
         for pipe in pipeline:
+            if pipe.nulls_values:
+                stage_values = {v for v in current_values.values() if v is not None}
+                nulled = self._nulled_by(pipe, list(stage_values))
+                nulled = stage_values if nulled is None else nulled
+                current_values = {
+                    clear: None if value in nulled else value
+                    for clear, value in current_values.items()
+                }
+                if nulled:
+                    # Later stages see only non-null values, as the first stage does
+                    col_data = self._filter_data(
+                        self._null_values(col_data, col_name, nulled),
+                        col_name,
+                        list(col_data.columns),
+                    )
+                continue
+
             new_table = pipe(col_data)
 
             # The masked values become the input of the next operation
@@ -213,16 +286,26 @@ class MaskDataFramePipelineBase(ABC):
             # missing from it into strings
             if new_table:
                 current_values = {
-                    clear: new_table.get(value, str(value))
+                    clear: value if value is None else new_table.get(value, str(value))
                     for clear, value in current_values.items()
                 }
 
+        nulled = {clear for clear, value in current_values.items() if value is None}
+        if nulled:
+            self._nulled_values[col_name] = nulled
+
+        # Previous mappings of values nulled now are dropped, also for equal keys
+        # of another type (1 and 1.0)
         return {
-            **self.concordance_tables.get(col_name, {}),
+            **{
+                clear: masked
+                for clear, masked in self.concordance_tables.get(col_name, {}).items()
+                if clear not in nulled
+            },
             **{
                 clear: masked
                 for clear, masked in current_values.items()
-                if str(clear) != str(masked)
+                if masked is not None and str(clear) != str(masked)
             },
         }
 
@@ -410,7 +493,13 @@ class MaskDataFramePipelineBase(ABC):
         columns_order = self._get_data_columns_order(data)
 
         # Create concordance tables
+        self._nulled_values = {}
         self._run_pipelines(data)
+
+        # Null before substituting: the nulled values are clear values, in their own type
+        for col_name, values in self._nulled_values.items():
+            if values is None or values:
+                data = self._null_values(data, col_name, values)
 
         # Substitute the masked values in the original dataframe
         data = self._substitute_masked_values(

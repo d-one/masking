@@ -85,6 +85,36 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
         return data.select(necessary_columns).drop_nulls(subset=[col_name]).unique()
 
     @staticmethod
+    def _null_values(
+        data: pl.DataFrame, col_name: str, values: set | None
+    ) -> pl.DataFrame:
+        """Replace values of a column with null.
+
+        Args:
+        ----
+            data (pl.DataFrame): input dataframe
+            col_name (str): column name
+            values (set | None): values to replace, or None to replace every value
+
+        Returns:
+        -------
+            pl.DataFrame: dataframe with the values replaced by null
+
+        """
+        if values is None:
+            return data.with_columns(
+                pl.lit(None, dtype=data[col_name].dtype).alias(col_name)
+            )
+        # Values in the column's own type, e.g. nanosecond datetimes and decimals
+        values = pl.Series(list(values), dtype=data[col_name].dtype)
+        return data.with_columns(
+            pl.when(pl.col(col_name).is_in(values.implode()))
+            .then(None)
+            .otherwise(pl.col(col_name))
+            .alias(col_name)
+        )
+
+    @staticmethod
     def _substitute_masked_values(
         data: pl.DataFrame,
         col_pipelines: list[ConcordanceTable],

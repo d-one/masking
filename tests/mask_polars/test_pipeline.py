@@ -1,4 +1,6 @@
+import datetime as dt
 import hashlib
+from decimal import Decimal
 
 import polars as pl
 import pytest
@@ -64,11 +66,57 @@ class TestStaticMethods:
 
 
 class TestPipeline:
-    def test_null_operation_is_rejected(self):
-        with pytest.raises(TypeError, match="NullOperation cannot be used"):
-            MaskDataFramePipeline({
-                "c": {"masking_operation": NullOperation(col_name="c")}
-            })
+    def test_null_operation_nulls_the_column(self):
+        data = pl.DataFrame({"c": ["a", None, "b"], "o": [1, 2, 3]})
+        pipeline = MaskDataFramePipeline({
+            "c": {"masking_operation": NullOperation(col_name="c")}
+        })
+        out = pipeline(data)
+        assert out["c"].to_list() == [None, None, None]
+        assert out["o"].to_list() == [1, 2, 3]
+        assert pipeline.concordance_tables == {"c": {}}
+
+    def test_null_operation_concordance_table_is_empty(self):
+        table = ConcordanceTable(masking_operation=NullOperation(col_name="c"))
+        assert table(pl.DataFrame({"c": ["a"]})) == {}
+
+    def test_null_operation_in_new_column_keeps_input(self):
+        data = pl.DataFrame({"c": ["a", "b"]})
+        pipeline = MaskDataFramePipeline({
+            "out": {
+                "masking_operation": NullOperation(
+                    col_name="c", condition=lambda v: v == "a"
+                )
+            }
+        })
+        for _ in range(2):
+            out = pipeline(data)
+            assert out["c"].to_list() == ["a", "b"]
+            assert out["out"].to_list() == [None, "b"]
+
+    @pytest.mark.parametrize(
+        "column",
+        [
+            pl.Series(
+                [dt.datetime(2024, 1, 1, 12), dt.datetime(2000, 1, 1)],  # noqa: DTZ001
+                dtype=pl.Datetime("ns"),
+            ),
+            pl.Series([Decimal("1.10"), Decimal("2.00")], dtype=pl.Decimal(10, 2)),
+        ],
+        ids=["datetime_ns", "decimal"],
+    )
+    def test_conditional_null_matches_the_column_type(self, column: pl.Series):
+        selected = str(column[0])
+        pipeline = MaskDataFramePipeline({
+            "c": {
+                "masking_operation": NullOperation(
+                    col_name="c", condition=lambda v: v == selected
+                )
+            }
+        })
+        out = pipeline(pl.DataFrame({"c": column}))
+        assert out["c"].to_list() == [None, column[1]]
+        assert out["c"].dtype == column.dtype
 
     def test_end_to_end(self):
         data = pl.DataFrame({"p": ["1000", "0000", None, "1000"], "o": [1, 2, 3, 4]})

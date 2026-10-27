@@ -3,7 +3,7 @@ from typing import Any
 
 import pyarrow as pa
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import broadcast, coalesce, col, udf, when
+from pyspark.sql.functions import broadcast, coalesce, col, lit, udf, when
 from pyspark.sql.types import (
     ByteType,
     DataType,
@@ -12,6 +12,8 @@ from pyspark.sql.types import (
     LongType,
     ShortType,
     StringType,
+    StructField,
+    StructType,
 )
 
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
@@ -282,6 +284,40 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
                 data = substitute_column(data, c_name, concordance_tables[c_name])
 
         return data
+
+    @staticmethod
+    def _null_values(data: DataFrame, col_name: str, values: set | None) -> DataFrame:
+        """Replace values of a column with null.
+
+        Args:
+        ----
+            data (DataFrame): input dataframe
+            col_name (str): column name
+            values (set | None): values to replace, or None to replace every value
+
+        Returns:
+        -------
+            DataFrame: dataframe with the values replaced by null
+
+        """
+        if values is None:
+            return data.withColumn(
+                col_name, lit(None).cast(data.schema[col_name].dataType)
+            )
+
+        # Join with the values in the column's own type: isin converts naive
+        # datetimes in the driver's time zone, so they miss TIMESTAMP_NTZ values
+        existing = [c.lower() for c in data.columns]
+        key_name = generate_unique_name(f"{col_name}_nulled".lower(), existing)
+        lookup = data.sparkSession.createDataFrame(
+            [(v,) for v in values],
+            StructType([StructField(key_name, data.schema[col_name].dataType)]),
+        ).distinct()
+        return (
+            data.join(lookup, col(col_name) == col(key_name), "left")
+            .withColumn(col_name, when(col(key_name).isNull(), col(col_name)))
+            .drop(key_name)
+        )
 
     @staticmethod
     def _copy_column(data: DataFrame, col_name: str, new_col_name: str) -> DataFrame:

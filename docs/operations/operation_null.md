@@ -2,7 +2,13 @@
 
 Replaces entries with `None` values. This is the simplest masking operation — it removes data entirely. An optional condition function allows selective nullification based on the cell value.
 
-> **Status:** `NullOperation` works when called on a DataFrame directly. Pipelines (`MaskDataFramePipeline`) reject it with a `TypeError` until pipeline support lands ([#24](https://github.com/d-one/masking/issues/24)).
+## Pipelines
+
+`NullOperation` also works in pipelines (`MaskDataFramePipeline`), alone or in a list of operations, on pandas, polars, and Spark ([ADR 0003](../../decisions/0003-null-operation-in-pipelines.md)):
+
+- The values it selects become null; values it keeps are left unchanged, as for any value without a mapping.
+- In a list, the `condition` sees the previous operation's output, and nulled values stay null in later operations.
+- Nulled values never appear in `pipeline.concordance_tables`; a null mapping cannot be reversed.
 
 ______________________________________________________________________
 
