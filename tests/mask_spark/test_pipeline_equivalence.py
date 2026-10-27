@@ -569,3 +569,36 @@ def test_backends_null_all_in_a_list(spark: SparkSession) -> None:
     outputs = _run_all_backends(spark, build, ["a", None, "b"], "string")
     expected = [None, None, None]
     assert outputs == {"pandas": expected, "polars": expected, "spark": expected}
+
+
+def test_backends_drop_previous_mappings_of_newly_nulled_values(
+    spark: SparkSession,
+) -> None:
+    # The first call stores 1 -> hash; the second nulls 1.0, an equal dict key
+    def build(null: type, hash_op: type) -> dict:
+        return {
+            "c": [
+                {
+                    "masking_operation": null(
+                        col_name="c", condition=lambda v: v == "1.0"
+                    )
+                },
+                {"masking_operation": hash_op(col_name="c", secret=SECRET)},
+            ]
+        }
+
+    pipelines = {
+        "pandas": PandasPipeline(build(NullPd, HashPd)),
+        "polars": PolarsPipeline(build(NullPl, HashPl)),
+        "spark": SparkPipeline(build(NullOperation, HashOperation)),
+    }
+    for rows, spark_type in (([1], "long"), ([1.0, 2.5], "double")):
+        data = list(enumerate(rows))
+        pipelines["pandas"](pd.DataFrame(data, columns=["row_id", "c"]))
+        pipelines["polars"](pl.DataFrame(data, schema=["row_id", "c"], orient="row"))
+        pipelines["spark"](
+            spark.createDataFrame(data, f"row_id long, c {spark_type}")
+        ).collect()
+
+    for pipeline in pipelines.values():
+        assert pipeline.concordance_tables["c"] == {2.5: hash_string("2.5", SECRET)}

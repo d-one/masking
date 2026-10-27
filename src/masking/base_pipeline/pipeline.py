@@ -294,8 +294,14 @@ class MaskDataFramePipelineBase(ABC):
         if nulled:
             self._nulled_values[col_name] = nulled
 
+        # Previous mappings of values nulled now are dropped, also for equal keys
+        # of another type (1 and 1.0)
         return {
-            **self.concordance_tables.get(col_name, {}),
+            **{
+                clear: masked
+                for clear, masked in self.concordance_tables.get(col_name, {}).items()
+                if clear not in nulled
+            },
             **{
                 clear: masked
                 for clear, masked in current_values.items()
