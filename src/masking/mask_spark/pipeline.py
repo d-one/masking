@@ -12,6 +12,8 @@ from pyspark.sql.types import (
     LongType,
     ShortType,
     StringType,
+    StructField,
+    StructType,
 )
 
 from masking.base_concordance_table.concordance_table import ConcordanceTableBase
@@ -302,9 +304,19 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             return data.withColumn(
                 col_name, lit(None).cast(data.schema[col_name].dataType)
             )
-        return data.withColumn(
-            col_name,
-            when(col(col_name).isin(list(values)), lit(None)).otherwise(col(col_name)),
+
+        # Join with the values in the column's own type: isin converts naive
+        # datetimes in the driver's time zone, so they miss TIMESTAMP_NTZ values
+        existing = [c.lower() for c in data.columns]
+        key_name = generate_unique_name(f"{col_name}_nulled".lower(), existing)
+        lookup = data.sparkSession.createDataFrame(
+            [(v,) for v in values],
+            StructType([StructField(key_name, data.schema[col_name].dataType)]),
+        ).distinct()
+        return (
+            data.join(lookup, col(col_name) == col(key_name), "left")
+            .withColumn(col_name, when(col(key_name).isNull(), col(col_name)))
+            .drop(key_name)
         )
 
     @staticmethod

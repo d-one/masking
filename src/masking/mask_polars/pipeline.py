@@ -105,8 +105,10 @@ class MaskDataFramePipeline(MaskDataFramePipelineBase):
             return data.with_columns(
                 pl.lit(None, dtype=data[col_name].dtype).alias(col_name)
             )
+        # Values in the column's own type, e.g. nanosecond datetimes and decimals
+        values = pl.Series(list(values), dtype=data[col_name].dtype)
         return data.with_columns(
-            pl.when(pl.col(col_name).is_in(list(values)))
+            pl.when(pl.col(col_name).is_in(values.implode()))
             .then(None)
             .otherwise(pl.col(col_name))
             .alias(col_name)
